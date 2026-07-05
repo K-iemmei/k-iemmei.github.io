@@ -1,51 +1,165 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Demo</title>
+  <title>Admin VSCode</title>
+
+  <!-- Monaco Editor -->
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+    }
+
+    #loginBox {
+      padding: 20px;
+    }
+
+    #editor {
+      display: none;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    .main {
+      display: flex;
+      height: 90vh;
+    }
+
+    #explorer {
+      width: 200px;
+      background: #1e1e1e;
+      color: white;
+      padding: 10px;
+    }
+
+    #explorer div {
+      padding: 5px;
+      cursor: pointer;
+    }
+
+    #explorer div:hover {
+      background: #333;
+    }
+
+    #container {
+      flex: 1;
+      height: 100%;
+    }
+
+    #topbar {
+      padding: 10px;
+      background: #eee;
+    }
+  </style>
 </head>
 
 <body>
 
-<h2>Admin Login</h2>
+<!-- LOGIN -->
+<div id="loginBox">
+  <h2>Admin Login</h2>
+  <input id="pw" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
 
-<input id="pw" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
+<!-- EDITOR -->
+<div id="editor">
 
-<hr>
+  <div id="topbar">
+    <button onclick="save()">💾 Save (Ctrl+S)</button>
+    <span id="status"></span>
+  </div>
 
-<div id="editor" style="display:none;">
-  <h3>Editor</h3>
+  <div class="main">
 
-  <textarea id="content" style="width:300px;height:150px;">
-Hello World
-  </textarea>
+    <!-- Explorer -->
+    <div id="explorer">
+      <b>FILES</b>
+      <div onclick="openFile('home.html')">home.html</div>
+      <div onclick="openFile('about.html')">about.html</div>
+    </div>
 
-  <br><br>
-  <button onclick="save()">Save</button>
+    <!-- Monaco Editor -->
+    <div id="container"></div>
 
-  <p id="status"></p>
+  </div>
+
 </div>
 
 <script>
-  console.log("NEW VERSION LOADED");
-alert("NEW VERSION LOADED");
+/* =====================
+   CONFIG
+===================== */
 const PASSWORD = "1234";
+
 const SUPABASE_URL = "https://lmqukgeyfmxprgkrujff.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtcXVrZ2V5Zm14cHJna3J1amZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzQ5NTMsImV4cCI6MjA5ODgxMDk1M30.mz7NTaWXqcokWnuYb2k65dWmgvywpFpemnJcsO3UFk0";
 
+
+/* =====================
+   LOGIN
+===================== */
 function login(){
   const pw = document.getElementById("pw").value;
 
   if(pw === PASSWORD){
-    document.getElementById("editor").style.display = "block";
-    alert("Login success");
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("editor").style.display = "flex";
+    initEditor();
   } else {
     alert("Wrong password");
   }
 }
 
+/* =====================
+   MONACO EDITOR
+===================== */
+let editor;
+let currentFile = "home.html";
+
+function initEditor(){
+
+  require.config({
+    paths: {
+      vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs"
+    }
+  });
+
+  require(["vs/editor/editor.main"], function () {
+
+    editor = monaco.editor.create(document.getElementById("container"), {
+      value: "<h1>Home page</h1>",
+      language: "html",
+      theme: "vs-dark",
+      automaticLayout: true
+    });
+
+  });
+
+}
+
+/* =====================
+   OPEN FILE
+===================== */
+function openFile(file){
+  currentFile = file;
+
+  if(file === "home.html"){
+    editor.setValue("<h1>Home Page</h1>");
+  }
+
+  if(file === "about.html"){
+    editor.setValue("<h1>About Page</h1>");
+  }
+}
+
+/* =====================
+   SAVE TO SUPABASE
+===================== */
 async function save(){
-  const data = document.getElementById("content").value;
+  const data = editor.getValue();
 
   const res = await fetch(SUPABASE_URL + "/rest/v1/pages?id=eq.1", {
     method: "PATCH",
@@ -61,11 +175,20 @@ async function save(){
   });
 
   const result = await res.json();
-  console.log("SUPABASE RESPONSE:", result);
+  console.log(result);
 
-  document.getElementById("status").innerText =
-    "Saved: " + JSON.stringify(result);
+  document.getElementById("status").innerText = "Saved ✔";
 }
+
+/* =====================
+   CTRL + S
+===================== */
+document.addEventListener("keydown", function(e){
+  if(e.ctrlKey && e.key === "s"){
+    e.preventDefault();
+    save();
+  }
+});
 </script>
 
 </body>
