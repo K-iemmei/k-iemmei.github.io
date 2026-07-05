@@ -77,7 +77,15 @@
 </div>
 
 <script>
+  
+window._supabaseClient =
+  window._supabaseClient ||
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
+const supabase = window._supabaseClient;
 /* =====================
    CONFIG
 ===================== */
@@ -85,7 +93,7 @@ const PASSWORD = "1234";
 
 const SUPABASE_URL = "https://lmqukgeyfmxprgkrujff.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtcXVrZ2V5Zm14cHJna3J1amZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzQ5NTMsImV4cCI6MjA5ODgxMDk1M30.mz7NTaWXqcokWnuYb2k65dWmgvywpFpemnJcsO3UFk0";
-
+supabaseClient
 /* =====================
    STATE
 ===================== */
