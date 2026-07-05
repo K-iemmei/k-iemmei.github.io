@@ -4,6 +4,7 @@
   <title>Admin VSCode CMS Level 2</title>
 
   <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     body { margin: 0; font-family: Arial; }
@@ -78,22 +79,23 @@
 
 <script>
   
+const SUPABASE_URL = "https://lmqukgeyfmxprgkrujff.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtcXVrZ2V5Zm14cHJna3J1amZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzQ5NTMsImV4cCI6MjA5ODgxMDk1M30.mz7NTaWXqcokWnuYb2k65dWmgvywpFpemnJcsO3UFk0";
+
 window._supabaseClient =
   window._supabaseClient ||
-  window.supabase.createClient(
+  supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
   );
 
-const supabase = window._supabaseClient;
+const supabaseClient = window._supabaseClient;
+
 /* =====================
    CONFIG
 ===================== */
 const PASSWORD = "1234";
 
-const SUPABASE_URL = "https://lmqukgeyfmxprgkrujff.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtcXVrZ2V5Zm14cHJna3J1amZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzQ5NTMsImV4cCI6MjA5ODgxMDk1M30.mz7NTaWXqcokWnuYb2k65dWmgvywpFpemnJcsO3UFk0";
-supabaseClient
 /* =====================
    STATE
 ===================== */

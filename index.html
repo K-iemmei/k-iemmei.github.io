@@ -28,14 +28,14 @@ window._supabaseClient =
     SUPABASE_KEY
   );
 
-const supabase = window._supabaseClient;
+const supabaseClient = window._supabaseClient;
 
 /* =====================
    LOAD INITIAL DATA
 ===================== */
 async function load(){
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('files')
     .select('*')
     .eq('id', 1)
@@ -54,7 +54,7 @@ load();
 /* =====================
    REALTIME LISTENER
 ===================== */
-supabase
+supabaseClient
   .channel('files-channel')
   .on(
     'postgres_changes',
