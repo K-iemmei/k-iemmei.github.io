@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Demo</title>
+</head>
+
+<body>
+
+<h2>Admin Login</h2>
+
+<input id="pw" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+
+<hr>
+
+<div id="editor" style="display:none;">
+  <h3>Editor</h3>
+
+  <textarea id="content" style="width:300px;height:150px;">
+Hello World
+  </textarea>
+
+  <br><br>
+  <button onclick="save()">Save</button>
+
+  <p id="status"></p>
+</div>
+
+<script>
+const PASSWORD = "1234";
+
+function login(){
+  const pw = document.getElementById("pw").value;
+
+  if(pw === PASSWORD){
+    document.getElementById("editor").style.display = "block";
+    alert("Login success");
+  } else {
+    alert("Wrong password");
+  }
+}
+
+function save(){
+  const data = document.getElementById("content").value;
+
+  // demo thôi, chưa lưu đâu cả
+  console.log("Saved:", data);
+
+  document.getElementById("status").innerText =
+    "Saved (demo only): " + data;
+}
+</script>
+
+</body>
+</html>
