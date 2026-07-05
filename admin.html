@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin VSCode</title>
+  <title>Admin VSCode CMS Level 2</title>
 
-  <!-- Monaco Editor -->
   <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 
   <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-    }
+    body { margin: 0; font-family: Arial; }
 
-    #loginBox {
-      padding: 20px;
-    }
+    #loginBox { padding: 20px; }
 
-    #editor {
+    #editorApp {
       display: none;
       height: 100vh;
       flex-direction: column;
@@ -28,14 +22,14 @@
     }
 
     #explorer {
-      width: 200px;
+      width: 220px;
       background: #1e1e1e;
       color: white;
       padding: 10px;
     }
 
     #explorer div {
-      padding: 5px;
+      padding: 6px;
       cursor: pointer;
     }
 
@@ -64,8 +58,8 @@
   <button onclick="login()">Login</button>
 </div>
 
-<!-- EDITOR -->
-<div id="editor">
+<!-- APP -->
+<div id="editorApp">
 
   <div id="topbar">
     <button onclick="save()">💾 Save (Ctrl+S)</button>
@@ -74,14 +68,8 @@
 
   <div class="main">
 
-    <!-- Explorer -->
-    <div id="explorer">
-      <b>FILES</b>
-      <div onclick="openFile('home.html')">home.html</div>
-      <div onclick="openFile('about.html')">about.html</div>
-    </div>
+    <div id="explorer"></div>
 
-    <!-- Monaco Editor -->
     <div id="container"></div>
 
   </div>
@@ -89,6 +77,7 @@
 </div>
 
 <script>
+
 /* =====================
    CONFIG
 ===================== */
@@ -97,6 +86,12 @@ const PASSWORD = "1234";
 const SUPABASE_URL = "https://lmqukgeyfmxprgkrujff.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtcXVrZ2V5Zm14cHJna3J1amZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzQ5NTMsImV4cCI6MjA5ODgxMDk1M30.mz7NTaWXqcokWnuYb2k65dWmgvywpFpemnJcsO3UFk0";
 
+/* =====================
+   STATE
+===================== */
+let editor;
+let files = [];
+let currentFileId = null;
 
 /* =====================
    LOGIN
@@ -106,7 +101,7 @@ function login(){
 
   if(pw === PASSWORD){
     document.getElementById("loginBox").style.display = "none";
-    document.getElementById("editor").style.display = "flex";
+    document.getElementById("editorApp").style.display = "flex";
     initEditor();
   } else {
     alert("Wrong password");
@@ -114,11 +109,8 @@ function login(){
 }
 
 /* =====================
-   MONACO EDITOR
+   INIT EDITOR
 ===================== */
-let editor;
-let currentFile = "home.html";
-
 function initEditor(){
 
   require.config({
@@ -130,12 +122,48 @@ function initEditor(){
   require(["vs/editor/editor.main"], function () {
 
     editor = monaco.editor.create(document.getElementById("container"), {
-      value: "<h1>Home page</h1>",
+      value: "",
       language: "html",
       theme: "vs-dark",
       automaticLayout: true
     });
 
+    loadFiles();
+  });
+
+}
+
+/* =====================
+   LOAD FILES
+===================== */
+async function loadFiles(){
+
+  const res = await fetch(SUPABASE_URL + "/rest/v1/files", {
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + SUPABASE_KEY
+    }
+  });
+
+  files = await res.json();
+  renderExplorer();
+
+}
+
+/* =====================
+   RENDER EXPLORER
+===================== */
+function renderExplorer(){
+
+  const box = document.getElementById("explorer");
+  box.innerHTML = "<h3>FILES</h3>";
+
+  files.forEach(f => {
+    box.innerHTML += `
+      <div onclick="openFile(${f.id})">
+        📄 ${f.name}
+      </div>
+    `;
   });
 
 }
@@ -143,41 +171,39 @@ function initEditor(){
 /* =====================
    OPEN FILE
 ===================== */
-function openFile(file){
-  currentFile = file;
+function openFile(id){
 
-  if(file === "home.html"){
-    editor.setValue("<h1>Home Page</h1>");
-  }
+  const file = files.find(f => f.id === id);
+  currentFileId = id;
 
-  if(file === "about.html"){
-    editor.setValue("<h1>About Page</h1>");
-  }
+  editor.setValue(file.content);
+
 }
 
 /* =====================
-   SAVE TO SUPABASE
+   SAVE FILE
 ===================== */
 async function save(){
-  const data = editor.getValue();
 
-  const res = await fetch(SUPABASE_URL + "/rest/v1/pages?id=eq.1", {
-    method: "PATCH",
-    headers: {
-      apikey: SUPABASE_KEY,
-      Authorization: "Bearer " + SUPABASE_KEY,
-      "Content-Type": "application/json",
-      Prefer: "return=representation"
-    },
-    body: JSON.stringify({
-      content: data
-    })
-  });
+  const content = editor.getValue();
 
-  const result = await res.json();
-  console.log(result);
+  const res = await fetch(
+    SUPABASE_URL + "/rest/v1/files?id=eq." + currentFileId,
+    {
+      method: "PATCH",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        content: content
+      })
+    }
+  );
 
   document.getElementById("status").innerText = "Saved ✔";
+
 }
 
 /* =====================
@@ -189,6 +215,7 @@ document.addEventListener("keydown", function(e){
     save();
   }
 });
+
 </script>
 
 </body>
