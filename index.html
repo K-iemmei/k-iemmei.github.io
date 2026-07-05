@@ -4,12 +4,12 @@
   <title>Home</title>
 
   <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
 
 <h1 id="content">Loading...</h1>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 /* =====================
@@ -18,16 +18,13 @@
 const SUPABASE_URL = "https://lmqukgeyfmxprgkrujff.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtcXVrZ2V5Zm14cHJna3J1amZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzQ5NTMsImV4cCI6MjA5ODgxMDk1M30.mz7NTaWXqcokWnuYb2k65dWmgvywpFpemnJcsO3UFk0";
 
-
 /* =====================
-   INIT SUPABASE
+   INIT SUPABASE (ĐÚNG)
 ===================== */
-
-<script>
-  const supabase = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 /* =====================
    LOAD INITIAL DATA
