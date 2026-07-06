@@ -68,6 +68,7 @@
     <div id="explorer"></div>
     <div id="container"></div>
   </div>
+  <button onclick="uploadPost()">🚀 Publish Notebook</button>
 </div>
 
 <script type="module">
@@ -270,6 +271,50 @@ function convertNotebookToHTML(notebook){
     }
 
     return html;
+}
+  window.uploadPost = async function(){
+
+    const fileInput = document.getElementById("uploadNotebook");
+
+    const file = fileInput.files[0];
+
+    if(!file){
+        alert("Chưa chọn notebook");
+        return;
+    }
+
+    const text = await file.text();
+    const notebook = JSON.parse(text);
+
+    const html = convertNotebookToHTML(notebook);
+
+    // lấy title từ cell đầu tiên
+    let title = "Untitled";
+
+    for(const cell of notebook.cells){
+        if(cell.cell_type === "markdown"){
+            title = cell.source.join("").replace("#", "").trim();
+            break;
+        }
+    }
+
+    const slug = title.toLowerCase().replace(/\s+/g, "-");
+
+    const { error } = await supabase
+        .from("posts")
+        .insert({
+            title: title,
+            slug: slug,
+            content: html
+        });
+
+    if(error){
+        console.log(error);
+        alert("Upload failed");
+        return;
+    }
+
+    alert("Published ✔");
 }
 document.addEventListener("keydown",function(e){
 
