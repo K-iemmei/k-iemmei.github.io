@@ -235,14 +235,41 @@ async function loadNotebook(e){
 
     for(const cell of notebook.cells){
 
-        console.log("----------------");
+        const html = convertNotebookToHTML(notebook);
 
-        console.log(cell.cell_type);
-
-        console.log(cell.source.join(""));
+        console.log("========== HTML ==========");
+        console.log(html);
 
     }
 
+}
+function convertNotebookToHTML(notebook){
+
+    let html = "";
+
+    for(const cell of notebook.cells){
+
+        if(cell.cell_type === "markdown"){
+
+            const text = cell.source.join("");
+
+            html += `<div class="md">${text}</div>`;
+
+        }
+
+        if(cell.cell_type === "code"){
+
+            const code = cell.source.join("");
+
+            html += `
+                <pre style="background:#111;color:#0f0;padding:10px;">
+<code>${code}</code>
+</pre>
+            `;
+        }
+    }
+
+    return html;
 }
 document.addEventListener("keydown",function(e){
 
