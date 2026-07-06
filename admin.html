@@ -3,7 +3,7 @@
 <head>
   <title>Admin VSCode CMS Level 2</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+  <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
 
   <style>
     body { margin: 0; font-family: Arial; }
@@ -51,14 +51,12 @@
 
 <body>
 
-<!-- LOGIN -->
 <div id="loginBox">
   <h2>Admin Login</h2>
   <input id="pw" type="password" placeholder="Password">
   <button onclick="login()">Login</button>
 </div>
 
-<!-- APP -->
 <div id="editorApp">
 
   <div id="topbar">
@@ -67,11 +65,8 @@
   </div>
 
   <div class="main">
-
     <div id="explorer"></div>
-
     <div id="container"></div>
-
   </div>
 
 </div>
@@ -80,12 +75,10 @@
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-/* =====================
-   CONFIG
-===================== */
 const SUPABASE_URL = "https://lmqukgeyfmxprgkrujff.supabase.co";
 
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtcXVrZ2V5Zm14cHJna3J1amZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzQ5NTMsImV4cCI6MjA5ODgxMDk1M30.mz7NTaWXqcokWnuYb2k65dWmgvywpFpemnJcsO3UFk0";
+const SUPABASE_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtcXVrZ2V5Zm14cHJna3J1amZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzQ5NTMsImV4cCI6MjA5ODgxMDk1M30.mz7NTaWXqcokWnuYb2k65dWmgvywpFpemnJcsO3UFk0";
 
 const supabase = createClient(
   SUPABASE_URL,
@@ -94,66 +87,59 @@ const supabase = createClient(
 
 const PASSWORD = "1234";
 
-/* =====================
-   STATE
-===================== */
 let editor;
 let files = [];
 let currentFileId = null;
 
-/* =====================
-   LOGIN
-===================== */
-window.login = function () {
+window.login = function(){
 
   const pw = document.getElementById("pw").value;
 
-  if (pw === PASSWORD) {
+  if(pw === PASSWORD){
     document.getElementById("loginBox").style.display = "none";
     document.getElementById("editorApp").style.display = "flex";
     initEditor();
-  } else {
+  }else{
     alert("Wrong password");
   }
-};
 
-/* =====================
-   INIT EDITOR
-===================== */
-function initEditor() {
+}
+
+function initEditor(){
 
   require.config({
-    paths: {
-      vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs"
+    paths:{
+      vs:"https://unpkg.com/monaco-editor@0.45.0/min/vs"
     }
   });
 
-  require(["vs/editor/editor.main"], function () {
+  require(["vs/editor/editor.main"],function(){
 
-    editor = monaco.editor.create(document.getElementById("container"), {
-      value: "",
-      language: "html",
-      theme: "vs-dark",
-      automaticLayout: true
-    });
+    editor = monaco.editor.create(
+      document.getElementById("container"),
+      {
+        value:"",
+        language:"html",
+        theme:"vs-dark",
+        automaticLayout:true
+      }
+    );
 
     loadFiles();
+
   });
 
 }
 
-/* =====================
-   LOAD FILES
-===================== */
-async function loadFiles() {
+async function loadFiles(){
 
-  const { data, error } = await supabase
+  const {data,error} = await supabase
     .from("files")
     .select("*")
     .order("id");
 
-  if (error) {
-    console.error(error);
+  if(error){
+    console.log(error);
     return;
   }
 
@@ -162,19 +148,19 @@ async function loadFiles() {
 
 }
 
-/* =====================
-   RENDER EXPLORER
-===================== */
-function renderExplorer() {
+function renderExplorer(){
 
   const box = document.getElementById("explorer");
+
   box.innerHTML = "<h3>FILES</h3>";
 
-  files.forEach(f => {
+  files.forEach(f=>{
 
     const div = document.createElement("div");
+
     div.innerHTML = "📄 " + f.name;
-    div.onclick = () => openFile(f.id);
+
+    div.onclick = ()=>openFile(f.id);
 
     box.appendChild(div);
 
@@ -182,23 +168,21 @@ function renderExplorer() {
 
 }
 
-/* =====================
-   OPEN FILE
-===================== */
-function openFile(id) {
+function openFile(id){
 
-  const file = files.find(f => f.id === id);
+  const file = files.find(f=>f.id===id);
 
   currentFileId = id;
 
   editor.setValue(file.content);
 
 }
+window.save = async function(){
 
-/* =====================
-   SAVE FILE
-===================== */
-window.save = async function () {
+  if(currentFileId === null){
+    alert("Please select a file.");
+    return;
+  }
 
   const content = editor.getValue();
 
@@ -209,25 +193,29 @@ window.save = async function () {
     })
     .eq("id", currentFileId);
 
-  if (error) {
-    console.error(error);
+  if(error){
+    console.log(error);
     document.getElementById("status").innerText = "Save failed";
     return;
   }
 
   const file = files.find(f => f.id === currentFileId);
-  if (file) file.content = content;
+
+  if(file){
+    file.content = content;
+  }
 
   document.getElementById("status").innerText = "Saved ✔";
 
-};
+  setTimeout(()=>{
+    document.getElementById("status").innerText = "";
+  },1500);
 
-/* =====================
-   CTRL + S
-===================== */
-document.addEventListener("keydown", function (e) {
+}
 
-  if (e.ctrlKey && e.key === "s") {
+document.addEventListener("keydown",function(e){
+
+  if(e.ctrlKey && e.key==="s"){
     e.preventDefault();
     save();
   }
