@@ -58,21 +58,16 @@
 </div>
 
 <div id="editorApp">
+  <div id="topbar">
+    <button onclick="save()">💾 Save (Ctrl+S)</button>
+    <input type="file" id="uploadNotebook" accept=".ipynb">
+    <span id="status"></span>
+  </div>
 
-<div id="topbar">
-
-  <button onclick="save()">💾 Save (Ctrl+S)</button>
-
-  <input
-      type="file"
-      id="uploadNotebook"
-      accept=".ipynb"
-  >
-
-  <span id="status"></span>
-
-</div>
-
+  <div class="main">
+    <div id="explorer"></div>
+    <div id="container"></div>
+  </div>
 </div>
 
 <script type="module">
