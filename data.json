@@ -1,0 +1,64 @@
+{
+  "profile": {
+    "name": "Tên của bạn",
+    "title": "Developer | Writer",
+    "description": "Mô tả ngắn về bạn",
+    "profileImage": "assets/profile.jpeg",
+    "bio": "Viết thêm thông tin chi tiết về bạn ở đây..."
+  },
+  "navigation": [
+    { "label": "Home", "href": "#" },
+    { "label": "Blog", "href": "#blog" },
+    { "label": "Projects", "href": "#projects" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "sections": [
+    {
+      "id": "about",
+      "title": "About Me",
+      "content": "Đây là phần giới thiệu về bạn. Bạn có thể thay đổi nội dung này trong file data.json"
+    },
+    {
+      "id": "experience",
+      "title": "Experience",
+      "items": [
+        {
+          "company": "Company A",
+          "role": "Developer",
+          "period": "2020 - 2023",
+          "description": "Mô tả công việc của bạn"
+        },
+        {
+          "company": "Company B",
+          "role": "Junior Developer",
+          "period": "2019 - 2020",
+          "description": "Mô tả công việc của bạn"
+        }
+      ]
+    },
+    {
+      "id": "projects",
+      "title": "Projects",
+      "items": [
+        {
+          "name": "Project 1",
+          "description": "Mô tả dự án",
+          "link": "https://example.com",
+          "tags": ["JavaScript", "HTML", "CSS"]
+        },
+        {
+          "name": "Project 2",
+          "description": "Mô tả dự án",
+          "link": "https://example.com",
+          "tags": ["Python", "React"]
+        }
+      ]
+    }
+  ],
+  "social": {
+    "github": "https://github.com/yourusername",
+    "twitter": "https://twitter.com/yourusername",
+    "linkedin": "https://linkedin.com/in/yourusername",
+    "email": "your@email.com"
+  }
+}

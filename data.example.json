@@ -1,0 +1,132 @@
+{
+  "profile": {
+    "name": "Nguyễn Văn Ánh",
+    "title": "Full Stack Developer | Tech Enthusiast",
+    "description": "Tôi tạo ra các ứng dụng web tuyệt vời và yêu thích chia sẻ kiến thức",
+    "profileImage": "assets/profile.jpeg",
+    "bio": "Lập trình viên có 5+ năm kinh nghiệm. Chuyên môn: React, Node.js, Python. Yêu thích code và cà phê ☕"
+  },
+
+  "navigation": [
+    { "label": "Home", "href": "#" },
+    { "label": "Projects", "href": "#projects" },
+    { "label": "Experience", "href": "#experience" },
+    { "label": "Skills", "href": "#skills" },
+    { "label": "Blog", "href": "blog.html" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+
+  "sections": [
+    {
+      "id": "about",
+      "title": "About Me",
+      "content": "Xin chào! Tôi là một lập trình viên đam mê công nghệ. Tôi bắt đầu hành trình lập trình của mình từ năm 2018 và từ đó không bao giờ dừng lại. Tôi thích giải quyết các vấn đề phức tạp bằng code và tạo ra những sản phẩm mà mọi người yêu thích."
+    },
+
+    {
+      "id": "experience",
+      "title": "Experience",
+      "items": [
+        {
+          "company": "Tech Innovations Inc.",
+          "role": "Senior Full Stack Developer",
+          "period": "Jan 2023 - Present",
+          "description": "Lãnh đạo một team 5 developers trong phát triển các ứng dụng web. Thiết kế kiến trúc hệ thống, triển khai CI/CD pipelines và mentoring junior developers."
+        },
+        {
+          "company": "Digital Solutions Ltd.",
+          "role": "Full Stack Developer",
+          "period": "Jun 2021 - Dec 2022",
+          "description": "Phát triển các tính năng frontend bằng React và backend bằng Node.js. Tối ưu hóa performance để tăng tốc độ ứng dụng từ 5s xuống 1s."
+        },
+        {
+          "company": "StartUp Vietnam",
+          "role": "Junior Developer",
+          "period": "Jan 2020 - May 2021",
+          "description": "Bắt đầu sự nghiệp lập trình với các task frontend đơn giản. Dần dần tiếp xúc với backend và database."
+        }
+      ]
+    },
+
+    {
+      "id": "skills",
+      "title": "Skills",
+      "content": "Frontend: HTML, CSS, JavaScript, React, Vue.js, Tailwind CSS | Backend: Node.js, Express, Python, Django | Database: MongoDB, PostgreSQL, Firebase | Tools: Git, Docker, AWS, Linux"
+    },
+
+    {
+      "id": "projects",
+      "title": "My Projects",
+      "items": [
+        {
+          "name": "E-Commerce Platform",
+          "description": "Nền tảng thương mại điện tử đầy đủ với chức năng giỏ hàng, thanh toán, quản lý admin. Xử lý 10k+ requests/day.",
+          "link": "https://github.com/yourname/ecommerce-platform",
+          "tags": ["React", "Node.js", "MongoDB", "Stripe API"]
+        },
+        {
+          "name": "Social Media App",
+          "description": "Ứng dụng mạng xã hội tương tự Facebook với real-time notifications. Có 5k+ users đang hoạt động.",
+          "link": "https://github.com/yourname/social-app",
+          "tags": ["React Native", "Firebase", "WebSocket"]
+        },
+        {
+          "name": "AI Chat Bot",
+          "description": "Chat bot sử dụng AI để hỗ trợ khách hàng 24/7. Có khả năng hiểu ngôn ngữ tự nhiên tiếng Việt.",
+          "link": "https://github.com/yourname/ai-chatbot",
+          "tags": ["Python", "TensorFlow", "NLP", "Flask"]
+        },
+        {
+          "name": "Task Management System",
+          "description": "Ứng dụng quản lý công việc cho teams. Có tính năng collaboration real-time, reminder, export reports.",
+          "link": "https://github.com/yourname/task-manager",
+          "tags": ["Vue.js", "Express", "PostgreSQL", "Socket.io"]
+        },
+        {
+          "name": "Weather App",
+          "description": "Ứng dụng thời tiết đơn giản nhưng đẹp mắt. Tích hợp API OpenWeather, có bản mobile.",
+          "link": "https://github.com/yourname/weather-app",
+          "tags": ["React", "API", "Mobile Responsive"]
+        },
+        {
+          "name": "Blog Platform",
+          "description": "Nền tảng viết blog với Markdown support, comment system, analytics dashboard.",
+          "link": "https://github.com/yourname/blog-platform",
+          "tags": ["Next.js", "GraphQL", "Prisma", "PostgreSQL"]
+        }
+      ]
+    },
+
+    {
+      "id": "education",
+      "title": "Education",
+      "items": [
+        {
+          "company": "University of Technology Ho Chi Minh City",
+          "role": "Bachelor of Science in Computer Science",
+          "period": "2016 - 2020",
+          "description": "GPA: 3.8/4.0. Specialized in Web Development and Software Engineering"
+        },
+        {
+          "company": "Coursera & Udemy",
+          "role": "Online Certifications",
+          "period": "2020 - Present",
+          "description": "Completed courses: The Complete JavaScript Course, React Masterclass, Machine Learning Basics, Cloud Computing with AWS"
+        }
+      ]
+    },
+
+    {
+      "id": "testimonials",
+      "title": "What People Say",
+      "content": "\"Làm việc với Ánh là một trải nghiệm tuyệt vời. Anh ấy không chỉ là một developer giỏi mà còn là một team player tuyệt vời.\" - CEO, Tech Innovations Inc."
+    }
+  ],
+
+  "social": {
+    "github": "https://github.com/yourname",
+    "twitter": "https://twitter.com/yourname",
+    "linkedin": "https://linkedin.com/in/yourname",
+    "email": "your.email@gmail.com"
+  }
+}

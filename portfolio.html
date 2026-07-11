@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Portfolio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #fafafa;
+    }
+
+    /* Navigation */
+    header {
+      background: white;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav h1 {
+      font-size: 1.5rem;
+      margin-right: auto;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #0066cc;
+    }
+
+    /* Hero/Profile Section */
+    .hero {
+      background: white;
+      padding: 3rem 0;
+      margin: 2rem 0;
+      border-radius: 8px;
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .hero-text h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #222;
+    }
+
+    .hero-text .title {
+      font-size: 1.3rem;
+      color: #0066cc;
+      margin-bottom: 1rem;
+    }
+
+    .hero-text p {
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-image {
+      text-align: center;
+    }
+
+    .hero-image img {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #eee;
+    }
+
+    /* Section Styling */
+    .section {
+      background: white;
+      padding: 2rem;
+      margin: 2rem 0;
+      border-radius: 8px;
+    }
+
+    .section h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #222;
+      border-bottom: 3px solid #0066cc;
+      padding-bottom: 0.5rem;
+    }
+
+    /* Experience/Items */
+    .item {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .item:last-child {
+      border-bottom: none;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .item-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #222;
+    }
+
+    .item-meta {
+      color: #0066cc;
+      font-size: 0.95rem;
+    }
+
+    .item-subtitle {
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .item-description {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 6px;
+      border-left: 4px solid #0066cc;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .project-card h3 {
+      margin-bottom: 0.5rem;
+      color: #222;
+    }
+
+    .project-card p {
+      color: #666;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .project-card a {
+      color: #0066cc;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .project-card a:hover {
+      text-decoration: underline;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .tag {
+      background: #e8f0ff;
+      color: #0066cc;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    /* Social Links */
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .social-links a {
+      color: #666;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .social-links a:hover {
+      color: #0066cc;
+    }
+
+    /* Footer */
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .hero-text h2 {
+        font-size: 1.8rem;
+      }
+
+      .hero-image img {
+        width: 200px;
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <header>
+    <div class="container">
+      <nav id="navbar"></nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Hero Section -->
+    <div class="hero">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h2 id="profileName"></h2>
+          <p class="title" id="profileTitle"></p>
+          <p id="profileDescription"></p>
+          <p id="profileBio"></p>
+        </div>
+        <div class="hero-image">
+          <img id="profileImg" src="" alt="Profile">
+        </div>
+      </div>
+    </div>
+
+    <!-- Sections -->
+    <div id="contentSections"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer"></footer>
+
+  <script>
+    // Load data từ file JSON
+    async function loadData() {
+      try {
+        const response = await fetch('data.json');
+        const data = await response.json();
+        renderPage(data);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
+    }
+
+    // Render toàn bộ trang
+    function renderPage(data) {
+      renderNavbar(data.profile.name, data.navigation);
+      renderProfile(data.profile);
+      renderSections(data.sections);
+      renderFooter(data.social);
+    }
+
+    // Render Navigation
+    function renderNavbar(name, navItems) {
+      const navbar = document.getElementById('navbar');
+      navbar.innerHTML = `<h1>${name}</h1>`;
+      
+      navItems.forEach(item => {
+        const link = document.createElement('a');
+        link.href = item.href;
+        link.textContent = item.label;
+        navbar.appendChild(link);
+      });
+    }
+
+    // Render Profile
+    function renderProfile(profile) {
+      document.getElementById('profileName').textContent = profile.name;
+      document.getElementById('profileTitle').textContent = profile.title;
+      document.getElementById('profileDescription').textContent = profile.description;
+      document.getElementById('profileBio').textContent = profile.bio;
+      document.getElementById('profileImg').src = profile.profileImage;
+    }
+
+    // Render Sections (About, Experience, Projects, etc.)
+    function renderSections(sections) {
+      const container = document.getElementById('contentSections');
+      container.innerHTML = '';
+
+      sections.forEach(section => {
+        const sectionEl = document.createElement('div');
+        sectionEl.className = 'section';
+
+        let html = `<h2>${section.title}</h2>`;
+
+        if (section.content) {
+          // Simple content section
+          html += `<p>${section.content}</p>`;
+        } else if (section.items) {
+          // Items section (Experience, Projects)
+          if (section.id === 'projects') {
+            html += '<div class="projects-grid">';
+            section.items.forEach(item => {
+              html += `
+                <div class="project-card">
+                  <h3>${item.name}</h3>
+                  <p>${item.description}</p>
+                  <a href="${item.link}" target="_blank">View Project →</a>
+                  <div class="tags">
+                    ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                  </div>
+                </div>
+              `;
+            });
+            html += '</div>';
+          } else {
+            // Experience format
+            section.items.forEach(item => {
+              html += `
+                <div class="item">
+                  <div class="item-header">
+                    <div>
+                      <div class="item-title">${item.name || item.company}</div>
+                      <div class="item-subtitle">${item.role || item.company}</div>
+                    </div>
+                    <div class="item-meta">${item.period}</div>
+                  </div>
+                  <p class="item-description">${item.description}</p>
+                </div>
+              `;
+            });
+          }
+        }
+
+        sectionEl.innerHTML = html;
+        container.appendChild(sectionEl);
+      });
+    }
+
+    // Render Footer
+    function renderFooter(social) {
+      const footer = document.getElementById('footer');
+      let html = '<div class="social-links">';
+      
+      if (social.github) html += `<a href="${social.github}" target="_blank">GitHub</a>`;
+      if (social.twitter) html += `<a href="${social.twitter}" target="_blank">Twitter</a>`;
+      if (social.linkedin) html += `<a href="${social.linkedin}" target="_blank">LinkedIn</a>`;
+      if (social.email) html += `<a href="mailto:${social.email}">Email</a>`;
+      
+      html += '</div><p style="margin-top: 1.5rem; font-size: 0.9rem;">© 2024 Your Name. All rights reserved.</p>';
+      
+      footer.innerHTML = html;
+    }
+
+    // Load and render on page load
+    loadData();
+  </script>
+</body>
+</html>
