@@ -213,10 +213,13 @@
       overflow-y: auto;
       background: white;
       padding: 2rem;
+      display: flex;
+      justify-content: center;
     }
 
     .note-content {
       max-width: 900px;
+      width: 100%;
       line-height: 1.8;
     }
 
@@ -325,12 +328,12 @@
 <body>
   <!-- Navigation Header -->
   <header>
+    <button class="toggle-btn" id="toggleBtn">☰ Notes</button>
     <nav>
       <h1><a href="index.html">Tên của bạn</a></h1>
     </nav>
     <div class="nav-spacer"></div>
     <div class="nav-links" id="navLinks"></div>
-    <button class="toggle-btn" id="toggleBtn">☰ Notes</button>
   </header>
 
   <!-- Main Container -->
@@ -405,7 +408,6 @@
         document.querySelector('nav h1 a').textContent = data.profile.name;
         
         // Render footer
-        renderFooter(data.social);
       } catch (error) {
         console.error('Error loading data:', error);
       }
@@ -503,21 +505,6 @@
       });
     }
 
-    /* =====================
-       RENDER FOOTER
-    ===================== */
-    function renderFooter(social) {
-      const footer = document.getElementById('footer');
-      let html = '<div class="social-links">';
-      
-      if (social.github) html += `<a href="${social.github}" target="_blank">GitHub</a>`;
-      if (social.twitter) html += `<a href="${social.twitter}" target="_blank">Twitter</a>`;
-      if (social.linkedin) html += `<a href="${social.linkedin}" target="_blank">LinkedIn</a>`;
-      if (social.email) html += `<a href="mailto:${social.email}">Email</a>`;
-      
-      html += '</div><p>© 2024 Your Name. All rights reserved.</p>';
-      footer.innerHTML = html;
-    }
 
     // Initialize on load
     init();
