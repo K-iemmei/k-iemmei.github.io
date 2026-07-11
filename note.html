@@ -1,114 +1,487 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>My Blog</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Notes - Knowledge Base</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial;
-      margin: 40px;
-    }
-
-    #posts div {
-      cursor: pointer;
-      padding: 8px;
-      border-bottom: 1px solid #eee;
-    }
-
-    #posts div:hover {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: #333;
       background: #f5f5f5;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
 
-    #article {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 2px solid #ddd;
+    /* Navigation Header */
+    header {
+      background: white;
+      padding: 0.8rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
-    pre {
-      background: #111;
-      color: #0f0;
-      padding: 10px;
+    nav h1 a {
+      font-size: 1.3rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      text-decoration: none;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    nav h1 a:hover {
+      color: #0066cc;
+    }
+
+    .nav-spacer {
+      flex: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #444;
+      font-weight: 500;
+      transition: color 0.3s;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: #0066cc;
+    }
+
+    .toggle-btn {
+      background: #f0f0f0;
+      border: 1px solid #e0e0e0;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #333;
+      transition: all 0.3s;
+      display: none;
+    }
+
+    .toggle-btn:hover {
+      background: #e8e8e8;
+    }
+
+    /* Main Container */
+    .main-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: white;
+      border-right: 1px solid #e0e0e0;
+      overflow-y: auto;
+      padding: 1.5rem 0;
+      transition: transform 0.3s ease, width 0.3s ease;
+      position: relative;
+      z-index: 100;
+    }
+
+    .sidebar.hidden {
+      transform: translateX(-100%);
+      width: 0;
+    }
+
+    .sidebar-header {
+      padding: 0 1.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      color: #222;
+    }
+
+    .notes-list {
+      list-style: none;
+    }
+
+    .note-item {
+      padding: 0.8rem 1.5rem;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+      color: #666;
+    }
+
+    .note-item:hover {
+      background: #f5f5f5;
+      color: #0066cc;
+      border-left-color: #0066cc;
+    }
+
+    .note-item.active {
+      background: #e8f0ff;
+      color: #0066cc;
+      border-left-color: #0066cc;
+      font-weight: 600;
+    }
+
+    /* Content Area */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .editor-header {
+      background: white;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .editor-title {
+      font-size: 1.3rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .editor-date {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .editor-body {
+      flex: 1;
+      overflow-y: auto;
+      background: white;
+      padding: 2rem;
+    }
+
+    .note-content {
+      max-width: 900px;
+      line-height: 1.8;
+    }
+
+    .note-content h1 {
+      font-size: 2rem;
+      margin: 0 0 1.5rem 0;
+      font-family: 'Poppins', sans-serif;
+      color: #222;
+    }
+
+    .note-content h2 {
+      font-size: 1.5rem;
+      margin: 1.5rem 0 1rem 0;
+      font-family: 'Poppins', sans-serif;
+      color: #222;
+    }
+
+    .note-content h3 {
+      font-size: 1.2rem;
+      margin: 1.2rem 0 0.8rem 0;
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+
+    .note-content p {
+      margin-bottom: 1rem;
+      color: #666;
+    }
+
+    .note-content code {
+      background: #f5f5f5;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #d73a49;
+    }
+
+    .note-content pre {
+      background: #282c34;
+      color: #abb2bf;
+      padding: 1rem;
+      border-radius: 6px;
       overflow-x: auto;
+      margin: 1rem 0;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+
+    .note-content div {
+      margin-bottom: 1rem;
+    }
+
+    .placeholder {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: #999;
+    }
+
+    .placeholder h2 {
+      color: #bbb;
+      margin-bottom: 1rem;
+    }
+
+    /* Footer */
+    footer {
+      background: #222;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      border-top: 1px solid #111;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .social-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .social-links a:hover {
+      color: #0066cc;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 50px;
+        height: calc(100vh - 50px);
+        box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+      }
+
+      .toggle-btn {
+        display: block;
+      }
+
+      .editor-body {
+        padding: 1.5rem;
+      }
+
+      .editor-title {
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
-
 <body>
+  <!-- Navigation Header -->
+  <header>
+    <nav>
+      <h1><a href="index.html">Tên của bạn</a></h1>
+    </nav>
+    <div class="nav-spacer"></div>
+    <div class="nav-links" id="navLinks"></div>
+    <button class="toggle-btn" id="toggleBtn">☰ Notes</button>
+  </header>
 
-<h1>My Blog</h1>
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">📔 My Notes</div>
+      <ul class="notes-list" id="notesList"></ul>
+    </aside>
 
-<div id="posts">Loading...</div>
+    <!-- Content Area -->
+    <main class="content">
+      <div class="editor-header">
+        <div>
+          <div class="editor-title" id="editorTitle">Select a note</div>
+          <div class="editor-date" id="editorDate"></div>
+        </div>
+      </div>
+      <div class="editor-body">
+        <div class="note-content" id="noteContent">
+          <div class="placeholder">
+            <h2>📝 Welcome to Notes</h2>
+            <p>Select a note from the sidebar to view it.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 
-<div id="article"></div>
+  <!-- Footer -->
+  <footer id="footer"></footer>
 
-<script type="module">
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+    /* =====================
+       CONFIG
+    ===================== */
+    const SUPABASE_URL = "https://lmqukgeyfmxprgkrujff.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtcXVrZ2V5Zm14cHJna3J1amZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzQ5NTMsImV4cCI6MjA5ODgxMDk1M30.mz7NTaWXqcokWnuYb2k65dWmgvywpFpemnJcsO3UFk0";
 
-/* =====================
-   CONFIG
-===================== */
-const SUPABASE_URL = "https://lmqukgeyfmxprgkrujff.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtcXVrZ2V5Zm14cHJna3J1amZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzQ5NTMsImV4cCI6MjA5ODgxMDk1M30.mz7NTaWXqcokWnuYb2k65dWmgvywpFpemnJcsO3UFk0";
+    /* =====================
+       INIT SUPABASE
+    ===================== */
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/* =====================
-   INIT SUPABASE
-===================== */
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    let allPosts = [];
 
-/* =====================
-   LOAD POSTS
-===================== */
-async function loadPosts() {
+    // Initialize
+    async function init() {
+      loadNavigation();
+      await loadPosts();
+      setupToggleButton();
+    }
 
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*")
-    .order("id", { ascending: false });
+    // Load Navigation
+    async function loadNavigation() {
+      try {
+        const response = await fetch('data.json');
+        const data = await response.json();
+        
+        const navLinks = document.getElementById('navLinks');
+        data.navigation.forEach(item => {
+          const link = document.createElement('a');
+          link.href = item.href;
+          link.textContent = item.label;
+          navLinks.appendChild(link);
+        });
+        
+        // Update header name
+        document.querySelector('nav h1 a').textContent = data.profile.name;
+        
+        // Render footer
+        renderFooter(data.social);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
+    }
 
-  if (error) {
-    console.error("LOAD ERROR:", error);
-    document.getElementById("posts").innerText = "Error loading posts";
-    return;
-  }
+    /* =====================
+       LOAD POSTS FROM SUPABASE
+    ===================== */
+    async function loadPosts() {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .order("id", { ascending: false });
 
-  const box = document.getElementById("posts");
-  box.innerHTML = "";
+      if (error) {
+        console.error("LOAD ERROR:", error);
+        document.getElementById('notesList').innerHTML = '<li style="padding: 1.5rem; color: #999;">Error loading posts</li>';
+        return;
+      }
 
-  data.forEach(post => {
+      allPosts = data || [];
+      renderNotesList();
+      
+      // Auto-select first post
+      if (allPosts.length > 0) {
+        selectPost(0);
+      }
+    }
 
-    const div = document.createElement("div");
+    /* =====================
+       RENDER POSTS LIST IN SIDEBAR
+    ===================== */
+    function renderNotesList() {
+      const notesList = document.getElementById('notesList');
+      notesList.innerHTML = '';
+      
+      allPosts.forEach((post, index) => {
+        const li = document.createElement('li');
+        li.className = `note-item ${index === 0 ? 'active' : ''}`;
+        li.textContent = post.title;
+        li.onclick = () => selectPost(index);
+        notesList.appendChild(li);
+      });
+    }
 
-    div.innerHTML = `<h3>${post.title}</h3>`;
+    /* =====================
+       SELECT POST AND DISPLAY CONTENT
+    ===================== */
+    function selectPost(index) {
+      const post = allPosts[index];
+      
+      // Update active state
+      document.querySelectorAll('.note-item').forEach((item, i) => {
+        item.classList.toggle('active', i === index);
+      });
+      
+      // Update content
+      document.getElementById('editorTitle').textContent = post.title;
+      document.getElementById('editorDate').textContent = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('noteContent').innerHTML = post.content;
+      
+      // Hide sidebar on mobile after selection
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.add('hidden');
+      }
+    }
 
-    div.onclick = () => openPost(post);
+    /* =====================
+       SETUP TOGGLE BUTTON
+    ===================== */
+    function setupToggleButton() {
+      const toggleBtn = document.getElementById('toggleBtn');
+      const sidebar = document.getElementById('sidebar');
+      
+      toggleBtn.onclick = () => {
+        sidebar.classList.toggle('hidden');
+      };
+    }
 
-    box.appendChild(div);
+    /* =====================
+       RENDER FOOTER
+    ===================== */
+    function renderFooter(social) {
+      const footer = document.getElementById('footer');
+      let html = '<div class="social-links">';
+      
+      if (social.github) html += `<a href="${social.github}" target="_blank">GitHub</a>`;
+      if (social.twitter) html += `<a href="${social.twitter}" target="_blank">Twitter</a>`;
+      if (social.linkedin) html += `<a href="${social.linkedin}" target="_blank">LinkedIn</a>`;
+      if (social.email) html += `<a href="mailto:${social.email}">Email</a>`;
+      
+      html += '</div><p>© 2024 Your Name. All rights reserved.</p>';
+      footer.innerHTML = html;
+    }
 
-  });
-
-}
-
-/* =====================
-   OPEN POST
-===================== */
-function openPost(post) {
-
-  document.getElementById("article").innerHTML = `
-    <h1>${post.title}</h1>
-    <div>${post.content}</div>
-  `;
-
-}
-
-/* =====================
-   INIT
-===================== */
-loadPosts();
-
-</script>
-
+    // Initialize on load
+    init();
+  </script>
 </body>
 </html>
