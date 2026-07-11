@@ -72,31 +72,6 @@
       color: #0066cc;
     }
 
-    .toggle-btn {
-      background: #f0f0f0;
-      border: 1px solid #e0e0e0;
-      padding: 0.6rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #333;
-      transition: all 0.3s;
-      display: block;
-    }
-
-    .toggle-btn:hover {
-      background: #e8e8e8;
-      border-color: #0066cc;
-      color: #0066cc;
-    }
-
-    .toggle-btn.active {
-      background: #0066cc;
-      border-color: #0066cc;
-      color: white;
-    }
-
     /* Main Container */
     .main-container {
       display: flex;
@@ -196,6 +171,37 @@
       align-items: center;
     }
 
+    .editor-header-left {
+      font-size: 1.2rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .editor-header-toggle {
+      background: #f0f0f0;
+      border: 1px solid #e0e0e0;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #333;
+      transition: all 0.3s;
+    }
+
+    .editor-header-toggle:hover {
+      background: #e8e8e8;
+      border-color: #0066cc;
+      color: #0066cc;
+    }
+
+    .editor-header-toggle.active {
+      background: #0066cc;
+      border-color: #0066cc;
+      color: white;
+    }
+
     .editor-title {
       font-size: 1.3rem;
       font-family: 'Poppins', sans-serif;
@@ -221,6 +227,54 @@
       max-width: 900px;
       width: 100%;
       line-height: 1.8;
+    }
+
+    /* List View */
+    .list-view {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100%;
+    }
+
+    .list-container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .list-title {
+      font-size: 1.8rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .list-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .list-item {
+      padding: 1.2rem 1.5rem;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+      color: #444;
+    }
+
+    .list-item:hover {
+      border-color: #0066cc;
+      background: #f8faff;
+      color: #0066cc;
+      transform: translateX(4px);
     }
 
     .note-content h1 {
@@ -347,13 +401,19 @@
     <!-- Content Area -->
     <main class="content">
       <div class="editor-header">
-        <div>
-          <div class="editor-title" id="editorTitle">Select a note</div>
-          <div class="editor-date" id="editorDate"></div>
-        </div>
+        <div class="editor-header-left">Content</div>
+        <button class="editor-header-toggle" id="headerToggle" style="display:none;">☰ Back</button>
       </div>
       <div class="editor-body">
-        <div class="note-content" id="noteContent">
+        <!-- List View -->
+        <div class="list-view" id="listView">
+          <div class="list-container">
+            <div class="list-title">📔 My Notes</div>
+            <ul class="list-items" id="listItems"></ul>
+          </div>
+        </div>
+        <!-- Detail View -->
+        <div class="note-content" id="noteContent" style="display:none;">
           <div class="placeholder">
             <h2>📝 Welcome to Notes</h2>
             <p>Select a note from the sidebar to view it.</p>
@@ -382,6 +442,7 @@
 
     let allPosts = [];
     let isInitialLoad = true;
+    let isDetailView = false;
 
     // Initialize
     async function init() {
@@ -424,32 +485,27 @@
 
       if (error) {
         console.error("LOAD ERROR:", error);
-        document.getElementById('notesList').innerHTML = '<li style="padding: 1.5rem; color: #999;">Error loading posts</li>';
+        document.getElementById('listItems').innerHTML = '<li style="padding: 1.5rem; color: #999;">Error loading posts</li>';
         return;
       }
 
       allPosts = data || [];
       renderNotesList();
-      
-      // Auto-select first post
-      if (allPosts.length > 0) {
-        selectPost(0);
-      }
     }
 
     /* =====================
-       RENDER POSTS LIST IN SIDEBAR
+       RENDER POSTS LIST IN CENTER
     ===================== */
     function renderNotesList() {
-      const notesList = document.getElementById('notesList');
-      notesList.innerHTML = '';
+      const listItems = document.getElementById('listItems');
+      listItems.innerHTML = '';
       
       allPosts.forEach((post, index) => {
         const li = document.createElement('li');
-        li.className = `note-item ${index === 0 ? 'active' : ''}`;
+        li.className = 'list-item';
         li.textContent = post.title;
         li.onclick = () => selectPost(index);
-        notesList.appendChild(li);
+        listItems.appendChild(li);
       });
     }
 
@@ -459,36 +515,34 @@
     function selectPost(index) {
       const post = allPosts[index];
       
-      // Update active state
-      document.querySelectorAll('.note-item').forEach((item, i) => {
-        item.classList.toggle('active', i === index);
-      });
-      
       // Update content
-      document.getElementById('editorTitle').textContent = post.title;
-      document.getElementById('editorDate').textContent = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
       document.getElementById('noteContent').innerHTML = post.content;
       
-      // Auto-hide sidebar after selection (but not on initial load)
-      if (!isInitialLoad) {
-        const sidebar = document.getElementById('sidebar');
-        const mainContainer = document.querySelector('.main-container');
-        const toggleBtn = document.getElementById('toggleBtn');
-        sidebar.classList.add('hidden');
-        mainContainer.classList.remove('sidebar-open');
-        toggleBtn.classList.remove('active');
-      }
-      isInitialLoad = false;
+      // Switch to detail view
+      isDetailView = true;
+      document.getElementById('listView').style.display = 'none';
+      document.getElementById('noteContent').style.display = 'block';
+      document.getElementById('headerToggle').style.display = 'block';
     }
 
     /* =====================
-       SETUP TOGGLE BUTTON
+       SETUP TOGGLE BUTTONS
     ===================== */
     function setupToggleButton() {
       const toggleBtn = document.getElementById('toggleBtn');
+      const headerToggle = document.getElementById('headerToggle');
       const sidebar = document.getElementById('sidebar');
       const mainContainer = document.querySelector('.main-container');
       
+      // Header toggle (Back button)
+      headerToggle.onclick = () => {
+        isDetailView = false;
+        document.getElementById('listView').style.display = 'flex';
+        document.getElementById('noteContent').style.display = 'none';
+        headerToggle.style.display = 'none';
+      };
+      
+      // Sidebar toggle (left button)
       toggleBtn.onclick = () => {
         sidebar.classList.toggle('hidden');
         mainContainer.classList.toggle('sidebar-open');
