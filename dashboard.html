@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard · Daily Practice</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-mark">D</div>
+            <span>Daily Practice</span>
+        </div>
+
+        <nav class="nav">
+
+            <a href="#" class="nav-item active">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">◷</span>
+                <span>Today</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">▤</span>
+                <span>Subjects</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⚙</span>
+                <span>Settings</span>
+            </a>
+
+            <button class="user-button">
+
+                <div class="avatar">K</div>
+
+                <div class="user-info">
+                    <strong>Kiểm</strong>
+                    <span>Student</span>
+                </div>
+
+                <span class="user-more">···</span>
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Top bar -->
+        <header class="topbar">
+
+            <div class="mobile-brand">
+                <div class="brand-mark">D</div>
+                <span>Daily Practice</span>
+            </div>
+
+            <div class="topbar-actions">
+
+                <button
+                    id="themeToggle"
+                    class="icon-button"
+                    aria-label="Toggle theme"
+                >
+                    ☼
+                </button>
+
+                <div class="top-avatar">
+                    K
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="content">
+
+            <!-- Greeting -->
+            <section class="welcome">
+
+                <div>
+                    <p class="eyebrow">Saturday, August 8, 2026</p>
+
+                    <h1>
+                        Good morning, Kiểm.
+                    </h1>
+
+                    <p class="welcome-subtitle">
+                        Keep your streak alive. A little progress every day.
+                    </p>
+                </div>
+
+            </section>
+
+
+            <!-- Today's practice -->
+            <section class="section">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Today's practice</h2>
+                        <p>What you need to complete today.</p>
+                    </div>
+
+                    <button class="view-button">
+                        View all →
+                    </button>
+
+                </div>
+
+
+                <div class="subject-grid">
+
+                    <!-- DSA -->
+                    <article class="subject-card">
+
+                        <div class="subject-top">
+
+                            <div class="subject-icon dsa">
+                                DS
+                            </div>
+
+                            <span class="status-dot active"></span>
+
+                        </div>
+
+                        <h3>Data Structures</h3>
+
+                        <p class="subject-topic">
+                            Arrays · DP · Graph
+                        </p>
+
+                        <div class="subject-progress">
+
+                            <div class="progress-info">
+                                <span>3 of 5 completed</span>
+                                <span>60%</span>
+                            </div>
+
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 60%"
+                                ></div>
+                            </div>
+
+                        </div>
+
+                        <button class="subject-action">
+                            Continue →
+                        </button>
+
+                    </article>
+
+
+                    <!-- Networking -->
+                    <article class="subject-card">
+
+                        <div class="subject-top">
+
+                            <div class="subject-icon networking">
+                                NW
+                            </div>
+
+                            <span class="status-dot active"></span>
+
+                        </div>
+
+                        <h3>Networking</h3>
+
+                        <p class="subject-topic">
+                            TCP/IP · DNS · HTTP
+                        </p>
+
+                        <div class="subject-progress">
+
+                            <div class="progress-info">
+                                <span>2 of 3 completed</span>
+                                <span>67%</span>
+                            </div>
+
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 67%"
+                                ></div>
+                            </div>
+
+                        </div>
+
+                        <button class="subject-action">
+                            Continue →
+                        </button>
+
+                    </article>
+
+
+                    <!-- English -->
+                    <article class="subject-card">
+
+                        <div class="subject-top">
+
+                            <div class="subject-icon english">
+                                EN
+                            </div>
+
+                            <span class="status-dot done"></span>
+
+                        </div>
+
+                        <h3>English</h3>
+
+                        <p class="subject-topic">
+                            Vocabulary · Grammar
+                        </p>
+
+                        <div class="subject-progress">
+
+                            <div class="progress-info">
+                                <span>10 of 10 completed</span>
+                                <span>100%</span>
+                            </div>
+
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill complete"
+                                    style="width: 100%"
+                                ></div>
+                            </div>
+
+                        </div>
+
+                        <button class="subject-action completed">
+                            Completed ✓
+                        </button>
+
+                    </article>
+
+
+                    <!-- AI -->
+                    <article class="subject-card">
+
+                        <div class="subject-top">
+
+                            <div class="subject-icon ai">
+                                AI
+                            </div>
+
+                            <span class="status-dot"></span>
+
+                        </div>
+
+                        <h3>AI / Machine Learning</h3>
+
+                        <p class="subject-topic">
+                            RAG · Embeddings · Agents
+                        </p>
+
+                        <div class="subject-progress">
+
+                            <div class="progress-info">
+                                <span>0 of 4 completed</span>
+                                <span>0%</span>
+                            </div>
+
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 0%"
+                                ></div>
+                            </div>
+
+                        </div>
+
+                        <button class="subject-action">
+                            Start →
+                        </button>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- Activity -->
+            <section class="section activity-section">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Activity</h2>
+                        <p>Your learning activity over the last year.</p>
+                    </div>
+
+                </div>
+
+
+                <!-- Overall stats -->
+                <div class="activity-summary">
+
+                    <div class="summary-item">
+
+                        <strong>127</strong>
+                        <span>active days</span>
+
+                    </div>
+
+                    <div class="summary-item">
+
+                        <strong>12</strong>
+                        <span>day streak</span>
+
+                    </div>
+
+                    <div class="summary-item">
+
+                        <strong>486</strong>
+                        <span>exercises completed</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DSA heatmap -->
+                <div class="heatmap-card">
+
+                    <div class="heatmap-header">
+
+                        <div>
+                            <h3>Data Structures</h3>
+                            <span>Less · More</span>
+                        </div>
+
+                        <strong>42 active days</strong>
+
+                    </div>
+
+                    <div class="heatmap-wrapper">
+
+                        <div class="months">
+                            <span>Jan</span>
+                            <span>Feb</span>
+                            <span>Mar</span>
+                            <span>Apr</span>
+                            <span>May</span>
+                            <span>Jun</span>
+                            <span>Jul</span>
+                            <span>Aug</span>
+                        </div>
+
+                        <div
+                            id="heatmap-dsa"
+                            class="heatmap"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Networking heatmap -->
+                <div class="heatmap-card">
+
+                    <div class="heatmap-header">
+
+                        <div>
+                            <h3>Networking</h3>
+                            <span>Less · More</span>
+                        </div>
+
+                        <strong>31 active days</strong>
+
+                    </div>
+
+                    <div class="heatmap-wrapper">
+
+                        <div class="months">
+                            <span>Jan</span>
+                            <span>Feb</span>
+                            <span>Mar</span>
+                            <span>Apr</span>
+                            <span>May</span>
+                            <span>Jun</span>
+                            <span>Jul</span>
+                            <span>Aug</span>
+                        </div>
+
+                        <div
+                            id="heatmap-networking"
+                            class="heatmap"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- English heatmap -->
+                <div class="heatmap-card">
+
+                    <div class="heatmap-header">
+
+                        <div>
+                            <h3>English</h3>
+                            <span>Less · More</span>
+                        </div>
+
+                        <strong>89 active days</strong>
+
+                    </div>
+
+                    <div class="heatmap-wrapper">
+
+                        <div class="months">
+                            <span>Jan</span>
+                            <span>Feb</span>
+                            <span>Mar</span>
+                            <span>Apr</span>
+                            <span>May</span>
+                            <span>Jun</span>
+                            <span>Jul</span>
+                            <span>Aug</span>
+                        </div>
+
+                        <div
+                            id="heatmap-english"
+                            class="heatmap"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>
