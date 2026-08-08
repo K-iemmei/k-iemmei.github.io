@@ -8,32 +8,72 @@ const savedTheme = localStorage.getItem("theme");
 
 if (savedTheme === "dark") {
     document.documentElement.dataset.theme = "dark";
-    themeToggle.textContent = "☾";
-}
-
-themeToggle.addEventListener("click", () => {
-
-    const isDark =
-        document.documentElement.dataset.theme === "dark";
-
-    if (isDark) {
-
-        document.documentElement.removeAttribute("data-theme");
-
-        localStorage.setItem("theme", "light");
-
-        themeToggle.textContent = "☼";
-
-    } else {
-
-        document.documentElement.dataset.theme = "dark";
-
-        localStorage.setItem("theme", "dark");
-
+    if (themeToggle) {
         themeToggle.textContent = "☾";
     }
-});
+}
 
+if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+
+        const isDark =
+            document.documentElement.dataset.theme === "dark";
+
+        if (isDark) {
+
+            document.documentElement.removeAttribute("data-theme");
+
+            localStorage.setItem("theme", "light");
+
+            themeToggle.textContent = "☼";
+
+        } else {
+
+            document.documentElement.dataset.theme = "dark";
+
+            localStorage.setItem("theme", "dark");
+
+            themeToggle.textContent = "☾";
+        }
+    });
+}
+
+
+// =========================
+// Supabase dashboard data
+// =========================
+
+async function loadDashboardData() {
+    const userId = localStorage.getItem("userId");
+
+    if (!userId || !window.supabase || typeof window.supabase.get !== "function") {
+        return;
+    }
+
+    try {
+        const subjects = await window.supabase.get("subjects", {
+            select: "id, slug, name, color, description"
+        });
+
+        const activities = await window.supabase.get("subject_daily_activity", {
+            select: "*",
+            filters: {
+                user_id: `eq.${userId}`
+            }
+        });
+
+        window.dashboardData = {
+            subjects: Array.isArray(subjects) ? subjects : [],
+            activities: Array.isArray(activities) ? activities : []
+        };
+    } catch (error) {
+        console.warn("Unable to load dashboard data from Supabase:", error);
+        window.dashboardData = {
+            subjects: [],
+            activities: []
+        };
+    }
+}
 
 // =========================
 // Generate heatmap
@@ -156,12 +196,12 @@ function generateHeatmap(elementId, seed) {
 // =========================
 
 const username =
-    localStorage.getItem("username");
+    localStorage.getItem("username") || JSON.parse(localStorage.getItem("user") || "null")?.name || "User";
 
 const usernameDisplay =
     document.getElementById("usernameDisplay");
 
-if (username) {
+if (usernameDisplay) {
     usernameDisplay.textContent = username;
 }
 
@@ -173,13 +213,17 @@ if (username) {
 const logoutButton =
     document.getElementById("logoutButton");
 
-logoutButton.addEventListener("click", () => {
+if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
 
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("username");
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("username");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("user");
 
-    window.location.href = "index.html";
-});
+        window.location.href = "index.html";
+    });
+}
 
 
 
@@ -199,4 +243,12 @@ if (yearSelector) {
     yearSelector.addEventListener("change", refreshHeatmaps);
 }
 
+const englishCards = document.querySelectorAll('[data-go="english.html"]');
+englishCards.forEach((card) => {
+    card.addEventListener('click', () => {
+        window.location.href = 'english.html';
+    });
+});
+
+loadDashboardData();
 refreshHeatmaps();
