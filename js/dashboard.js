@@ -1,7 +1,7 @@
 // =========================
 // Theme
 // =========================
-
+const isLoggedIn = localStorage.getItem("isLoggedIn"); if (isLoggedIn !== "true") { window.location.href = "index.html"; }
 const themeToggle = document.getElementById("themeToggle");
 
 const savedTheme = localStorage.getItem("theme");
