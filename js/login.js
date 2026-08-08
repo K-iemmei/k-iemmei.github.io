@@ -1,4 +1,3 @@
-```javascript
 const loginForm = document.getElementById("loginForm");
 const loginMessage = document.getElementById("loginMessage");
 
@@ -68,4 +67,3 @@ loginForm.addEventListener("submit", (event) => {
     // Chuyển sang Dashboard
     window.location.href = "dashboard.html";
 });
-```
