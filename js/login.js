@@ -1,3 +1,4 @@
+```javascript
 const loginForm = document.getElementById("loginForm");
 const loginMessage = document.getElementById("loginMessage");
 
@@ -12,18 +13,22 @@ const savedTheme = localStorage.getItem("theme");
 
 if (savedTheme === "dark") {
     document.documentElement.dataset.theme = "dark";
+    themeToggle.textContent = "☾";
 }
 
 themeToggle.addEventListener("click", () => {
+
     const isDark =
         document.documentElement.dataset.theme === "dark";
 
     if (isDark) {
         document.documentElement.removeAttribute("data-theme");
         localStorage.setItem("theme", "light");
+        themeToggle.textContent = "☼";
     } else {
         document.documentElement.dataset.theme = "dark";
         localStorage.setItem("theme", "dark");
+        themeToggle.textContent = "☾";
     }
 });
 
@@ -44,9 +49,23 @@ loginForm.addEventListener("submit", (event) => {
 
     loginMessage.textContent = "";
 
-    console.log("Username:", username);
-    console.log("Password:", password);
+    // Temporary mock authentication
+    // --------------------------------
+    // Sau này đoạn này sẽ được thay bằng
+    // request tới Supabase Edge Function.
 
-    loginMessage.textContent =
-        "Login system is not connected yet.";
+    if (!username || !password) {
+        loginMessage.textContent =
+            "Please enter your username and password.";
+
+        return;
+    }
+
+    // Mock login thành công
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("username", username);
+
+    // Chuyển sang Dashboard
+    window.location.href = "dashboard.html";
 });
+```
