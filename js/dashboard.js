@@ -41,77 +41,115 @@ themeToggle.addEventListener("click", () => {
 
 function generateHeatmap(elementId, seed) {
 
-    const container =
-        document.getElementById(elementId);
+    const container = document.getElementById(elementId);
 
     if (!container) return;
 
-    // 52 weeks × 7 days
-    const totalDays = 52 * 7;
+    const yearSelector = document.getElementById("yearSelector");
+    const year = Number(yearSelector?.value || new Date().getFullYear());
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+    container.innerHTML = "";
+
+    const labelsRow = document.createElement("div");
+    labelsRow.classList.add("months-row");
+
+    const grid = document.createElement("div");
+    grid.classList.add("heatmap-grid");
+
+    const cellSize = 10;
+    const gap = 3;
     let random = seed;
 
     function pseudoRandom() {
-
-        random =
-            (random * 9301 + 49297) % 233280;
-
+        random = (random * 9301 + 49297) % 233280;
         return random / 233280;
     }
 
-    for (let i = 0; i < totalDays; i++) {
+    const monthData = monthNames.map((name, monthIndex) => {
+        const firstDay = new Date(year, monthIndex, 1);
+        const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+        const firstWeekday = firstDay.getDay();
+        const weeksInMonth = Math.ceil((firstWeekday + daysInMonth) / 7);
 
-        const cell =
-            document.createElement("div");
+        return {
+            name,
+            monthIndex,
+            firstDay,
+            daysInMonth,
+            firstWeekday,
+            weeksInMonth
+        };
+    });
 
-        cell.classList.add("heat-cell");
+    let totalCols = 0;
+    monthData.forEach((month) => {
+        totalCols += month.weeksInMonth + 1;
+    });
 
-        const value = pseudoRandom();
+    grid.style.setProperty("--cols", totalCols);
+    labelsRow.style.width = `${totalCols * (cellSize + gap) - gap}px`;
 
-        let level = 0;
+    let currentColumn = 1;
 
-        if (value > 0.80) {
-            level = 4;
-        } else if (value > 0.62) {
-            level = 3;
-        } else if (value > 0.40) {
-            level = 2;
-        } else if (value > 0.20) {
-            level = 1;
-        }
+    monthData.forEach((month) => {
+        const monthLabel = document.createElement("span");
+        monthLabel.classList.add("month-label");
+        monthLabel.textContent = month.name;
+        const monthWidth = month.weeksInMonth * (cellSize + gap);
+        monthLabel.style.left = `${(currentColumn - 1) * (cellSize + gap) + monthWidth / 2}px`;
+        labelsRow.appendChild(monthLabel);
 
-        if (level > 0) {
-            cell.classList.add(`level-${level}`);
-        }
+        for (let week = 0; week < month.weeksInMonth; week++) {
+            for (let day = 0; day < 7; day++) {
+                const date = new Date(year, month.monthIndex, 1 + week * 7 + day - month.firstWeekday);
+                const cell = document.createElement("div");
+                cell.classList.add("heat-cell");
+                cell.style.gridColumn = String(currentColumn + week);
+                cell.style.gridRow = String(day + 1);
 
-        const daysAgo =
-            totalDays - i - 1;
+                const isCurrentMonth = date.getFullYear() === year && date.getMonth() === month.monthIndex;
 
-        const date =
-            new Date();
+                if (!isCurrentMonth) {
+                    cell.classList.add("heat-empty");
+                    grid.appendChild(cell);
+                    continue;
+                }
 
-        date.setDate(
-            date.getDate() - daysAgo
-        );
+                const value = pseudoRandom();
+                let level = 0;
 
-        const formattedDate =
-            date.toLocaleDateString(
-                "en-US",
-                {
+                if (value > 0.80) {
+                    level = 4;
+                } else if (value > 0.62) {
+                    level = 3;
+                } else if (value > 0.40) {
+                    level = 2;
+                } else if (value > 0.20) {
+                    level = 1;
+                }
+
+                if (level > 0) {
+                    cell.classList.add(`level-${level}`);
+                }
+
+                const formattedDate = date.toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
                     day: "numeric"
-                }
-            );
+                });
 
-        const exercises =
-            level * 2;
+                const exercises = level * 2;
+                cell.title = `${formattedDate} · ${exercises} exercises`;
+                grid.appendChild(cell);
+            }
+        }
 
-        cell.title =
-            `${formattedDate} · ${exercises} exercises`;
+        currentColumn += month.weeksInMonth + 1;
+    });
 
-        container.appendChild(cell);
-    }
+    container.appendChild(labelsRow);
+    container.appendChild(grid);
 }
 // =========================
 // User
@@ -149,17 +187,16 @@ logoutButton.addEventListener("click", () => {
 // Create heatmaps
 // =========================
 
-generateHeatmap(
-    "heatmap-dsa",
-    17
-);
+function refreshHeatmaps() {
+    generateHeatmap("heatmap-dsa", 17);
+    generateHeatmap("heatmap-networking", 41);
+    generateHeatmap("heatmap-english", 83);
+}
 
-generateHeatmap(
-    "heatmap-networking",
-    41
-);
+const yearSelector = document.getElementById("yearSelector");
 
-generateHeatmap(
-    "heatmap-english",
-    83
-);
+if (yearSelector) {
+    yearSelector.addEventListener("change", refreshHeatmaps);
+}
+
+refreshHeatmaps();
