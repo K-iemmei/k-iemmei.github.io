@@ -113,6 +113,36 @@ function generateHeatmap(elementId, seed) {
         container.appendChild(cell);
     }
 }
+// =========================
+// User
+// =========================
+
+const username =
+    localStorage.getItem("username");
+
+const usernameDisplay =
+    document.getElementById("usernameDisplay");
+
+if (username) {
+    usernameDisplay.textContent = username;
+}
+
+
+// =========================
+// Logout
+// =========================
+
+const logoutButton =
+    document.getElementById("logoutButton");
+
+logoutButton.addEventListener("click", () => {
+
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("username");
+
+    window.location.href = "index.html";
+});
+
 
 
 // =========================
