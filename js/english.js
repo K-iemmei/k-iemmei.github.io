@@ -238,6 +238,13 @@ function escapeHtml(value) {
         .replace(/'/g, '&#039;');
 }
 
+function normalizeAnswer(value) {
+    return String(value || '')
+        .trim()
+        .replace(/\s+/g, ' ')
+        .toLocaleLowerCase();
+}
+
 function getPassageParagraphs(passage) {
     if (!passage) return ['<p>No passage available.</p>'];
 
@@ -304,7 +311,7 @@ function renderQuestions(sections = [], exercises = []) {
                     <span class="question-label">${questionNumber}.</span>
                     <span class="question-prompt">${escapeHtml(questionText)}</span>
                     <div class="answer-row">
-                        <input type="text" class="answer-input" data-question-id="${escapeHtml(exercise.id || '')}" aria-label="Answer for question ${questionNumber}" />
+                        <input type="text" class="answer-input" data-question-id="${escapeHtml(exercise.id || '')}" data-answer="${escapeHtml(exercise.answer || exercise.correct_answer || '')}" aria-label="Answer for question ${questionNumber}" />
                     </div>
                 </div>`;
             })
@@ -396,6 +403,9 @@ async function submitEnglishAnswers() {
         .map((input) => {
             const questionId = input.getAttribute('data-question-id');
             const value = input.value.trim();
+            const expectedAnswer = input.getAttribute('data-answer') || '';
+            const acceptedAnswers = expectedAnswer.split(/\s*\|\|\s*/).filter(Boolean);
+            const isCorrect = acceptedAnswers.some((answer) => normalizeAnswer(answer) === normalizeAnswer(value));
 
             if (!questionId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(questionId)) {
                 return null;
@@ -406,6 +416,7 @@ async function submitEnglishAnswers() {
                 lesson_id: window.currentEnglishLessonId,
                 question_id: questionId,
                 submitted_answer: value,
+                is_correct: isCorrect,
                 submitted_at: new Date().toISOString()
             };
         })
@@ -425,16 +436,31 @@ async function submitEnglishAnswers() {
         });
 
         const result = await window.supabase.create('english_user_answers', payload);
+        const correctCount = payload.filter((answer) => answer.is_correct).length;
+        const totalCount = payload.length;
+        const scorePercent = totalCount > 0 ? Number(((correctCount / totalCount) * 100).toFixed(2)) : 0;
+
+        await window.supabase.delete('english_daily_results', {
+            filters: {
+                user_id: `eq.${userId}`,
+                lesson_id: `eq.${window.currentEnglishLessonId}`
+            }
+        });
+        await window.supabase.create('english_daily_results', {
+            user_id: userId,
+            lesson_id: window.currentEnglishLessonId,
+            activity_date: window.currentEnglishLessonDate || new Date().toISOString().slice(0, 10),
+            correct_count: correctCount,
+            total_count: totalCount,
+            score_percent: scorePercent,
+            submitted_at: new Date().toISOString()
+        });
 
         console.log('English submission payload:', payload);
         console.log('Delete old answers result:', existingDelete);
         console.log('Create result:', result);
 
-        if (Array.isArray(result) && result.length > 0) {
-            showEnglishSubmitMessage('Your answers have been submitted successfully.', 'success');
-        } else {
-            showEnglishSubmitMessage('Your answers were accepted by the server.', 'success');
-        }
+        showEnglishSubmitMessage(`Your answers have been submitted successfully. Score: ${correctCount}/${totalCount}.`, 'success');
     } catch (error) {
         console.error('Unable to submit English answers:', error);
         showEnglishSubmitMessage('Unable to submit answers. Please try again.', 'error');
@@ -509,6 +535,8 @@ async function loadEnglishLesson() {
         renderQuestions(Array.isArray(sections) ? sections : [], Array.isArray(exercises) ? exercises : []);
 
         window.currentEnglishLessonId = lesson.id;
+        window.currentEnglishLessonDate = lesson.lesson_date;
+        window.englishFallbackMode = false;
         await loadExistingUserAnswers(lesson.id);
 
     } catch (error) {

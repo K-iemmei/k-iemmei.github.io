@@ -44,8 +44,8 @@ if (themeToggle) {
 // =========================
 
 function normalizeDailyProgress(record = {}) {
-    const totalFromExplicit = Number(record.total_exercises ?? record.total ?? record.exercise_total ?? record.goal ?? 0);
-    const completedFromExplicit = Number(record.completed_exercises ?? record.completed ?? record.done ?? 0);
+    const totalFromExplicit = Number(record.total_count ?? record.total_exercises ?? record.total ?? record.exercise_total ?? record.goal ?? 0);
+    const completedFromExplicit = Number(record.correct_count ?? record.completed_exercises ?? record.completed ?? record.done ?? 0);
     const scoreFromExplicit = Number(record.score ?? 0);
     const minutesFromExplicit = Number(record.minutes ?? 0);
 
@@ -95,15 +95,25 @@ async function loadDashboardData() {
 
         const englishSubjectId = englishSubject ? englishSubject.id : null;
 
-        const activities = englishSubjectId
-            ? await window.supabase.get("subject_daily_activity", {
-                select: "*",
-                filters: {
-                    user_id: `eq.${userId}`,
-                    subject_id: `eq.${englishSubjectId}`
-                }
-            })
-            : [];
+        let activities = [];
+        if (englishSubjectId) {
+            try {
+                activities = await window.supabase.get("english_daily_results", {
+                    select: "*",
+                    filters: {
+                        user_id: `eq.${userId}`
+                    }
+                });
+            } catch (resultError) {
+                activities = await window.supabase.get("subject_daily_activity", {
+                    select: "*",
+                    filters: {
+                        user_id: `eq.${userId}`,
+                        subject_id: `eq.${englishSubjectId}`
+                    }
+                });
+            }
+        }
 
         window.dashboardData = {
             subjects: Array.isArray(subjects) ? subjects : [],

@@ -4,6 +4,7 @@
 -- Questions are mostly IELTS-style short-answer inputs.
 
 DROP TABLE IF EXISTS english_user_answers CASCADE;
+DROP TABLE IF EXISTS english_daily_results CASCADE;
 DROP TABLE IF EXISTS english_questions CASCADE;
 DROP TABLE IF EXISTS english_lesson_sections CASCADE;
 DROP TABLE IF EXISTS english_lessons CASCADE;
@@ -42,6 +43,7 @@ CREATE TABLE english_questions (
     question_text TEXT NOT NULL,
     question_type TEXT NOT NULL DEFAULT 'short_answer' CHECK (question_type IN ('short_answer', 'multiple_choice', 'true_false')),
     options JSONB DEFAULT '[]'::jsonb,
+    answer TEXT,
     correct_answer TEXT,
     answer_hint TEXT,
     points INTEGER NOT NULL DEFAULT 1,
@@ -58,6 +60,18 @@ CREATE TABLE english_user_answers (
     is_correct BOOLEAN,
     submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE (user_id, lesson_id, question_id)
+);
+
+CREATE TABLE english_daily_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    lesson_id UUID NOT NULL REFERENCES english_lessons(id) ON DELETE CASCADE,
+    activity_date DATE NOT NULL,
+    correct_count INTEGER NOT NULL DEFAULT 0 CHECK (correct_count >= 0),
+    total_count INTEGER NOT NULL DEFAULT 0 CHECK (total_count >= 0),
+    score_percent NUMERIC(5, 2) NOT NULL DEFAULT 0 CHECK (score_percent >= 0 AND score_percent <= 100),
+    submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE (user_id, lesson_id)
 );
 
 -- Example lesson: day 1 / today-like reading lesson.
@@ -175,6 +189,10 @@ FROM lesson l JOIN section_map sm ON sm.section_order = 3
 UNION ALL
 SELECT l.id, sm.section_id, 14, 'What is the final idea of the passage?', 'short_answer', '[]'::jsonb, 'Societies must adapt to AI-driven change', 'The last sentence expresses the core message.', 1
 FROM lesson l JOIN section_map sm ON sm.section_order = 3;
+
+UPDATE english_questions
+SET answer = correct_answer
+WHERE answer IS NULL;
 
 -- Future authoring pattern:
 -- INSERT INTO english_lessons (lesson_date, type, title, subtitle, lesson_level, duration_minutes, skill_focus, passage, summary, is_active)
