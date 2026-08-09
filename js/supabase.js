@@ -7,13 +7,27 @@
         const {
             select = "*",
             filters = {},
+            order = null,
             method = "GET",
-            body = null
+            body = null,
+            onConflict = null,
+            returnRepresentation = false
         } = options;
 
-        const params = new URLSearchParams({
-            select
-        });
+        const params = new URLSearchParams();
+
+        if (method === 'GET' || method === 'DELETE') {
+            params.append('select', select);
+        }
+
+        if (onConflict && typeof onConflict === 'string') {
+            params.append('on_conflict', onConflict);
+        }
+
+        if (order && order.column) {
+            const direction = order.direction || "asc";
+            params.append("order", `${order.column}.${direction}`);
+        }
 
         Object.entries(filters).forEach(([key, value]) => {
             if (value === undefined || value === null || value === "") {
@@ -37,14 +51,32 @@
             Authorization: `Bearer ${supabaseKey}`
         };
 
+        const preferHeaders = [];
+
+        if (method === 'POST' && onConflict && typeof onConflict === 'string') {
+            preferHeaders.push('resolution=merge-duplicates');
+        }
+
+        if (method === 'POST' && returnRepresentation) {
+            preferHeaders.push('return=representation');
+        }
+
+        if (preferHeaders.length > 0) {
+            headers['Prefer'] = preferHeaders.join(',');
+        }
+
         const response = await fetch(url, {
             method,
             headers,
             ...(body ? { body: JSON.stringify(body) } : {})
         });
 
+        if (method === 'DELETE' && response.status === 204) {
+            return [];
+        }
+
         const text = await response.text();
-        const data = text ? JSON.parse(text) : null;
+        const data = text ? JSON.parse(text) : [];
 
         if (!response.ok) {
             throw new Error(data?.message || `Supabase request failed for ${table}`);
@@ -65,7 +97,25 @@
         async create(table, payload) {
             return supabaseRequest(table, {
                 method: "POST",
-                body: payload
+                body: payload,
+                returnRepresentation: true
+            });
+        },
+
+        async delete(table, options = {}) {
+            return supabaseRequest(table, {
+                ...options,
+                method: 'DELETE',
+                select: '*'
+            });
+        },
+
+        async upsert(table, payload, options = {}) {
+            const rows = Array.isArray(payload) ? payload : [payload];
+            return supabaseRequest(table, {
+                method: "POST",
+                body: rows,
+                onConflict: options.onConflict || null
             });
         },
 

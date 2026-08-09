@@ -43,11 +43,45 @@ if (themeToggle) {
 // Supabase dashboard data
 // =========================
 
+function normalizeDailyProgress(record = {}) {
+    const totalFromExplicit = Number(record.total_exercises ?? record.total ?? record.exercise_total ?? record.goal ?? 0);
+    const completedFromExplicit = Number(record.completed_exercises ?? record.completed ?? record.done ?? 0);
+    const scoreFromExplicit = Number(record.score ?? 0);
+    const minutesFromExplicit = Number(record.minutes ?? 0);
+
+    let total = totalFromExplicit || 0;
+    let completed = completedFromExplicit || 0;
+
+    if (total === 0 && minutesFromExplicit > 0 && completed <= minutesFromExplicit) {
+        total = minutesFromExplicit;
+    }
+
+    if (total > 0 && completed === 0 && scoreFromExplicit > 0 && scoreFromExplicit <= 100) {
+        completed = Math.round((scoreFromExplicit / 100) * total);
+    }
+
+    if (total === 0 && scoreFromExplicit > 0 && scoreFromExplicit <= 100) {
+        total = 100;
+        completed = scoreFromExplicit;
+    }
+
+    const safeTotal = Number.isFinite(total) ? Math.max(0, total) : 0;
+    const safeCompleted = Number.isFinite(completed) ? Math.max(0, completed) : 0;
+    const ratio = safeTotal > 0 ? Math.min(1, Math.max(0, safeCompleted / safeTotal)) : 0;
+
+    return {
+        total: safeTotal,
+        completed: safeCompleted,
+        ratio
+    };
+}
+
 async function loadDashboardData() {
     const userId = localStorage.getItem("userId");
 
     if (!userId || !window.supabase || typeof window.supabase.get !== "function") {
-        return;
+        window.dashboardData = { subjects: [], activities: [] };
+        return window.dashboardData;
     }
 
     try {
@@ -55,23 +89,35 @@ async function loadDashboardData() {
             select: "id, slug, name, color, description"
         });
 
-        const activities = await window.supabase.get("subject_daily_activity", {
-            select: "*",
-            filters: {
-                user_id: `eq.${userId}`
-            }
-        });
+        const englishSubject = Array.isArray(subjects)
+            ? subjects.find((subject) => String(subject.slug || subject.name || "").toLowerCase() === "english")
+            : null;
+
+        const englishSubjectId = englishSubject ? englishSubject.id : null;
+
+        const activities = englishSubjectId
+            ? await window.supabase.get("subject_daily_activity", {
+                select: "*",
+                filters: {
+                    user_id: `eq.${userId}`,
+                    subject_id: `eq.${englishSubjectId}`
+                }
+            })
+            : [];
 
         window.dashboardData = {
             subjects: Array.isArray(subjects) ? subjects : [],
             activities: Array.isArray(activities) ? activities : []
         };
+
+        return window.dashboardData;
     } catch (error) {
         console.warn("Unable to load dashboard data from Supabase:", error);
         window.dashboardData = {
             subjects: [],
             activities: []
         };
+        return window.dashboardData;
     }
 }
 
@@ -79,7 +125,7 @@ async function loadDashboardData() {
 // Generate heatmap
 // =========================
 
-function generateHeatmap(elementId, seed) {
+function generateHeatmap(elementId, seed, records = []) {
 
     const container = document.getElementById(elementId);
 
@@ -99,12 +145,26 @@ function generateHeatmap(elementId, seed) {
 
     const cellSize = 10;
     const gap = 3;
+    const shouldShowProgress = Number(seed) > 0 || Array.isArray(records) && records.length > 0;
     let random = seed;
 
     function pseudoRandom() {
         random = (random * 9301 + 49297) % 233280;
         return random / 233280;
     }
+
+    const progressByDate = new Map();
+    (Array.isArray(records) ? records : []).forEach((record) => {
+        const rawDate = record.activity_date || record.date || record.updated_at || "";
+        const dateKey = String(rawDate).slice(0, 10);
+
+        if (!dateKey) return;
+
+        const normalized = normalizeDailyProgress(record);
+        if (normalized.total > 0 || normalized.completed > 0) {
+            progressByDate.set(dateKey, normalized);
+        }
+    });
 
     const monthData = monthNames.map((name, monthIndex) => {
         const firstDay = new Date(year, monthIndex, 1);
@@ -143,34 +203,42 @@ function generateHeatmap(elementId, seed) {
         for (let week = 0; week < month.weeksInMonth; week++) {
             for (let day = 0; day < 7; day++) {
                 const date = new Date(year, month.monthIndex, 1 + week * 7 + day - month.firstWeekday);
+                const isCurrentMonth = date.getFullYear() === year && date.getMonth() === month.monthIndex;
+
+                if (!isCurrentMonth) {
+                    continue;
+                }
+
                 const cell = document.createElement("div");
                 cell.classList.add("heat-cell");
                 cell.style.gridColumn = String(currentColumn + week);
                 cell.style.gridRow = String(day + 1);
 
-                const isCurrentMonth = date.getFullYear() === year && date.getMonth() === month.monthIndex;
+                const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+                const dailyProgress = progressByDate.get(dateKey) || null;
 
-                if (!isCurrentMonth) {
+                if (!dailyProgress || dailyProgress.total <= 0) {
                     cell.classList.add("heat-empty");
+                    cell.title = `${date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })} · 0/0 exercises`;
                     grid.appendChild(cell);
                     continue;
                 }
 
-                const value = pseudoRandom();
                 let level = 0;
-
-                if (value > 0.80) {
+                if (dailyProgress.ratio >= 0.75) {
                     level = 4;
-                } else if (value > 0.62) {
+                } else if (dailyProgress.ratio >= 0.5) {
                     level = 3;
-                } else if (value > 0.40) {
+                } else if (dailyProgress.ratio >= 0.25) {
                     level = 2;
-                } else if (value > 0.20) {
+                } else if (dailyProgress.ratio > 0) {
                     level = 1;
                 }
 
                 if (level > 0) {
                     cell.classList.add(`level-${level}`);
+                } else {
+                    cell.classList.add("heat-empty");
                 }
 
                 const formattedDate = date.toLocaleDateString("en-US", {
@@ -179,14 +247,20 @@ function generateHeatmap(elementId, seed) {
                     day: "numeric"
                 });
 
-                const exercises = level * 2;
-                cell.title = `${formattedDate} · ${exercises} exercises`;
+                cell.title = `${formattedDate} · ${dailyProgress.completed}/${dailyProgress.total} exercises`;
                 grid.appendChild(cell);
             }
         }
 
         currentColumn += month.weeksInMonth + 1;
     });
+
+    if (!shouldShowProgress && !records.length) {
+        const allCells = grid.querySelectorAll(".heat-cell");
+        allCells.forEach((cell) => {
+            cell.classList.add("heat-empty");
+        });
+    }
 
     container.appendChild(labelsRow);
     container.appendChild(grid);
@@ -232,9 +306,11 @@ if (logoutButton) {
 // =========================
 
 function refreshHeatmaps() {
-    generateHeatmap("heatmap-dsa", 17);
-    generateHeatmap("heatmap-networking", 41);
-    generateHeatmap("heatmap-english", 83);
+    const englishRecords = (window.dashboardData && Array.isArray(window.dashboardData.activities))
+        ? window.dashboardData.activities
+        : [];
+
+    generateHeatmap("heatmap-english", 0, englishRecords);
 }
 
 const yearSelector = document.getElementById("yearSelector");
@@ -250,5 +326,9 @@ englishCards.forEach((card) => {
     });
 });
 
-loadDashboardData();
-refreshHeatmaps();
+async function initializeDashboard() {
+    await loadDashboardData();
+    refreshHeatmaps();
+}
+
+initializeDashboard();
