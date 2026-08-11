@@ -4,6 +4,9 @@
 -- Questions are mostly IELTS-style short-answer inputs.
 
 DROP TABLE IF EXISTS english_user_answers CASCADE;
+DROP TABLE IF EXISTS english_listening_user_answers CASCADE;
+DROP TABLE IF EXISTS english_listening_questions CASCADE;
+DROP TABLE IF EXISTS english_listening_lessons CASCADE;
 DROP TABLE IF EXISTS english_daily_results CASCADE;
 DROP TABLE IF EXISTS english_questions CASCADE;
 DROP TABLE IF EXISTS english_lesson_sections CASCADE;
@@ -61,6 +64,41 @@ CREATE TABLE english_user_answers (
     submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE (user_id, lesson_id, question_id)
 );
+
+CREATE TABLE english_listening_lessons (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    lesson_id UUID NOT NULL UNIQUE REFERENCES english_lessons(id) ON DELETE CASCADE,
+    title TEXT NOT NULL DEFAULT 'Daily listening',
+    audio_path TEXT,
+    transcript TEXT,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE english_listening_questions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    lesson_id UUID NOT NULL REFERENCES english_lessons(id) ON DELETE CASCADE,
+    order_index INTEGER NOT NULL CHECK (order_index >= 1),
+    question_text TEXT NOT NULL,
+    question_type TEXT NOT NULL DEFAULT 'short_answer' CHECK (question_type IN ('short_answer', 'multiple_choice', 'true_false')),
+    options JSONB NOT NULL DEFAULT '[]'::jsonb,
+    answer TEXT NOT NULL,
+    points INTEGER NOT NULL DEFAULT 1,
+    UNIQUE (lesson_id, order_index)
+);
+
+CREATE TABLE english_listening_user_answers (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    lesson_id UUID NOT NULL REFERENCES english_lessons(id) ON DELETE CASCADE,
+    question_id UUID NOT NULL REFERENCES english_listening_questions(id) ON DELETE CASCADE,
+    submitted_answer TEXT,
+    is_correct BOOLEAN,
+    submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE (user_id, lesson_id, question_id)
+);
+
 
 CREATE TABLE english_daily_results (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -193,6 +231,41 @@ FROM lesson l JOIN section_map sm ON sm.section_order = 3;
 UPDATE english_questions
 SET answer = correct_answer
 WHERE answer IS NULL;
+
+-- Optional Listening sample for the seeded lesson.
+-- Upload an audio file first, then replace NULL with its Storage path.
+WITH lesson AS (
+    SELECT id FROM english_lessons WHERE lesson_date = CURRENT_DATE LIMIT 1
+)
+INSERT INTO english_listening_lessons (lesson_id, title, audio_path, transcript)
+SELECT id, 'A short conversation about work', NULL,
+    'The speaker works in an office and usually starts at 8 a.m. Before work, the speaker drinks coffee. The speaker travels to work by car and has lunch with a colleague.'
+FROM lesson;
+
+WITH lesson AS (
+    SELECT id FROM english_lessons WHERE lesson_date = CURRENT_DATE LIMIT 1
+)
+INSERT INTO english_listening_questions (lesson_id, order_index, question_text, options, answer)
+SELECT id, 1, 'What is the conversation mainly about?', '["A new job","A daily work routine","A holiday plan","A university course"]'::jsonb, 'B'
+FROM lesson
+UNION ALL
+SELECT id, 2, 'Where does the speaker work?', '["At a hospital","At a school","In an office","At a shop"]'::jsonb, 'C'
+FROM lesson
+UNION ALL
+SELECT id, 3, 'What time does the speaker usually start work?', '[]'::jsonb, '8 a.m.'
+FROM lesson;
+
+WITH lesson AS (
+    SELECT id FROM english_lessons WHERE lesson_date = CURRENT_DATE LIMIT 1
+)
+INSERT INTO english_listening_questions (lesson_id, order_index, question_text, options, answer)
+SELECT id, 4, 'How does the speaker travel to work?', '["By bus","By train","By car","On foot"]'::jsonb, 'C' FROM lesson
+UNION ALL SELECT id, 5, 'What does the speaker usually do before work?', '[]'::jsonb, 'Drink coffee' FROM lesson
+UNION ALL SELECT id, 6, 'Who does the speaker meet in the morning?', '["A manager","A colleague","A customer","A teacher"]'::jsonb, 'B' FROM lesson
+UNION ALL SELECT id, 7, 'How long is the speaker’s lunch break?', '["Thirty minutes","One hour","Two hours","Fifteen minutes"]'::jsonb, 'A' FROM lesson
+UNION ALL SELECT id, 8, 'What does the speaker do after lunch?', '[]'::jsonb, 'Return to work' FROM lesson
+UNION ALL SELECT id, 9, 'What is the speaker’s main responsibility?', '["Teaching students","Helping customers","Writing reports","Designing buildings"]'::jsonb, 'B' FROM lesson
+UNION ALL SELECT id, 10, 'How does the speaker feel about the job?', '["Bored","Worried","Positive","Angry"]'::jsonb, 'C' FROM lesson;
 
 -- Future authoring pattern:
 -- INSERT INTO english_lessons (lesson_date, type, title, subtitle, lesson_level, duration_minutes, skill_focus, passage, summary, is_active)

@@ -271,9 +271,9 @@ function normalizeOptions(value) {
     return [];
 }
 
-function renderQuestions(sections = [], exercises = []) {
-    const questionsHost = document.getElementById('englishQuestions');
-    const exerciseTotal = document.getElementById('exerciseTotal');
+function renderQuestions(sections = [], exercises = [], questionsHostId = 'englishQuestions') {
+    const questionsHost = document.getElementById(questionsHostId);
+    const exerciseTotal = document.getElementById(questionsHostId === 'englishQuestions' ? 'exerciseTotal' : 'listeningTotal');
 
     if (!questionsHost) {
         return;
@@ -335,8 +335,31 @@ function renderQuestions(sections = [], exercises = []) {
     questionsHost.innerHTML = sectionBlocks;
 
     if (exerciseTotal) {
-        exerciseTotal.textContent = '';
+        exerciseTotal.textContent = `${safeExercises.length} questions`;
     }
+}
+
+function renderListeningQuestions(questions = []) {
+    const host = document.getElementById('englishListeningQuestions');
+    const totalHost = document.getElementById('listeningTotal');
+    if (!host) return;
+
+    if (totalHost) totalHost.textContent = `${questions.length} questions`;
+
+    host.innerHTML = questions.map((question, index) => {
+        const questionNumber = Number(question.order_index || index + 1);
+        const answerControl = `<input type="text" class="answer-input listening-answer-input" data-question-id="${escapeHtml(question.id || '')}" data-answer="${escapeHtml(question.answer || question.correct_answer || '')}" aria-label="Listening answer ${questionNumber}" />`;
+
+        return `<div class="question-row listening-answer-row"><span class="question-label">${questionNumber}.</span><div class="answer-row">${answerControl}</div></div>`;
+    }).join('');
+}
+
+function renderListeningTranscript(transcript = '') {
+    const host = document.getElementById('englishListeningCloze');
+    if (!host || !transcript) return;
+
+    const plainTranscript = String(transcript).replace(/\[\[\d+\]\]/g, '_____');
+    host.innerHTML = getPassageParagraphs(plainTranscript).join('');
 }
 
 async function loadExistingUserAnswers(lessonId) {
@@ -374,6 +397,27 @@ async function loadExistingUserAnswers(lessonId) {
     }
 }
 
+async function loadExistingListeningAnswers(lessonId) {
+    const userId = localStorage.getItem('userId');
+    if (!lessonId || !userId || !window.supabase) return;
+
+    try {
+        const rows = await window.supabase.get('english_listening_user_answers', {
+            select: '*',
+            filters: { user_id: `eq.${userId}`, lesson_id: `eq.${lessonId}` }
+        });
+        const answerMap = new Map((Array.isArray(rows) ? rows : []).map((row) => [row.question_id, row.submitted_answer || '']));
+        document.querySelectorAll('#englishListeningQuestions .listening-answer-input').forEach((input) => {
+            const value = answerMap.get(input.dataset.questionId);
+            if (!value) return;
+            if (input.type === 'radio') input.checked = input.value === value;
+            else input.value = value;
+        });
+    } catch (error) {
+        console.warn('Unable to load existing English listening answers:', error);
+    }
+}
+
 function showEnglishSubmitMessage(message, type = 'info') {
     const host = document.getElementById('englishSubmitMessage');
     if (!host) {
@@ -385,7 +429,8 @@ function showEnglishSubmitMessage(message, type = 'info') {
 }
 
 async function submitEnglishAnswers() {
-    const answerInputs = Array.from(document.querySelectorAll('#englishQuestions .answer-input'));
+    const readingInputs = Array.from(document.querySelectorAll('#englishQuestions .answer-input'));
+    const listeningInputs = Array.from(document.querySelectorAll('#englishListeningQuestions .listening-answer-input:checked, #englishListeningQuestions input[type="text"].listening-answer-input'));
     const userId = localStorage.getItem('userId');
 
     if (window.englishFallbackMode) {
@@ -399,7 +444,7 @@ async function submitEnglishAnswers() {
         return;
     }
 
-    const payload = answerInputs
+    const buildPayload = (inputs) => inputs
         .map((input) => {
             const questionId = input.getAttribute('data-question-id');
             const value = input.value.trim();
@@ -421,6 +466,9 @@ async function submitEnglishAnswers() {
             };
         })
         .filter(Boolean);
+    const readingPayload = buildPayload(readingInputs);
+    const listeningPayload = buildPayload(listeningInputs);
+    const payload = [...readingPayload, ...listeningPayload];
 
     if (payload.length === 0) {
         showEnglishSubmitMessage('No answer fields are available to submit yet.', 'info');
@@ -435,7 +483,16 @@ async function submitEnglishAnswers() {
             }
         });
 
-        const result = await window.supabase.create('english_user_answers', payload);
+        let result = [];
+        if (readingPayload.length > 0) {
+            result = await window.supabase.create('english_user_answers', readingPayload);
+        }
+        if (listeningPayload.length > 0) {
+            await window.supabase.delete('english_listening_user_answers', {
+                filters: { user_id: `eq.${userId}`, lesson_id: `eq.${window.currentEnglishLessonId}` }
+            });
+            await window.supabase.create('english_listening_user_answers', listeningPayload);
+        }
         const correctCount = payload.filter((answer) => answer.is_correct).length;
         const totalCount = payload.length;
         const scorePercent = totalCount > 0 ? Number(((correctCount / totalCount) * 100).toFixed(2)) : 0;
@@ -524,6 +581,25 @@ async function loadEnglishLesson() {
             })
         ]);
 
+        let listeningLesson = null;
+        let listeningQuestions = [];
+        try {
+            const listeningLessons = await window.supabase.get('english_listening_lessons', {
+                select: '*',
+                filters: { lesson_id: `eq.${lesson.id}`, is_active: 'eq.true' }
+            });
+            listeningLesson = Array.isArray(listeningLessons) ? listeningLessons[0] : null;
+            if (listeningLesson) {
+                listeningQuestions = await window.supabase.get('english_listening_questions', {
+                    select: '*',
+                    filters: { lesson_id: `eq.${lesson.id}` },
+                    order: { column: 'order_index', direction: 'asc' }
+                });
+            }
+        } catch (listeningError) {
+            console.warn('English listening lesson is not available yet:', listeningError);
+        }
+
         if (titleHost) {
             titleHost.textContent = lesson.title || 'English lesson';
         }
@@ -533,11 +609,23 @@ async function loadEnglishLesson() {
         eyebrowHost.textContent = 'Reading Exercise';
         passageHost.innerHTML = getPassageParagraphs(lesson.passage || '').join('');
         renderQuestions(Array.isArray(sections) ? sections : [], Array.isArray(exercises) ? exercises : []);
+        renderListeningQuestions(Array.isArray(listeningQuestions) ? listeningQuestions : []);
+        renderListeningTranscript(listeningLesson?.transcript || 'The speaker works in an office and usually starts at 8 a.m. Before work, the speaker drinks coffee. The speaker travels to work by car and has lunch with a colleague.');
+
+        const listeningTitleHost = document.getElementById('listeningTitle');
+        const audioHost = document.getElementById('englishAudio');
+        const audioStatusHost = document.getElementById('englishAudioStatus');
+        if (listeningTitleHost) listeningTitleHost.textContent = listeningLesson?.title || 'Listening lesson';
+        if (audioHost && listeningLesson?.audio_path && window.supabase?.url) {
+            audioHost.src = `${window.supabase.url}/storage/v1/object/public/english-audio/${listeningLesson.audio_path}`;
+            if (audioStatusHost) audioStatusHost.textContent = 'Listen and answer the questions below.';
+        }
 
         window.currentEnglishLessonId = lesson.id;
         window.currentEnglishLessonDate = lesson.lesson_date;
         window.englishFallbackMode = false;
         await loadExistingUserAnswers(lesson.id);
+        await loadExistingListeningAnswers(lesson.id);
 
     } catch (error) {
         console.warn('Unable to load English lesson from Supabase:', error);
@@ -574,6 +662,10 @@ if (resetButton) {
         const answerInputs = document.querySelectorAll('#englishQuestions .answer-input');
         answerInputs.forEach((input) => {
             input.value = '';
+        });
+        document.querySelectorAll('#englishListeningQuestions .listening-answer-input').forEach((input) => {
+            if (input.type === 'radio') input.checked = false;
+            else input.value = '';
         });
         showEnglishSubmitMessage('Answers cleared. You can start again.', 'info');
     });

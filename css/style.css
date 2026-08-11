@@ -818,6 +818,115 @@ a {
     color: var(--text-secondary);
 }
 
+.listening-section {
+    max-width: 1400px;
+    margin: 24px auto 0;
+}
+
+.listening-card,
+.english-submit-panel {
+    padding: 22px 24px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--surface);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.03);
+}
+
+.listening-card {
+    min-height: 650px;
+}
+
+.listening-eyebrow {
+    margin-bottom: 10px;
+}
+
+.listening-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.listening-card-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.listening-player-wrap {
+    margin: 18px 0 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.listening-player-wrap audio {
+    width: 100%;
+}
+
+.listening-status {
+    margin: 10px 0 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.listening-transcript-card .listening-cloze {
+    margin-top: 14px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.listening-questions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 18px;
+    padding-right: 8px;
+}
+
+.listening-questions .question-row {
+    padding: 6px 0;
+    align-items: center;
+}
+
+.listening-questions .answer-row {
+    grid-column: 2;
+    width: 100%;
+    margin-top: 0;
+}
+
+.listening-questions .answer-input {
+    width: 50%;
+}
+
+.listening-option-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.listening-option {
+    display: flex;
+    gap: 8px;
+    padding: 9px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.listening-option input {
+    accent-color: var(--accent);
+}
+
+@media (max-width: 640px) {
+    .listening-option-list {
+        grid-template-columns: 1fr;
+    }
+}
+
 .reading-head,
 .question-header,
 .exercise-panel-header {

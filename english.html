@@ -53,13 +53,42 @@
                     </div>
 
                     <div class="exercise-sections" id="englishQuestions"></div>
-
-                    <div class="submit-area">
-                        <button class="secondary-button" type="button" id="resetEnglishAnswers">Reset</button>
-                        <button class="primary-button" type="button" id="submitEnglishAnswers">Submit answers</button>
-                    </div>
-                    <div class="english-submit-message" id="englishSubmitMessage" aria-live="polite"></div>
                 </section>
+            </section>
+
+            <section class="listening-section" id="englishListeningSection">
+                <p class="eyebrow listening-eyebrow">Listening Exercise</p>
+
+                <div class="english-layout listening-layout">
+                    <aside class="reading-card reading-panel listening-transcript-card">
+                        <div class="reading-title-bar">
+                            <h2 class="reading-title" id="listeningTitle">Listening lesson</h2>
+                        </div>
+
+                        <div class="listening-player-wrap">
+                            <audio id="englishAudio" controls preload="metadata"></audio>
+                        </div>
+
+                        <article class="reading-block listening-cloze" id="englishListeningCloze">
+                            <p>Listen to the audio and complete the missing information.</p>
+                        </article>
+                    </aside>
+
+                    <section class="exercise-panel listening-question-card">
+                        <div class="exercise-panel-header">
+                            <span class="exercise-total" id="listeningTotal"></span>
+                        </div>
+                        <div class="listening-questions" id="englishListeningQuestions"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section class="english-submit-panel">
+                <div class="submit-area">
+                    <button class="secondary-button" type="button" id="resetEnglishAnswers">Reset</button>
+                    <button class="primary-button" type="button" id="submitEnglishAnswers">Submit answers</button>
+                </div>
+                <div class="english-submit-message" id="englishSubmitMessage" aria-live="polite"></div>
             </section>
         </main>
     </div>
