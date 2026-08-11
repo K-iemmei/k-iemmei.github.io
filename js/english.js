@@ -617,7 +617,10 @@ async function loadEnglishLesson() {
         const audioStatusHost = document.getElementById('englishAudioStatus');
         if (listeningTitleHost) listeningTitleHost.textContent = listeningLesson?.title || 'Listening lesson';
         if (audioHost && listeningLesson?.audio_path && window.supabase?.url) {
-            audioHost.src = `${window.supabase.url}/storage/v1/object/public/english-audio/${listeningLesson.audio_path}`;
+            const audioPath = String(listeningLesson.audio_path);
+            audioHost.src = /^https?:\/\//i.test(audioPath)
+                ? audioPath
+                : `${window.supabase.url}/storage/v1/object/public/english-audio/${audioPath}`;
             if (audioStatusHost) audioStatusHost.textContent = 'Listen and answer the questions below.';
         }
 

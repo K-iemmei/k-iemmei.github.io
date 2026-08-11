@@ -449,6 +449,120 @@ a {
     font-weight: 600;
 }
 
+.admin-page {
+    min-height: 100vh;
+    padding: 28px 20px 70px;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.admin-topbar,
+.admin-shell {
+    width: min(100%, 980px);
+    margin: 0 auto;
+}
+
+.admin-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 44px;
+}
+
+.admin-header {
+    margin-bottom: 22px;
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: clamp(28px, 4vw, 42px);
+    letter-spacing: -0.04em;
+}
+
+.admin-header p:last-child {
+    margin: 10px 0 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.admin-card {
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--surface);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
+}
+
+.admin-label {
+    display: block;
+    margin: 0 0 8px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.admin-input,
+.admin-editor {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-hover);
+    color: var(--text);
+    font: inherit;
+}
+
+.admin-input {
+    height: 42px;
+    margin-bottom: 20px;
+    padding: 0 12px;
+}
+
+.admin-editor {
+    min-height: 360px;
+    padding: 14px;
+    resize: vertical;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.admin-input:focus,
+.admin-editor:focus {
+    outline: none;
+    border-color: var(--text-muted);
+}
+
+.admin-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.admin-message {
+    min-height: 20px;
+    margin: 14px 0 0;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.admin-message.success { color: var(--green-80); }
+.admin-message.error { color: #b33a3a; }
+.admin-message.info { color: var(--text-secondary); }
+
+.sql-result {
+    max-height: 300px;
+    overflow: auto;
+    margin: 14px 0 0;
+    padding: 14px;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    background: var(--surface-hover);
+    color: var(--text-secondary);
+    white-space: pre-wrap;
+    font-size: 12px;
+}
+
 .avatar {
     width: 30px;
     height: 30px;

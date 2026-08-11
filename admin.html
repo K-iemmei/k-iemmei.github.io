@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin SQL · Daily Practice</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div class="admin-page">
+        <header class="admin-topbar">
+            <a href="dashboard.html" class="back-link">← Dashboard</a>
+            <span class="brand-pill">Admin SQL</span>
+        </header>
+
+        <main class="admin-shell">
+            <section class="admin-header">
+                <p class="eyebrow">Content management</p>
+                <h1>Run a daily lesson script</h1>
+                <p>Paste a trusted SQL script to publish or update English, Chinese, or Listening content.</p>
+            </section>
+
+            <section class="admin-card">
+                <label class="admin-label" for="adminToken">Admin token</label>
+                <input id="adminToken" class="admin-input" type="password" autocomplete="off" />
+
+                <label class="admin-label" for="sqlEditor">SQL script</label>
+                <textarea id="sqlEditor" class="admin-editor" spellcheck="false" placeholder="UPDATE english_lessons ..."></textarea>
+
+                <div class="admin-actions">
+                    <button id="clearSqlButton" class="secondary-button" type="button">Clear</button>
+                    <button id="runSqlButton" class="primary-button" type="button">Run SQL</button>
+                </div>
+
+                <p id="adminMessage" class="admin-message" aria-live="polite"></p>
+                <pre id="sqlResult" class="sql-result" hidden></pre>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
