@@ -95,29 +95,37 @@ async function loadDashboardData() {
 
         const englishSubjectId = englishSubject ? englishSubject.id : null;
 
-        let activities = [];
-        if (englishSubjectId) {
+        const loadActivity = async (resultTable, fallbackSubjectId = null) => {
             try {
-                activities = await window.supabase.get("english_daily_results", {
+                return await window.supabase.get(resultTable, {
                     select: "*",
-                    filters: {
-                        user_id: `eq.${userId}`
-                    }
+                    filters: { user_id: `eq.${userId}` }
                 });
             } catch (resultError) {
-                activities = await window.supabase.get("subject_daily_activity", {
-                    select: "*",
-                    filters: {
-                        user_id: `eq.${userId}`,
-                        subject_id: `eq.${englishSubjectId}`
-                    }
-                });
+                if (!fallbackSubjectId) return [];
+                try {
+                    return await window.supabase.get("subject_daily_activity", {
+                        select: "*",
+                        filters: {
+                            user_id: `eq.${userId}`,
+                            subject_id: `eq.${fallbackSubjectId}`
+                        }
+                    });
+                } catch (fallbackError) {
+                    return [];
+                }
             }
-        }
+        };
+
+        const [englishActivities, chineseActivities] = await Promise.all([
+            loadActivity("english_daily_results", englishSubjectId),
+            loadActivity("chinese_daily_results")
+        ]);
 
         window.dashboardData = {
             subjects: Array.isArray(subjects) ? subjects : [],
-            activities: Array.isArray(activities) ? activities : []
+            activities: Array.isArray(englishActivities) ? englishActivities : [],
+            chineseActivities: Array.isArray(chineseActivities) ? chineseActivities : []
         };
 
         return window.dashboardData;
@@ -125,7 +133,8 @@ async function loadDashboardData() {
         console.warn("Unable to load dashboard data from Supabase:", error);
         window.dashboardData = {
             subjects: [],
-            activities: []
+            activities: [],
+            chineseActivities: []
         };
         return window.dashboardData;
     }
@@ -285,8 +294,16 @@ const username =
 const usernameDisplay =
     document.getElementById("usernameDisplay");
 
+const topAvatar =
+    document.querySelector(".top-avatar");
+
 if (usernameDisplay) {
     usernameDisplay.textContent = username;
+}
+
+if (topAvatar) {
+    topAvatar.textContent = username.trim().charAt(0).toUpperCase() || "U";
+    topAvatar.title = `Log out ${username}`;
 }
 
 
@@ -319,8 +336,12 @@ function refreshHeatmaps() {
     const englishRecords = (window.dashboardData && Array.isArray(window.dashboardData.activities))
         ? window.dashboardData.activities
         : [];
+    const chineseRecords = (window.dashboardData && Array.isArray(window.dashboardData.chineseActivities))
+        ? window.dashboardData.chineseActivities
+        : [];
 
     generateHeatmap("heatmap-english", 0, englishRecords);
+    generateHeatmap("heatmap-chinese", 0, chineseRecords);
 }
 
 const yearSelector = document.getElementById("yearSelector");
@@ -329,10 +350,10 @@ if (yearSelector) {
     yearSelector.addEventListener("change", refreshHeatmaps);
 }
 
-const englishCards = document.querySelectorAll('[data-go="english.html"]');
-englishCards.forEach((card) => {
+const subjectCards = document.querySelectorAll('[data-go]');
+subjectCards.forEach((card) => {
     card.addEventListener('click', () => {
-        window.location.href = 'english.html';
+        window.location.href = card.dataset.go;
     });
 });
 

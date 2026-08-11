@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>中文阅读练习</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div class="english-page chinese-page">
+        <header class="english-topbar">
+            <div class="english-brand-wrap">
+                <a href="dashboard.html" class="back-link">← 返回主页</a>
+                <div class="brand-pill">中文</div>
+            </div>
+            <button id="themeToggle" class="icon-button" aria-label="切换主题">☼</button>
+        </header>
+
+        <main class="english-shell chinese-shell">
+            <section class="english-header">
+                <div>
+                    <p class="eyebrow">HSK 阅读练习</p>
+                    <h1 id="chineseLessonTitle">每日中文阅读</h1>
+                </div>
+                <span class="exercise-total">每天 10 道题</span>
+            </section>
+
+            <section class="chinese-exercise-list" id="chineseQuestions"></section>
+
+            <section class="chinese-submit-panel">
+                <div class="submit-area">
+                    <button class="secondary-button" type="button" id="resetChineseAnswers">重新填写</button>
+                    <button class="primary-button" type="button" id="submitChineseAnswers">提交答案</button>
+                </div>
+                <div class="english-submit-message" id="chineseSubmitMessage" aria-live="polite"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/chinese.js"></script>
+</body>
+</html>

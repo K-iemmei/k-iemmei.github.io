@@ -28,41 +28,13 @@
                 <span>Dashboard</span>
             </a>
 
-            <a href="#" class="nav-item">
-                <span class="nav-icon">◷</span>
-                <span>Today</span>
-            </a>
-
-            <a href="#" class="nav-item">
-                <span class="nav-icon">▤</span>
-                <span>Subjects</span>
-            </a>
-
         </nav>
 
         <div class="sidebar-bottom">
-
             <a href="#" class="nav-item">
                 <span class="nav-icon">⚙</span>
                 <span>Settings</span>
             </a>
-
-            <button
-                id="logoutButton"
-                class="user-button"
-                type="button"
-            >
-                <div class="avatar">K</div>
-            
-                <div class="user-info">
-                    <strong id="usernameDisplay">User</strong>
-                    <span>Student</span>
-                </div>
-            
-                <span class="user-more">↪</span>
-            </button>
-
-
         </div>
 
     </aside>
@@ -89,9 +61,15 @@
                     ☼
                 </button>
 
-                <div class="top-avatar">
+                <button
+                    id="logoutButton"
+                    class="top-avatar logout-avatar"
+                    type="button"
+                    aria-label="Log out"
+                    title="Log out"
+                >
                     K
-                </div>
+                </button>
 
             </div>
 
@@ -110,9 +88,6 @@
                         Good morning, Kiểm.
                     </h1>
 
-                    <p class="welcome-subtitle">
-                        Keep your streak alive. A little progress every day.
-                    </p>
                 </div>
 
             </section>
@@ -125,7 +100,6 @@
 
                     <div>
                         <h2>Today's practice</h2>
-                        <p>What you need to complete today.</p>
                     </div>
 
                     <button class="view-button">
@@ -178,6 +152,44 @@
 
                     </article>
 
+                    <!-- Chinese -->
+                    <article class="subject-card" data-go="chinese.html">
+
+                        <div class="subject-top">
+
+                            <div class="subject-icon chinese">
+                                中
+                            </div>
+
+                            <span class="status-dot"></span>
+
+                        </div>
+
+                        <h3>中文</h3>
+
+                        <p class="subject-topic">
+                            HSK · 阅读
+                        </p>
+
+                        <div class="subject-progress">
+
+                            <div class="progress-info">
+                                <span>每天 10 道题</span>
+                                <span>HSK</span>
+                            </div>
+
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+
+                        </div>
+
+                        <button class="subject-action" type="button" data-go="chinese.html">
+                            开始练习 →
+                        </button>
+
+                    </article>
+
                 </div>
 
             </section>
@@ -190,7 +202,6 @@
 
                     <div>
                         <h2>Activity</h2>
-                        <p>Your learning activity over the last year.</p>
                     </div>
 
                     <label class="year-select-wrap" for="yearSelector">
@@ -249,6 +260,29 @@
 
                         <div
                             id="heatmap-english"
+                            class="heatmap"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+                <div class="heatmap-card">
+
+                    <div class="heatmap-header">
+
+                        <div>
+                            <h3>中文</h3>
+                        </div>
+
+                        <strong>0 active days</strong>
+
+                    </div>
+
+                    <div class="heatmap-wrapper">
+
+                        <div
+                            id="heatmap-chinese"
                             class="heatmap"
                         ></div>
 

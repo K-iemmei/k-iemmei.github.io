@@ -295,11 +295,13 @@ a {
     display: flex;
     flex-direction: column;
 
-    padding: 22px 14px 14px;
+    padding: 24px 14px 18px;
 
     border-right: 1px solid var(--border);
 
-    background: var(--surface);
+    background:
+        linear-gradient(180deg, var(--surface) 0%, var(--surface-hover) 100%);
+    box-shadow: 12px 0 30px rgba(0, 0, 0, 0.025);
 }
 
 
@@ -313,7 +315,7 @@ a {
 
     padding: 0 10px;
 
-    margin-bottom: 35px;
+    margin-bottom: 42px;
 
     font-size: 14px;
     font-weight: 600;
@@ -350,11 +352,11 @@ a {
 
     gap: 11px;
 
-    height: 38px;
+    height: 42px;
 
     padding: 0 11px;
 
-    border-radius: 7px;
+    border-radius: 10px;
 
     color: var(--text-secondary);
 
@@ -377,6 +379,7 @@ a {
     color: var(--text);
 
     font-weight: 500;
+    box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .nav-icon {
@@ -392,6 +395,8 @@ a {
 
 .sidebar-bottom {
     margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-light);
 }
 
 .user-button {
@@ -439,6 +444,18 @@ a {
     height: 30px;
 
     font-size: 12px;
+}
+
+.logout-avatar {
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.logout-avatar:hover {
+    transform: translateY(-1px);
+    opacity: 0.82;
 }
 
 .user-info {
@@ -593,6 +610,145 @@ a {
     grid-template-columns: minmax(500px, 1fr) minmax(500px, 1fr);
     gap: 24px;
     align-items: stretch;
+}
+
+.chinese-shell {
+    max-width: 980px;
+}
+
+.chinese-shell .english-header {
+    align-items: center;
+}
+
+.chinese-shell .english-header h1 {
+    margin-top: 8px;
+    font-size: 28px;
+    letter-spacing: 0;
+}
+
+.chinese-exercise-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.chinese-exercise-card,
+.chinese-submit-panel {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--surface);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.03);
+    padding: 24px;
+}
+
+.chinese-card-header {
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 14px;
+}
+
+.chinese-card-header h2 {
+    margin: 8px 0 0;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0;
+}
+
+.chinese-passage {
+    margin-top: 18px;
+    padding: 18px;
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    background: var(--surface-hover);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.chinese-passage p {
+    margin: 0 0 12px;
+}
+
+.chinese-passage p:last-child {
+    margin-bottom: 0;
+}
+
+.chinese-question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.chinese-question-list .question-row {
+    padding: 8px 0;
+}
+
+.chinese-question-list .answer-row {
+    max-width: none;
+    margin-top: 10px;
+}
+
+.chinese-radio-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 12px;
+}
+
+.chinese-radio-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 46px;
+    padding: 9px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.45;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+}
+
+.chinese-radio-option:hover {
+    border-color: var(--text-muted);
+    background: var(--surface-hover);
+    transform: translateY(-1px);
+}
+
+.chinese-radio-option.is-selected {
+    border: 2px solid var(--green-60) !important;
+    background: var(--surface-hover);
+}
+
+.chinese-radio-option input.answer-input {
+    appearance: none;
+    position: absolute;
+    width: 1px !important;
+    min-width: 1px !important;
+    min-height: 1px !important;
+    height: 1px !important;
+    margin: 0;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.chinese-radio-option input.answer-input:checked {
+    border-color: transparent;
+    background: transparent;
+}
+
+.chinese-submit-panel {
+    margin-top: 20px;
+}
+
+@media (max-width: 640px) {
+    .chinese-radio-list {
+        grid-template-columns: 1fr;
+    }
 }
 
 .reading-card,
