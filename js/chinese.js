@@ -108,6 +108,11 @@ function renderQuestions(parts) {
         return `<article class="chinese-exercise-card"><header class="chinese-card-header"><div><span class="section-kicker">${escapeHtml(part.part_title)}</span><h2>${escapeHtml(part.question_instruction)}</h2></div></header><article class="chinese-passage">${String(part.passage || '').split(/\n\s*\n/).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join('')}</article><div class="chinese-question-list">${questionsHtml}</div></article>`;
     }).join('');
 
+    const lastCard = host.querySelector('.chinese-exercise-card:last-child');
+    if (lastCard) {
+        lastCard.insertAdjacentHTML('beforeend', `<section class="chinese-submit-panel"><div class="submit-area"><button class="secondary-button" type="button" id="resetChineseAnswers">重新填写</button><button class="primary-button" type="button" id="submitChineseAnswers">提交答案</button></div><div class="english-submit-message" id="chineseSubmitMessage" aria-live="polite"></div></section>`);
+    }
+
     host.querySelectorAll('input[type="radio"]').forEach((radio) => {
         radio.addEventListener('change', () => {
             host.querySelectorAll(`input[name="${radio.name}"]`).forEach((sibling) => {
@@ -230,17 +235,22 @@ async function loadChineseLesson() {
     }
 }
 
-document.getElementById('submitChineseAnswers')?.addEventListener('click', submitChineseAnswers);
-document.getElementById('resetChineseAnswers')?.addEventListener('click', () => {
-    document.querySelectorAll('#chineseQuestions .answer-input').forEach((input) => {
-        if (input.type === 'radio') {
-            input.checked = false;
-            input.closest('.chinese-radio-option')?.classList.remove('is-selected');
-        } else {
-            input.value = '';
-        }
-    });
-    showMessage('答案已清空，可以重新填写。', 'info');
+document.addEventListener('click', (event) => {
+    if (event.target.closest('#submitChineseAnswers')) {
+        submitChineseAnswers();
+    }
+
+    if (event.target.closest('#resetChineseAnswers')) {
+        document.querySelectorAll('#chineseQuestions .answer-input').forEach((input) => {
+            if (input.type === 'radio') {
+                input.checked = false;
+                input.closest('.chinese-radio-option')?.classList.remove('is-selected');
+            } else {
+                input.value = '';
+            }
+        });
+        showMessage('答案已清空，可以重新填写。', 'info');
+    }
 });
 
 loadChineseLesson();

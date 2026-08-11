@@ -80,7 +80,7 @@ async function loadDashboardData() {
     const userId = localStorage.getItem("userId");
 
     if (!userId || !window.supabase || typeof window.supabase.get !== "function") {
-        window.dashboardData = { subjects: [], activities: [] };
+        window.dashboardData = { subjects: [], activities: [], chineseActivities: [] };
         return window.dashboardData;
     }
 
@@ -342,6 +342,49 @@ function refreshHeatmaps() {
 
     generateHeatmap("heatmap-english", 0, englishRecords);
     generateHeatmap("heatmap-chinese", 0, chineseRecords);
+    updateActivitySummary([...englishRecords, ...chineseRecords]);
+}
+
+function updateActivitySummary(records = []) {
+    const year = Number(document.getElementById("yearSelector")?.value || new Date().getFullYear());
+    const yearRecords = records
+        .map((record) => ({
+            record,
+            date: String(record.activity_date || record.date || record.updated_at || "").slice(0, 10),
+            progress: normalizeDailyProgress(record)
+        }))
+        .filter((entry) => entry.date.startsWith(`${year}-`) && entry.progress.total > 0);
+
+    const activeDates = [...new Set(yearRecords.map((entry) => entry.date))].sort();
+    const activeDaysHost = document.getElementById("activeDaysValue");
+    const streakHost = document.getElementById("dayStreakValue");
+    const averageScoreHost = document.getElementById("averageScoreValue");
+
+    let totalCorrect = 0;
+    let totalExercises = 0;
+    yearRecords.forEach((entry) => {
+        totalCorrect += entry.progress.completed;
+        totalExercises += entry.progress.total;
+    });
+
+    let streak = 0;
+    if (activeDates.length > 0) {
+        const dateToNumber = (date) => Date.parse(`${date}T00:00:00`);
+        let cursor = dateToNumber(activeDates[activeDates.length - 1]);
+        for (let index = activeDates.length - 1; index >= 0; index -= 1) {
+            if (dateToNumber(activeDates[index]) !== cursor) break;
+            streak += 1;
+            cursor -= 86400000;
+        }
+    }
+
+    const averagePercent = totalExercises > 0
+        ? Math.round((totalCorrect / totalExercises) * 100)
+        : 0;
+
+    if (activeDaysHost) activeDaysHost.textContent = String(activeDates.length);
+    if (streakHost) streakHost.textContent = String(streak);
+    if (averageScoreHost) averageScoreHost.textContent = `${Math.round(totalCorrect)}/${Math.round(totalExercises)} (${averagePercent}%)`;
 }
 
 const yearSelector = document.getElementById("yearSelector");
