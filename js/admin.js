@@ -44,7 +44,10 @@ runButton.addEventListener('click', async () => {
         resultHost.hidden = false;
         showMessage('SQL executed successfully.', 'success');
     } catch (error) {
-        showMessage(error.message || 'Unable to execute SQL.', 'error');
+        const message = error instanceof TypeError && error.message === 'Failed to fetch'
+            ? 'Cannot reach the Edge Function. Deploy admin-sql and check CORS/function URL.'
+            : error.message || 'Unable to execute SQL.';
+        showMessage(message, 'error');
     } finally {
         runButton.disabled = false;
     }

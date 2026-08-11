@@ -14,7 +14,12 @@ function response(body: unknown, status = 200) {
 }
 
 Deno.serve(async (request) => {
-    if (request.method === 'OPTIONS') return response({}, 204);
+    if (request.method === 'OPTIONS') {
+        return new Response(null, {
+            status: 204,
+            headers: corsHeaders
+        });
+    }
     if (request.method !== 'POST') return response({ error: 'Only POST is supported.' }, 405);
 
     const adminToken = Deno.env.get('ADMIN_TOKEN');
