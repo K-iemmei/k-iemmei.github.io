@@ -297,6 +297,12 @@ const usernameDisplay =
 const topAvatar =
     document.querySelector(".top-avatar");
 
+const greetingTitle =
+    document.getElementById("greetingTitle");
+
+const currentDateDisplay =
+    document.getElementById("currentDateDisplay");
+
 if (usernameDisplay) {
     usernameDisplay.textContent = username;
 }
@@ -304,6 +310,38 @@ if (usernameDisplay) {
 if (topAvatar) {
     topAvatar.textContent = username.trim().charAt(0).toUpperCase() || "U";
     topAvatar.title = `Log out ${username}`;
+}
+
+if (currentDateDisplay) {
+    currentDateDisplay.textContent = new Date().toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+    });
+}
+
+async function loadDashboardUserName() {
+    const userId = localStorage.getItem("userId");
+    if (!userId || !window.supabase || typeof window.supabase.get !== "function") return;
+
+    try {
+        const rows = await window.supabase.get("users", {
+            select: "name",
+            filters: { id: `eq.${userId}` }
+        });
+        const databaseName = Array.isArray(rows) ? rows[0]?.name : null;
+        if (!databaseName) return;
+
+        if (greetingTitle) greetingTitle.textContent = `Hello ${databaseName}`;
+        if (usernameDisplay) usernameDisplay.textContent = databaseName;
+        if (topAvatar) {
+            topAvatar.textContent = String(databaseName).trim().charAt(0).toUpperCase() || "U";
+            topAvatar.title = `Log out ${databaseName}`;
+        }
+    } catch (error) {
+        console.warn("Unable to load dashboard user name:", error);
+    }
 }
 
 
@@ -401,7 +439,10 @@ subjectCards.forEach((card) => {
 });
 
 async function initializeDashboard() {
-    await loadDashboardData();
+    await Promise.all([
+        loadDashboardData(),
+        loadDashboardUserName()
+    ]);
     refreshHeatmaps();
 }
 
