@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>English Realm</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top, rgba(24, 35, 58, 0.95), rgba(7, 12, 20, 1));
+            color: #edf3ff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .english-home {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 20px 60px;
+        }
+
+        .english-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .english-brand-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .back-link,
+        .category-card,
+        .primary-button,
+        .secondary-button {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #dfe8ff;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-weight: 700;
+        }
+
+        .brand-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+            height: 40px;
+            border-radius: 999px;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(125, 211, 252, 0.5);
+            color: #9fe7ff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .hero {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.8), rgba(17, 24, 39, 0.95));
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 22px;
+            padding: 28px 22px;
+            box-shadow: 0 18px 40px rgba(2, 6, 23, 0.3);
+            margin-bottom: 26px;
+        }
+
+        .eyebrow {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #7dd3fc;
+            margin: 0 0 10px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 3rem);
+            letter-spacing: -0.04em;
+        }
+
+        .hero p {
+            margin: 10px 0 0;
+            color: #bfd1ef;
+            max-width: 720px;
+            line-height: 1.7;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .category-card {
+            display: block;
+            background: linear-gradient(155deg, rgba(15, 23, 42, 0.82), rgba(18, 26, 41, 0.96));
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 18px;
+            padding: 22px 18px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 12px 26px rgba(2, 6, 23, 0.2);
+            min-height: 210px;
+        }
+
+        .category-card:hover,
+        .back-link:hover,
+        .primary-button:hover,
+        .secondary-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .category-icon {
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            background: rgba(125, 211, 252, 0.1);
+            border: 1px solid rgba(125, 211, 252, 0.25);
+        }
+
+        .category-card h2 {
+            margin: 0 0 8px;
+            font-size: 1.5rem;
+        }
+
+        .category-card p {
+            margin: 0;
+            color: #bfd1ef;
+            line-height: 1.7;
+            min-height: 72px;
+        }
+
+        .category-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 18px;
+            gap: 12px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #dfe8ff;
+            background: rgba(148, 163, 184, 0.08);
+        }
+
+        .action-label {
+            font-weight: 700;
+            color: #9fe7ff;
+        }
+
+        .category-card.coming-soon {
+            opacity: 0.82;
+        }
+
+        .category-card.coming-soon .category-icon {
+            background: rgba(251, 191, 36, 0.1);
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .category-card.coming-soon .action-label {
+            color: #ffd96a;
+        }
+
+        @media (max-width: 640px) {
+            .english-topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .hero {
+                padding: 22px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="english-home">
+        <header class="english-topbar">
+            <div class="english-brand-wrap">
+                <a href="dashboard.html" class="back-link">← Dashboard</a>
+                <div class="brand-pill">English</div>
+            </div>
+            <button id="themeToggle" class="icon-button" aria-label="Toggle theme">☼</button>
+        </header>
+
+        <section class="hero">
+            <p class="eyebrow">English Realm</p>
+            <h1>Choose your practice lane</h1>
+            <p>
+                Build your IELTS skill step by step. Start with Reading, or continue with Listening, Vocabulary, and Grammar when you are ready.
+            </p>
+        </section>
+
+        <div class="category-grid">
+            <a class="category-card" href="english-reading-library.html">
+                <div class="category-icon">📖</div>
+                <h2>Reading</h2>
+                <p>Practice IELTS Academic passages, scan for key ideas, and test comprehension with real Cambridge-style reading tasks.</p>
+                <div class="category-footer">
+                    <span class="tag">Core</span>
+                    <span class="action-label">Open →</span>
+                </div>
+            </a>
+
+            <a class="category-card coming-soon" href="#" aria-disabled="true">
+                <div class="category-icon">🎧</div>
+                <h2>Listening</h2>
+                <p>Listen to short practice tracks, improve note-taking, and sharpen your ability to catch details under time pressure.</p>
+                <div class="category-footer">
+                    <span class="tag">Soon</span>
+                    <span class="action-label">Coming soon</span>
+                </div>
+            </a>
+
+            <a class="category-card coming-soon" href="#" aria-disabled="true">
+                <div class="category-icon">🧠</div>
+                <h2>Vocab</h2>
+                <p>Review useful academic vocabulary, collocations, and word patterns to improve both reading and writing accuracy.</p>
+                <div class="category-footer">
+                    <span class="tag">Soon</span>
+                    <span class="action-label">Coming soon</span>
+                </div>
+            </a>
+
+            <a class="category-card coming-soon" href="#" aria-disabled="true">
+                <div class="category-icon">✍️</div>
+                <h2>Grammar</h2>
+                <p>Refresh sentence structure, grammar patterns, and error spotting through short interactive exercises.</p>
+                <div class="category-footer">
+                    <span class="tag">Soon</span>
+                    <span class="action-label">Coming soon</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const savedTheme = localStorage.getItem('theme');
+
+        if (savedTheme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+            if (themeToggle) themeToggle.textContent = '☾';
+        }
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const isDark = document.documentElement.dataset.theme === 'dark';
+                if (isDark) {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.textContent = '☼';
+                } else {
+                    document.documentElement.dataset.theme = 'dark';
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.textContent = '☾';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

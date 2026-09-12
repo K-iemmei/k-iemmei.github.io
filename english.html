@@ -1,10 +1,90 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>English Practice · Reading</title>
     <link rel="stylesheet" href="css/style.css" />
+    <style>
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .select-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #dfe8ff;
+        }
+
+        .select-wrap select {
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(15, 23, 42, 0.5);
+            color: #fff;
+            border-radius: 10px;
+            padding: 8px 12px;
+            min-width: 220px;
+        }
+
+        .score-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 12px;
+            background: rgba(76, 201, 240, 0.12);
+            border: 1px solid rgba(76, 201, 240, 0.4);
+            border-radius: 999px;
+            color: #dff6ff;
+            font-weight: 700;
+        }
+
+        .question-row {
+            margin-bottom: 18px;
+        }
+
+        .question-row .question-prompt {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.98rem;
+            line-height: 1.7;
+        }
+
+        .answer-row input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: rgba(15, 23, 42, 0.02);
+            color: inherit;
+        }
+
+        .answer-row input:focus {
+            outline: 2px solid rgba(119, 162, 255, 0.5);
+            border-color: rgba(119, 162, 255, 0.8);
+        }
+
+        .link-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            line-height: 1;
+        }
+
+        .badge-correct {
+            color: #00b894;
+            font-weight: 700;
+        }
+
+        .badge-incorrect {
+            color: #ff7675;
+            font-weight: 700;
+        }
+    </style>
 </head>
 <body>
     <div class="english-page english-reading-page">
@@ -14,86 +94,56 @@
                 <div class="brand-pill">English</div>
             </div>
 
+            <div class="toolbar">
+                <label class="select-wrap">
+                    <span>Test</span>
+                    <select id="testSelect" aria-label="Choose IELTS reading test"></select>
+                </label>
+                <button id="loadTestButton" class="secondary-button" type="button">Load test</button>
+                <a href="english-reading-library.html" class="secondary-button link-button">Choose another test</a>
+                <button id="checkScoreButton" class="primary-button" type="button">Check score</button>
+            </div>
+
             <button id="themeToggle" class="icon-button" aria-label="Toggle theme">☼</button>
         </header>
 
         <main class="english-shell">
             <section class="english-header">
                 <div>
-                    <p class="eyebrow" id="englishEyebrow">Reading Exercise</p>
+                    <p class="eyebrow" id="examTitle">IELTS Reading Practice</p>
                 </div>
+                <div class="score-chip" id="scoreChip">0/0</div>
             </section>
 
             <section class="english-layout">
                 <aside class="reading-card reading-panel">
                     <div class="reading-title-bar">
-                        <h2 class="reading-title" id="readingTitle">AI and the future of work</h2>
+                        <h2 class="reading-title" id="readingTitle">Reading passage</h2>
                     </div>
 
-                    <article class="reading-block" id="englishPassage">
-                        <p>
-                            Artificial intelligence is increasingly shaping the workplace, but its effect on employment is still a matter of debate.
-                            Some analysts argue that AI will replace many routine tasks, particularly in administration, data processing and basic customer service.
-                            These roles often involve repetitive work that can be automated with software. As a result, workers in these fields may need to retrain or focus on more complex responsibilities that require judgment, empathy and creativity.
-                        </p>
-
-                        <p>
-                            However, the impact of AI is not simply negative. In many industries, it can improve productivity by handling large amounts of information quickly and accurately. For example, doctors may use AI tools to review scans, while teachers can use language programs to personalize learning. In these situations, technology acts as a support system rather than a total replacement for human professionals.
-                        </p>
-
-                        <p>
-                            The real challenge is therefore not whether AI will change the labor market, but how societies adapt to that change. Governments, companies and education providers need to invest in training programs that help workers develop new skills. The most successful employees are likely to be those who can combine technical knowledge with strong communication and problem-solving abilities.
-                        </p>
-                    </article>
+                    <article class="reading-block" id="readingPassage"></article>
                 </aside>
 
                 <section class="exercise-panel">
                     <div class="exercise-panel-header">
-                        <span class="exercise-total" id="exerciseTotal"></span>
+                        <span class="exercise-total" id="questionCount">0 questions</span>
                     </div>
-
-                    <div class="exercise-sections" id="englishQuestions"></div>
+                    <div class="exercise-sections" id="questionList"></div>
                 </section>
-            </section>
-
-            <section class="listening-section" id="englishListeningSection">
-                <p class="eyebrow listening-eyebrow">Listening Exercise</p>
-
-                <div class="english-layout listening-layout">
-                    <aside class="reading-card reading-panel listening-transcript-card">
-                        <div class="reading-title-bar">
-                            <h2 class="reading-title" id="listeningTitle">Listening lesson</h2>
-                        </div>
-
-                        <div class="listening-player-wrap">
-                            <audio id="englishAudio" controls preload="metadata"></audio>
-                        </div>
-
-                        <article class="reading-block listening-cloze" id="englishListeningCloze">
-                            <p>Listen to the audio and complete the missing information.</p>
-                        </article>
-                    </aside>
-
-                    <section class="exercise-panel listening-question-card">
-                        <div class="exercise-panel-header">
-                            <span class="exercise-total" id="listeningTotal"></span>
-                        </div>
-                        <div class="listening-questions" id="englishListeningQuestions"></div>
-                    </section>
-                </div>
             </section>
 
             <section class="english-submit-panel">
                 <div class="submit-area">
-                    <button class="secondary-button" type="button" id="resetEnglishAnswers">Reset</button>
-                    <button class="primary-button" type="button" id="submitEnglishAnswers">Submit answers</button>
+                    <button class="secondary-button" type="button" id="resetAnswers">Reset</button>
+                    <button class="primary-button" type="button" id="submitAnswers">Submit answers</button>
                 </div>
-                <div class="english-submit-message" id="englishSubmitMessage" aria-live="polite"></div>
+                <div class="english-submit-message" id="scoreSummary" aria-live="polite">
+                    Select a Cambridge reading test and start practicing.
+                </div>
             </section>
         </main>
     </div>
 
-    <script src="js/supabase.js"></script>
     <script src="js/english.js"></script>
 </body>
 </html>

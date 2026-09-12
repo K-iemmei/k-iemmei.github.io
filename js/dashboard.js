@@ -38,7 +38,6 @@ if (themeToggle) {
     });
 }
 
-
 // =========================
 // Supabase dashboard data
 // =========================
@@ -367,7 +366,7 @@ if (logoutButton) {
 
 
 // =========================
-// Create heatmaps
+// Create heatmaps & Quest progress
 // =========================
 
 function refreshHeatmaps() {
@@ -378,9 +377,61 @@ function refreshHeatmaps() {
         ? window.dashboardData.chineseActivities
         : [];
 
+    const year = Number(document.getElementById("yearSelector")?.value || new Date().getFullYear());
+
+    // Filter year active counts
+    const countActiveDays = (records) => {
+        const activeDates = new Set();
+        records.forEach((record) => {
+            const date = String(record.activity_date || record.date || record.updated_at || "").slice(0, 10);
+            const progress = normalizeDailyProgress(record);
+            if (date.startsWith(`${year}-`) && (progress.total > 0 || progress.completed > 0)) {
+                activeDates.add(date);
+            }
+        });
+        return activeDates.size;
+    };
+
+    const englishDays = countActiveDays(englishRecords);
+    const chineseDays = countActiveDays(chineseRecords);
+
+    const engBadge = document.getElementById("englishActiveDaysBadge");
+    const chiBadge = document.getElementById("chineseActiveDaysBadge");
+    if (engBadge) engBadge.textContent = `${englishDays} ACTIVE DAYS`;
+    if (chiBadge) chiBadge.textContent = `${chineseDays} ACTIVE DAYS`;
+
     generateHeatmap("heatmap-english", 0, englishRecords);
     generateHeatmap("heatmap-chinese", 0, chineseRecords);
     updateActivitySummary([...englishRecords, ...chineseRecords]);
+    updateTodayQuestTracker(englishRecords, chineseRecords);
+}
+
+function updateTodayQuestTracker(englishRecords = [], chineseRecords = []) {
+    const today = new Date().toISOString().slice(0, 10);
+
+    const isDone = (records) => records.some((r) => {
+        const d = String(r.activity_date || r.date || r.updated_at || "").slice(0, 10);
+        const p = normalizeDailyProgress(r);
+        return d === today && (p.completed > 0 || p.total > 0);
+    });
+
+    const englishDone = isDone(englishRecords);
+    const chineseDone = isDone(chineseRecords);
+
+    let completedCount = 0;
+    if (englishDone) completedCount += 1;
+    if (chineseDone) completedCount += 1;
+
+    const countHost = document.getElementById("questProgressCount");
+    const barHost = document.getElementById("questProgressBar");
+    const engDot = document.getElementById("englishStatusDot");
+    const chiDot = document.getElementById("chineseStatusDot");
+
+    if (countHost) countHost.textContent = `${completedCount} / 2 DONE`;
+    if (barHost) barHost.style.width = `${(completedCount / 2) * 100}%`;
+
+    if (engDot) engDot.className = `status-dot ${englishDone ? "active" : ""}`;
+    if (chiDot) chiDot.className = `status-dot ${chineseDone ? "active" : ""}`;
 }
 
 function updateActivitySummary(records = []) {
@@ -438,12 +489,146 @@ subjectCards.forEach((card) => {
     });
 });
 
+// =========================
+// Leaderboard
+// =========================
+
+async function loadLeaderboard() {
+    const userId = localStorage.getItem("userId");
+    if (!userId || !window.supabase || typeof window.supabase.get !== "function") {
+        return [];
+    }
+
+    try {
+        // Fetch daily results from both English and Chinese tables
+        const [chineseResults, englishResults] = await Promise.all([
+            window.supabase.get("chinese_daily_results", {
+                select: "user_id, correct_count, total_count, activity_date, submitted_at"
+            }).catch(() => []),
+            window.supabase.get("english_daily_results", {
+                select: "user_id, correct_count, total_count, activity_date, submitted_at"
+            }).catch(() => [])
+        ]);
+
+        const allResults = [
+            ...(Array.isArray(chineseResults) ? chineseResults : []),
+            ...(Array.isArray(englishResults) ? englishResults : [])
+        ];
+
+        if (allResults.length === 0) {
+            return [];
+        }
+
+        // Group active dates by user
+        const userDatesMap = new Map();
+        allResults.forEach((result) => {
+            const uid = result.user_id;
+            if (!uid) return;
+            const dateStr = String(result.activity_date || result.submitted_at || "").slice(0, 10);
+            if (!dateStr) return;
+
+            if (!userDatesMap.has(uid)) {
+                userDatesMap.set(uid, new Set());
+            }
+            userDatesMap.get(uid).add(dateStr);
+        });
+
+        // Calculate consecutive streak for each user
+        const userStreaks = new Map();
+        userDatesMap.forEach((datesSet, uid) => {
+            const sortedDates = [...datesSet].sort();
+            let streak = 0;
+            if (sortedDates.length > 0) {
+                const dateToNumber = (d) => Date.parse(`${d}T00:00:00`);
+                let cursor = dateToNumber(sortedDates[sortedDates.length - 1]);
+                for (let i = sortedDates.length - 1; i >= 0; i -= 1) {
+                    if (dateToNumber(sortedDates[i]) !== cursor) break;
+                    streak += 1;
+                    cursor -= 86400000;
+                }
+            }
+            userStreaks.set(uid, streak);
+        });
+
+        // Get user names
+        const userNames = new Map();
+        try {
+            const users = await window.supabase.get("users", {
+                select: "id, name"
+            });
+            if (Array.isArray(users)) {
+                users.forEach((user) => {
+                    userNames.set(user.id, user.name || "Hero");
+                });
+            }
+        } catch (e) {
+            console.warn("Could not fetch user names:", e);
+        }
+
+        // Convert to array and sort by streak
+        const leaderboard = Array.from(userStreaks.entries())
+            .map(([uid, streak]) => ({
+                userId: uid,
+                name: userNames.get(uid) || "Hero",
+                streak: streak
+            }))
+            .sort((a, b) => b.streak - a.streak)
+            .slice(0, 5);
+
+        return leaderboard;
+    } catch (error) {
+        console.warn("Could not load leaderboard:", error);
+        return [];
+    }
+}
+
+function renderLeaderboard(leaderboard) {
+    const listHost = document.getElementById("leaderboardList");
+    if (!listHost) return;
+
+    if (leaderboard.length === 0) {
+        listHost.innerHTML = `
+            <div class="leaderboard-item pixel-rank-item">
+                <span class="leaderboard-rank">-</span>
+                <span class="leaderboard-name">No heroes yet</span>
+                <span class="leaderboard-streak">0d</span>
+            </div>
+        `;
+        return;
+    }
+
+    listHost.innerHTML = leaderboard.map((user, index) => {
+        const rankClass = index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : '';
+        const medal = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}`;
+        return `
+            <div class="leaderboard-item pixel-rank-item">
+                <span class="leaderboard-rank ${rankClass}">${medal}</span>
+                <span class="leaderboard-name">${escapeHtml(user.name)}</span>
+                <span class="leaderboard-streak">🔥 ${user.streak}d</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function escapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 async function initializeDashboard() {
     await Promise.all([
         loadDashboardData(),
         loadDashboardUserName()
     ]);
     refreshHeatmaps();
+
+    // Load and render leaderboard
+    const leaderboard = await loadLeaderboard();
+    renderLeaderboard(leaderboard);
 }
 
 initializeDashboard();

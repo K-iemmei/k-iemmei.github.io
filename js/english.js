@@ -1,4 +1,4 @@
-const themeToggle = document.getElementById('themeToggle');
+﻿const themeToggle = document.getElementById('themeToggle');
 const savedTheme = localStorage.getItem('theme');
 
 if (savedTheme === 'dark') {
@@ -22,656 +22,322 @@ if (themeToggle) {
     });
 }
 
-function buildFallbackLesson() {
+const state = {
+    tests: [],
+    currentIndex: 0,
+};
+
+const fallbackPassage = `Artificial intelligence is increasingly shaping the workplace, but its effect on employment is still a matter of debate. Some analysts argue that AI will replace many routine tasks, particularly in administration, data processing and basic customer service. These roles often involve repetitive work that can be automated with software. As a result, workers in these fields may need to retrain or focus on more complex responsibilities that require judgment, empathy and creativity.`;
+
+function normalizeAnswer(value = '') {
+    return String(value)
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function parseTestTitle(rawTitle = '') {
+    const value = String(rawTitle).trim();
+    if (!value) return '';
+
+    const withoutSource = value.replace(/\s*\(.*?\)\s*$/g, '').trim();
+    const cleaned = withoutSource
+        .replace(/^Cambridge IELTS\s+\d+\s+Academic Reading Test\s+\d+\s*[:\-]?\s*/i, '')
+        .trim();
+
+    return cleaned || withoutSource;
+}
+
+function extractPassageFromText(rawText = '') {
+    const text = String(rawText).replace(/\r/g, '');
+    const beforeQuestions = text.split(/(?:^|\n)\s*Questions\s+\d+\s*[-–]\d+/i)[0] || text;
+    const lines = beforeQuestions
+        .split(/\n/)
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+    const startIndex = lines.findIndex((line) => {
+        const noise = /^(Skip to content|Cambridge IELTS|🔥 Today Only:|Export|Focus|00:\d{2}:\d{2}|[-+]+|Part\s+\d+|Practice Skimming|Read the text|You should spend|Practice this section only|Complete the notes below|Choose ONE WORD ONLY|Questions\s+\d+)/i.test(line);
+        return !noise && !/answer questions/i.test(line) && line.length > 10;
+    });
+
+    if (startIndex === -1) {
+        return fallbackPassage;
+    }
+
+    const endIndex = lines.findIndex((line, index) => index > startIndex && /^(?:Questions\s+\d+\s*[-–]\d+|Questions\s+\d+\s*[-–]\d+.*)$/i.test(line));
+    const meaningfulLines = lines.slice(startIndex, endIndex >= 0 ? endIndex : undefined);
+    const cleaned = meaningfulLines.join('\n\n').replace(/\n{3,}/g, '\n\n').trim();
+
+    return cleaned || fallbackPassage;
+}
+
+function inferCorrectAnswerFromTitle(title = '', passage = '') {
+    const cleanedTitle = parseTestTitle(title) || 'Reading passage';
+    const shortTitle = cleanedTitle.replace(/\b(Academic|Reading|Test)\b/gi, '').trim();
+    const candidate = shortTitle || 'the main idea of the passage';
+
+    const yearMatch = (passage.match(/\b(19\d{2}|20\d{2})\b/g) || [])[0];
+    const regionMatch = (passage.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b/g) || []).find((word) => word.length > 4);
+
     return {
-        lesson: {
-            type: 'reading',
-            title: 'AI and the future of work',
-            subtitle: 'IELTS Reading · Day 01',
-            duration_minutes: 30,
-            skill_focus: 'Reading for main idea and detail',
-            passage: 'Artificial intelligence is increasingly shaping the workplace, but its effect on employment is still a matter of debate. Some analysts argue that AI will replace many routine tasks, particularly in administration, data processing and basic customer service. These roles often involve repetitive work that can be automated with software. As a result, workers in these fields may need to retrain or focus on more complex responsibilities that require judgment, empathy and creativity. However, the impact of AI is not simply negative. In many industries, it can improve productivity by handling large amounts of information quickly and accurately. For example, doctors may use AI tools to review scans, while teachers can use language programs to personalize learning. In these situations, technology acts as a support system rather than a total replacement for human professionals. The real challenge is therefore not whether AI will change the labor market, but how societies adapt to that change. Governments, companies and education providers need to invest in training programs that help workers develop new skills. The most successful employees are likely to be those who can combine technical knowledge with strong communication and problem-solving abilities.',
-            summary: 'Focus on main idea and inference.'
-        },
-        sections: [
-            {
-                id: 'section-1',
-                lesson_id: null,
-                section_order: 1,
-                section_title: 'Part 1',
-                section_instruction: 'Identify the main cause of workplace change.'
-            },
-            {
-                id: 'section-2',
-                lesson_id: null,
-                section_order: 2,
-                section_title: 'Part 2',
-                section_instruction: 'Explain how automation affects different job functions.'
-            },
-            {
-                id: 'section-3',
-                lesson_id: null,
-                section_order: 3,
-                section_title: 'Part 3',
-                section_instruction: 'Summarize the future skills and adaptation required.'
-            }
-        ],
-        exercises: [
-            {
-                id: 'fallback-question-1',
-                lesson_id: null,
-                section_id: 'section-1',
-                order_index: 1,
-                question_text: 'According to the passage, what is the main challenge created by AI in the workplace?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'Look for the sentence that discusses the real challenge in the final paragraph.',
-                points: 1,
-                correct_answer: 'How society adapts to the changes brought by AI'
-            },
-            {
-                id: 'fallback-question-2',
-                lesson_id: null,
-                section_id: 'section-1',
-                order_index: 2,
-                question_text: 'What roles are mentioned as being affected by automation?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'Look for routine work that can be automated.',
-                points: 1,
-                correct_answer: 'Administration, data processing and basic customer service'
-            },
-            {
-                id: 'fallback-question-3',
-                lesson_id: null,
-                section_id: 'section-1',
-                order_index: 3,
-                question_text: 'What does the passage say workers may need to do?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'The passage talks about retraining and new responsibilities.',
-                points: 1,
-                correct_answer: 'Retrain and focus on more complex responsibilities'
-            },
-            {
-                id: 'fallback-question-4',
-                lesson_id: null,
-                section_id: 'section-1',
-                order_index: 4,
-                question_text: 'Which professional roles are used as examples of AI support?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'The passage mentions doctors and teachers.',
-                points: 1,
-                correct_answer: 'Doctors and teachers'
-            },
-            {
-                id: 'fallback-question-5',
-                lesson_id: null,
-                section_id: 'section-1',
-                order_index: 5,
-                question_text: 'What skill combination is described as useful for future employees?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'The final paragraph mentions two capabilities.',
-                points: 1,
-                correct_answer: 'Technical knowledge and communication/problem-solving abilities'
-            },
-            {
-                id: 'fallback-question-6',
-                lesson_id: null,
-                section_id: 'section-2',
-                order_index: 6,
-                question_text: 'What is the main idea of paragraph 1?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'Read the first paragraph carefully.',
-                points: 1,
-                correct_answer: 'AI is changing workplace tasks and challenging employment'
-            },
-            {
-                id: 'fallback-question-7',
-                lesson_id: null,
-                section_id: 'section-2',
-                order_index: 7,
-                question_text: 'What kind of work is said to be suitable for automation?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'The passage gives examples of repetitive work.',
-                points: 1,
-                correct_answer: 'Routine administrative and customer service tasks'
-            },
-            {
-                id: 'fallback-question-8',
-                lesson_id: null,
-                section_id: 'section-2',
-                order_index: 8,
-                question_text: 'What can AI do in many industries according to the passage?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'Look at the sentence about productivity.',
-                points: 1,
-                correct_answer: 'Improve productivity and process information quickly and accurately'
-            },
-            {
-                id: 'fallback-question-9',
-                lesson_id: null,
-                section_id: 'section-2',
-                order_index: 9,
-                question_text: 'How does the author describe AI in relation to human professionals?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'Look toward the second paragraph.',
-                points: 1,
-                correct_answer: 'A support system rather than a total replacement'
-            },
-            {
-                id: 'fallback-question-10',
-                lesson_id: null,
-                section_id: 'section-2',
-                order_index: 10,
-                question_text: 'Which institutions are expected to support adaptation to change?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'The final paragraph includes the actors.',
-                points: 1,
-                correct_answer: 'Governments, companies and education providers'
-            },
-            {
-                id: 'fallback-question-11',
-                lesson_id: null,
-                section_id: 'section-3',
-                order_index: 11,
-                question_text: 'What kind of training do workers need according to the passage?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'The final paragraph refers to subjects that help workers develop new skills.',
-                points: 1,
-                correct_answer: 'Training programs for new skills'
-            },
-            {
-                id: 'fallback-question-12',
-                lesson_id: null,
-                section_id: 'section-3',
-                order_index: 12,
-                question_text: 'Which of the human abilities are mentioned as still necessary?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'The passage refers to judgment, empathy and creativity.',
-                points: 1,
-                correct_answer: 'Judgment, empathy and creativity'
-            },
-            {
-                id: 'fallback-question-13',
-                lesson_id: null,
-                section_id: 'section-3',
-                order_index: 13,
-                question_text: 'What is the final position of the author about AI?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'The last paragraph emphasizes adaptation rather than denial of change.',
-                points: 1,
-                correct_answer: 'AI will change the labor market, so society must adapt'
-            },
-            {
-                id: 'fallback-question-14',
-                lesson_id: null,
-                section_id: 'section-3',
-                order_index: 14,
-                question_text: 'What phrase best summarizes the passage?',
-                question_type: 'short_answer',
-                options: '[]',
-                answer_hint: 'Think about the overall message of the reading.',
-                points: 1,
-                correct_answer: 'AI brings change to work, but adaptation and human skills matter'
-            }
-        ]
+        mainTopic: cleanedTitle || 'the passage topic',
+        timeFocus: yearMatch || 'the period discussed in the text',
+        keySubject: regionMatch || candidate.split(' ').slice(0, 2).join(' '),
+        detailPhrase: candidate.split(' ').slice(0, 4).join(' '),
     };
 }
 
-function escapeHtml(value) {
-    return String(value || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+function buildQuestions(title, passage) {
+    const answers = inferCorrectAnswerFromTitle(title, passage);
+    return [
+        {
+            prompt: 'What is the main topic of this reading passage?',
+            answer: answers.mainTopic,
+            hint: 'Look at the title and the opening sentence.',
+        },
+        {
+            prompt: 'Which time period is the text mainly concerned with?',
+            answer: answers.timeFocus,
+            hint: 'Check the dates or historical context in the first paragraph.',
+        },
+        {
+            prompt: 'What makes the subject in this passage important?',
+            answer: answers.detailPhrase,
+            hint: 'Focus on the main idea and the significance described.',
+        },
+        {
+            prompt: 'Which key noun best captures the topic of the text?',
+            answer: answers.keySubject,
+            hint: 'Find the main subject or named thing in the passage.',
+        },
+        {
+            prompt: 'In one short phrase, describe the purpose of reading this text carefully.',
+            answer: 'to understand the main idea and key details',
+            hint: 'Think about why close reading matters.',
+        },
+    ];
 }
 
-function normalizeAnswer(value) {
-    return String(value || '')
-        .trim()
-        .replace(/\s+/g, ' ')
-        .toLocaleLowerCase();
+function checkAnswer(inputValue, answerText) {
+    const userValue = normalizeAnswer(inputValue);
+    const expected = normalizeAnswer(answerText);
+
+    if (!userValue) return false;
+    if (userValue === expected) return true;
+
+    const accepted = expected.split(' ');
+    const userWords = new Set(userValue.split(' '));
+    const matches = accepted.filter((word) => word.length > 2 && (userWords.has(word) || userValue.includes(word))).length;
+
+    return matches >= Math.max(2, Math.ceil(accepted.length * 0.6));
 }
 
-function getPassageParagraphs(passage) {
-    if (!passage) return ['<p>No passage available.</p>'];
-
-    const clean = String(passage).trim();
-    const paragraphs = clean.split(/\n\s*\n/);
-
-    return paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`);
-}
-
-function normalizeOptions(value) {
-    if (Array.isArray(value)) {
-        return value;
-    }
-
-    if (typeof value === 'string') {
-        try {
-            const parsed = JSON.parse(value);
-            return Array.isArray(parsed) ? parsed : [];
-        } catch (error) {
-            return [];
-        }
-    }
-
-    return [];
-}
-
-function renderQuestions(sections = [], exercises = [], questionsHostId = 'englishQuestions') {
-    const questionsHost = document.getElementById(questionsHostId);
-    const exerciseTotal = document.getElementById(questionsHostId === 'englishQuestions' ? 'exerciseTotal' : 'listeningTotal');
-
-    if (!questionsHost) {
-        return;
-    }
-
-    const safeSections = Array.isArray(sections) ? sections : [];
-    const safeExercises = Array.isArray(exercises) ? exercises : [];
-
-    if (safeSections.length === 0 && safeExercises.length === 0) {
-        questionsHost.innerHTML = '<div class="empty-state">No exercises available.</div>';
-        if (exerciseTotal) exerciseTotal.textContent = '';
-        return;
-    }
-
-    const orderedSections = [...safeSections].sort((a, b) => Number(a.section_order || 0) - Number(b.section_order || 0));
-
-    const groupedExercises = new Map();
-    safeExercises.forEach((exercise) => {
-        const sectionId = exercise.section_id || exercise.lesson_id;
-        if (!groupedExercises.has(sectionId)) {
-            groupedExercises.set(sectionId, []);
-        }
-        groupedExercises.get(sectionId).push(exercise);
-    });
-
-    const sectionBlocks = orderedSections.map((section) => {
-        const sectionQuestions = groupedExercises.get(section.id) || [];
-        const sectionQuestionsHtml = sectionQuestions
-            .sort((a, b) => Number(a.order_index || 0) - Number(b.order_index || 0))
-            .map((exercise, localIndex) => {
-                const questionNumber = Number(exercise.order_index || localIndex + 1);
-                const questionText = exercise.question_text || exercise.question || '';
-
-                return `<div class="question-row">
-                    <span class="question-label">${questionNumber}.</span>
-                    <span class="question-prompt">${escapeHtml(questionText)}</span>
-                    <div class="answer-row">
-                        <input type="text" class="answer-input" data-question-id="${escapeHtml(exercise.id || '')}" data-answer="${escapeHtml(exercise.answer || exercise.correct_answer || '')}" aria-label="Answer for question ${questionNumber}" />
-                    </div>
-                </div>`;
-            })
-            .join('');
-
-        if (!sectionQuestionsHtml) {
-            return '';
-        }
-
-        return `<section class="section-block">
-            <div class="section-block-header">
-                <div class="section-title-wrap">
-                    <span class="section-kicker">${escapeHtml(section.section_title || 'Exercise Section')}</span>
-                    <div class="section-instruction">${escapeHtml(section.section_instruction || '')}</div>
-                </div>
-            </div>
-            <div class="question-list">${sectionQuestionsHtml}</div>
-        </section>`;
-    }).join('');
-
-    questionsHost.innerHTML = sectionBlocks;
-
-    if (exerciseTotal) {
-        exerciseTotal.textContent = `${safeExercises.length} questions`;
-    }
-}
-
-function renderListeningQuestions(questions = []) {
-    const host = document.getElementById('englishListeningQuestions');
-    const totalHost = document.getElementById('listeningTotal');
+function renderQuestionList(questions) {
+    const host = document.getElementById('questionList');
+    const countHost = document.getElementById('questionCount');
     if (!host) return;
 
-    if (totalHost) totalHost.textContent = `${questions.length} questions`;
+    host.innerHTML = questions.map((question, index) => `
+        <div class="question-row">
+            <span class="question-label">${index + 1}.</span>
+            <span class="question-prompt">${question.prompt}</span>
+            <div class="answer-row">
+                <input type="text" class="answer-input" data-index="${index}" placeholder="Type your answer..." aria-label="Answer for question ${index + 1}" />
+            </div>
+        </div>
+    `).join('');
 
-    host.innerHTML = questions.map((question, index) => {
-        const questionNumber = Number(question.order_index || index + 1);
-        const answerControl = `<input type="text" class="answer-input listening-answer-input" data-question-id="${escapeHtml(question.id || '')}" data-answer="${escapeHtml(question.answer || question.correct_answer || '')}" aria-label="Listening answer ${questionNumber}" />`;
-
-        return `<div class="question-row listening-answer-row"><span class="question-label">${questionNumber}.</span><div class="answer-row">${answerControl}</div></div>`;
-    }).join('');
-}
-
-function renderListeningTranscript(transcript = '') {
-    const host = document.getElementById('englishListeningCloze');
-    if (!host || !transcript) return;
-
-    const plainTranscript = String(transcript).replace(/\[\[\d+\]\]/g, '_____');
-    host.innerHTML = getPassageParagraphs(plainTranscript).join('');
-}
-
-async function loadExistingUserAnswers(lessonId) {
-    const userId = localStorage.getItem('userId');
-    const answerInputs = Array.from(document.querySelectorAll('#englishQuestions .answer-input'));
-
-    if (!lessonId || !userId || !answerInputs.length || !window.supabase || typeof window.supabase.get !== 'function') {
-        return;
+    if (countHost) {
+        countHost.textContent = `${questions.length} questions`;
     }
+}
+
+function renderPassage(title, text) {
+    const host = document.getElementById('readingPassage');
+    const titleHost = document.getElementById('readingTitle');
+    if (titleHost) titleHost.textContent = title || 'Reading passage';
+    if (!host) return;
+
+    const paragraphs = String(text)
+        .split(/\n\s*\n/)
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .map((paragraph) => `<p>${paragraph.replace(/\n/g, ' ')}</p>`)
+        .join('');
+
+    host.innerHTML = paragraphs || '<p>No passage available.</p>';
+}
+
+async async function loadTestList() {
+    const select = document.getElementById('testSelect');
+    if (!select) return;
 
     try {
-        const rows = await window.supabase.get('english_user_answers', {
-            select: '*',
-            filters: {
-                user_id: `eq.${userId}`,
-                lesson_id: `eq.${lessonId}`
-            }
-        });
+        const response = await fetch('data/cambridge_ielts_reading/manifest.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Manifest not found');
+        const manifest = await response.json();
 
-        const storedAnswers = Array.isArray(rows) ? rows : [];
-        const answerMap = new Map(
-            storedAnswers
-                .filter((row) => row && row.question_id)
-                .map((row) => [row.question_id, row.submitted_answer || ''])
-        );
+        const items = Array.isArray(manifest) ? manifest : manifest.tests || [];
+        if (!items.length) throw new Error('No tests found');
 
-        answerInputs.forEach((input) => {
-            const questionId = input.getAttribute('data-question-id');
-            if (questionId && answerMap.has(questionId)) {
-                input.value = answerMap.get(questionId) || '';
-            }
-        });
+        state.tests = items.map((item) => ({
+            slug: item.slug || item.file?.replace(/\.txt$/i, '') || '',
+            title: item.title || item.name || 'Cambridge IELTS Reading',
+            file: item.file || item.filename || '',
+            source: item.url || '',
+        }));
     } catch (error) {
-        console.warn('Unable to load existing English answers for this user:', error);
+        console.warn('Unable to load Cambridge dataset:', error);
+        state.tests = [
+            { slug: 'sample-test', title: 'Sample IELTS Reading', file: '', source: '' },
+        ];
     }
+
+    select.innerHTML = state.tests.map((test, index) => `<option value="${index}">${test.title}</option>`).join('');
+
+    const params = new URLSearchParams(window.location.search);
+    const requestedTest = params.get('test');
+    const requestedIndex = requestedTest
+        ? state.tests.findIndex((test) => test.slug === requestedTest || test.file === requestedTest || test.title === requestedTest)
+        : -1;
+
+    state.currentIndex = requestedIndex >= 0 ? requestedIndex : 0;
+    select.value = String(state.currentIndex);
+    loadCurrentTest();
 }
 
-async function loadExistingListeningAnswers(lessonId) {
-    const userId = localStorage.getItem('userId');
-    if (!lessonId || !userId || !window.supabase) return;
-
-    try {
-        const rows = await window.supabase.get('english_listening_user_answers', {
-            select: '*',
-            filters: { user_id: `eq.${userId}`, lesson_id: `eq.${lessonId}` }
-        });
-        const answerMap = new Map((Array.isArray(rows) ? rows : []).map((row) => [row.question_id, row.submitted_answer || '']));
-        document.querySelectorAll('#englishListeningQuestions .listening-answer-input').forEach((input) => {
-            const value = answerMap.get(input.dataset.questionId);
-            if (!value) return;
-            if (input.type === 'radio') input.checked = input.value === value;
-            else input.value = value;
-        });
-    } catch (error) {
-        console.warn('Unable to load existing English listening answers:', error);
+async function loadCurrentTest() {
+    const test = state.tests[state.currentIndex] || state.tests[0];
+    const titleHost = document.getElementById('examTitle');
+    if (titleHost) {
+        titleHost.textContent = test ? test.title : 'IELTS Reading Practice';
     }
+
+    if (!test) return;
+
+    let rawText = '';
+    let title = test.title;
+
+    if (test.file) {
+        try {
+            const response = await fetch(`data/cambridge_ielts_reading/${test.file}`, { cache: 'no-store' });
+            if (response.ok) {
+                rawText = await response.text();
+                const detectedTitle = rawText
+                    .split(/\n+/)
+                    .map((line) => line.trim())
+                    .find((line) => line && !/^(Skip to content|Cambridge IELTS|Export|Focus|Part\s+\d+|Read the text|You should spend|Practice Skimming|Questions\s+\d+)/i.test(line));
+                title = parseTestTitle(detectedTitle || test.title || 'Reading passage') || 'Reading passage';
+            }
+        } catch (error) {
+            console.warn('Unable to load reading test file:', error);
+        }
+    }
+
+    const passage = extractPassageFromText(rawText || fallbackPassage);
+    const questions = buildQuestions(title, passage);
+    state.currentQuestions = questions;
+
+    renderPassage(title, passage);
+    renderQuestionList(questions);
+    updateScoreSummary('Select a test and start practicing.', 'info');
+    updateScoreChip(0, questions.length);
 }
 
-function showEnglishSubmitMessage(message, type = 'info') {
-    const host = document.getElementById('englishSubmitMessage');
-    if (!host) {
-        return;
-    }
-
+function updateScoreSummary(message, type = 'info') {
+    const host = document.getElementById('scoreSummary');
+    if (!host) return;
     host.className = `english-submit-message ${type}`;
     host.textContent = message;
 }
 
-async function submitEnglishAnswers() {
-    const readingInputs = Array.from(document.querySelectorAll('#englishQuestions .answer-input'));
-    const listeningInputs = Array.from(document.querySelectorAll('#englishListeningQuestions .listening-answer-input:checked, #englishListeningQuestions input[type="text"].listening-answer-input'));
-    const userId = localStorage.getItem('userId');
-
-    if (window.englishFallbackMode) {
-        showEnglishSubmitMessage('The live lesson is not available now, so sample answers cannot be saved to the database.', 'error');
-        return;
-    }
-
-    if (!window.currentEnglishLessonId || !userId || !window.supabase || typeof window.supabase.upsert !== 'function') {
-        console.warn('Cannot submit English answers without an active lesson or authenticated user.');
-        showEnglishSubmitMessage('Please log in before submitting your answers.', 'error');
-        return;
-    }
-
-    const buildPayload = (inputs) => inputs
-        .map((input) => {
-            const questionId = input.getAttribute('data-question-id');
-            const value = input.value.trim();
-            const expectedAnswer = input.getAttribute('data-answer') || '';
-            const acceptedAnswers = expectedAnswer.split(/\s*\|\|\s*/).filter(Boolean);
-            const isCorrect = acceptedAnswers.some((answer) => normalizeAnswer(answer) === normalizeAnswer(value));
-
-            if (!questionId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(questionId)) {
-                return null;
-            }
-
-            return {
-                user_id: userId,
-                lesson_id: window.currentEnglishLessonId,
-                question_id: questionId,
-                submitted_answer: value,
-                is_correct: isCorrect,
-                submitted_at: new Date().toISOString()
-            };
-        })
-        .filter(Boolean);
-    const readingPayload = buildPayload(readingInputs);
-    const listeningPayload = buildPayload(listeningInputs);
-    const payload = [...readingPayload, ...listeningPayload];
-
-    if (payload.length === 0) {
-        showEnglishSubmitMessage('No answer fields are available to submit yet.', 'info');
-        return;
-    }
-
-    try {
-        const existingDelete = await window.supabase.delete('english_user_answers', {
-            filters: {
-                user_id: `eq.${userId}`,
-                lesson_id: `eq.${window.currentEnglishLessonId}`
-            }
-        });
-
-        let result = [];
-        if (readingPayload.length > 0) {
-            result = await window.supabase.create('english_user_answers', readingPayload);
-        }
-        if (listeningPayload.length > 0) {
-            await window.supabase.delete('english_listening_user_answers', {
-                filters: { user_id: `eq.${userId}`, lesson_id: `eq.${window.currentEnglishLessonId}` }
-            });
-            await window.supabase.create('english_listening_user_answers', listeningPayload);
-        }
-        const correctCount = payload.filter((answer) => answer.is_correct).length;
-        const totalCount = payload.length;
-        const scorePercent = totalCount > 0 ? Number(((correctCount / totalCount) * 100).toFixed(2)) : 0;
-
-        await window.supabase.delete('english_daily_results', {
-            filters: {
-                user_id: `eq.${userId}`,
-                lesson_id: `eq.${window.currentEnglishLessonId}`
-            }
-        });
-        await window.supabase.create('english_daily_results', {
-            user_id: userId,
-            lesson_id: window.currentEnglishLessonId,
-            activity_date: window.currentEnglishLessonDate || new Date().toISOString().slice(0, 10),
-            correct_count: correctCount,
-            total_count: totalCount,
-            score_percent: scorePercent,
-            submitted_at: new Date().toISOString()
-        });
-
-        console.log('English submission payload:', payload);
-        console.log('Delete old answers result:', existingDelete);
-        console.log('Create result:', result);
-
-        showEnglishSubmitMessage(`Your answers have been submitted successfully. Score: ${correctCount}/${totalCount}.`, 'success');
-    } catch (error) {
-        console.error('Unable to submit English answers:', error);
-        showEnglishSubmitMessage('Unable to submit answers. Please try again.', 'error');
-    }
+function updateScoreChip(correct, total) {
+    const host = document.getElementById('scoreChip');
+    if (!host) return;
+    host.textContent = `${correct}/${total}`;
 }
 
-async function loadEnglishLesson() {
-    const titleHost = document.getElementById('englishTitle');
-    const eyebrowHost = document.getElementById('englishEyebrow');
-    const passageHost = document.getElementById('englishPassage');
-    const readingTitleHost = document.getElementById('readingTitle');
+function submitCurrentTest() {
+    const items = Array.from(document.querySelectorAll('.answer-input'));
+    const total = state.currentQuestions.length || items.length || 0;
 
-    if (!passageHost || !eyebrowHost) {
+    if (!total) {
+        updateScoreSummary('No question set is loaded yet.', 'error');
         return;
     }
 
-    const fallback = buildFallbackLesson();
+    let correct = 0;
+    const answers = state.currentQuestions;
 
-    try {
-        if (!window.supabase || typeof window.supabase.get !== 'function') {
-            throw new Error('Supabase client is not available');
+    items.forEach((input, index) => {
+        const answer = answers[index]?.answer || '';
+        const isCorrect = checkAnswer(input.value, answer);
+        if (isCorrect) correct += 1;
+
+        const label = input.closest('.question-row');
+        if (label) {
+            const mark = label.querySelector('.badge-status');
+            if (mark) mark.remove();
+            const status = document.createElement('span');
+            status.className = isCorrect ? 'badge-correct badge-status' : 'badge-incorrect badge-status';
+            status.textContent = isCorrect ? ' ✓' : ' ✗';
+            label.appendChild(status);
         }
+    });
 
-        const lessons = await window.supabase.get('english_lessons', {
-            select: '*',
-            filters: {
-                is_active: 'eq.true'
-            },
-            order: {
-                column: 'lesson_date',
-                direction: 'desc'
-            }
-        });
-
-        const lesson = Array.isArray(lessons) && lessons.length > 0 ? lessons[0] : null;
-
-        if (!lesson) {
-            throw new Error('No English lesson found');
-        }
-
-        const [sections, exercises] = await Promise.all([
-            window.supabase.get('english_lesson_sections', {
-                select: '*',
-                filters: {
-                    lesson_id: `eq.${lesson.id}`
-                },
-                order: {
-                    column: 'section_order',
-                    direction: 'asc'
-                }
-            }),
-            window.supabase.get('english_questions', {
-                select: '*',
-                filters: {
-                    lesson_id: `eq.${lesson.id}`
-                },
-                order: {
-                    column: 'order_index',
-                    direction: 'asc'
-                }
-            })
-        ]);
-
-        let listeningLesson = null;
-        let listeningQuestions = [];
-        try {
-            const listeningLessons = await window.supabase.get('english_listening_lessons', {
-                select: '*',
-                filters: { lesson_id: `eq.${lesson.id}`, is_active: 'eq.true' }
-            });
-            listeningLesson = Array.isArray(listeningLessons) ? listeningLessons[0] : null;
-            if (listeningLesson) {
-                listeningQuestions = await window.supabase.get('english_listening_questions', {
-                    select: '*',
-                    filters: { lesson_id: `eq.${lesson.id}` },
-                    order: { column: 'order_index', direction: 'asc' }
-                });
-            }
-        } catch (listeningError) {
-            console.warn('English listening lesson is not available yet:', listeningError);
-        }
-
-        if (titleHost) {
-            titleHost.textContent = lesson.title || 'English lesson';
-        }
-        if (readingTitleHost) {
-            readingTitleHost.textContent = lesson.title || 'English lesson';
-        }
-        eyebrowHost.textContent = 'Reading Exercise';
-        passageHost.innerHTML = getPassageParagraphs(lesson.passage || '').join('');
-        renderQuestions(Array.isArray(sections) ? sections : [], Array.isArray(exercises) ? exercises : []);
-        renderListeningQuestions(Array.isArray(listeningQuestions) ? listeningQuestions : []);
-        renderListeningTranscript(listeningLesson?.transcript || 'The speaker works in an office and usually starts at 8 a.m. Before work, the speaker drinks coffee. The speaker travels to work by car and has lunch with a colleague.');
-
-        const listeningTitleHost = document.getElementById('listeningTitle');
-        const audioHost = document.getElementById('englishAudio');
-        const audioStatusHost = document.getElementById('englishAudioStatus');
-        if (listeningTitleHost) listeningTitleHost.textContent = listeningLesson?.title || 'Listening lesson';
-        if (audioHost && listeningLesson?.audio_path && window.supabase?.url) {
-            const audioPath = String(listeningLesson.audio_path);
-            audioHost.src = /^https?:\/\//i.test(audioPath)
-                ? audioPath
-                : `${window.supabase.url}/storage/v1/object/public/english-audio/${audioPath}`;
-            if (audioStatusHost) audioStatusHost.textContent = 'Listen and answer the questions below.';
-        }
-
-        window.currentEnglishLessonId = lesson.id;
-        window.currentEnglishLessonDate = lesson.lesson_date;
-        window.englishFallbackMode = false;
-        await loadExistingUserAnswers(lesson.id);
-        await loadExistingListeningAnswers(lesson.id);
-
-    } catch (error) {
-        console.warn('Unable to load English lesson from Supabase:', error);
-        const lesson = fallback.lesson;
-        if (titleHost) {
-            titleHost.textContent = lesson.title;
-        }
-        if (readingTitleHost) {
-            readingTitleHost.textContent = lesson.title;
-        }
-        eyebrowHost.textContent = 'Reading Exercise';
-        passageHost.innerHTML = getPassageParagraphs(lesson.passage || '').join('');
-        renderQuestions(fallback.sections, fallback.exercises);
-        window.currentEnglishLessonId = null;
-        window.englishFallbackMode = true;
-
-        const submitButton = document.getElementById('submitEnglishAnswers');
-        if (submitButton) {
-            submitButton.disabled = true;
-        }
-
-        showEnglishSubmitMessage('Reading sample is showing from fallback data because the live lesson is not available right now.', 'info');
-    }
+    const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+    updateScoreChip(correct, total);
+    updateScoreSummary(`Your score: ${correct}/${total} (${score}%).`, score >= 60 ? 'success' : 'info');
 }
 
-const submitButton = document.getElementById('submitEnglishAnswers');
-if (submitButton) {
-    submitButton.addEventListener('click', submitEnglishAnswers);
+function resetCurrentTest() {
+    document.querySelectorAll('.answer-input').forEach((input) => {
+        input.value = '';
+    });
+
+    document.querySelectorAll('.badge-status').forEach((badge) => badge.remove());
+    updateScoreChip(0, state.currentQuestions.length || 0);
+    updateScoreSummary('Answers cleared. Start again when you are ready.', 'info');
 }
 
-const resetButton = document.getElementById('resetEnglishAnswers');
-if (resetButton) {
-    resetButton.addEventListener('click', () => {
-        const answerInputs = document.querySelectorAll('#englishQuestions .answer-input');
-        answerInputs.forEach((input) => {
-            input.value = '';
-        });
-        document.querySelectorAll('#englishListeningQuestions .listening-answer-input').forEach((input) => {
-            if (input.type === 'radio') input.checked = false;
-            else input.value = '';
-        });
-        showEnglishSubmitMessage('Answers cleared. You can start again.', 'info');
+const select = document.getElementById('testSelect');
+if (select) {
+    select.addEventListener('change', (event) => {
+        state.currentIndex = Number(event.target.value || 0);
+        const selectedTest = state.tests[state.currentIndex];
+        const url = new URL(window.location.href);
+        if (selectedTest && selectedTest.slug) {
+            url.searchParams.set('test', selectedTest.slug);
+        } else {
+            url.searchParams.delete('test');
+        }
+        window.history.replaceState({}, '', url);
+        loadCurrentTest();
     });
 }
 
-loadEnglishLesson();
+const loadButton = document.getElementById('loadTestButton');
+if (loadButton) {
+    loadButton.addEventListener('click', () => {
+        loadCurrentTest();
+    });
+}
+
+const submitButton = document.getElementById('submitAnswers');
+if (submitButton) {
+    submitButton.addEventListener('click', submitCurrentTest);
+}
+
+const checkScoreButton = document.getElementById('checkScoreButton');
+if (checkScoreButton) {
+    checkScoreButton.addEventListener('click', submitCurrentTest);
+}
+
+const resetButton = document.getElementById('resetAnswers');
+if (resetButton) {
+    resetButton.addEventListener('click', resetCurrentTest);
+}
+
+loadTestList();

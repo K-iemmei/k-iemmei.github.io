@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home · Daily Practice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app pixel-theme">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-mark">✦</div>
+                <span>Daily Note</span>
+            </div>
+
+            <nav class="nav" aria-label="Sidebar navigation">
+                <a class="nav-item active" href="home.html">
+                    <span class="nav-icon">⌂</span>
+                    <span>Home</span>
+                </a>
+                <a class="nav-item" href="dashboard.html">
+                    <span class="nav-icon">◫</span>
+                    <span>Learning</span>
+                </a>
+                <a class="nav-item" href="#">
+                    <span class="nav-icon">✎</span>
+                    <span>Blog</span>
+                </a>
+                <a class="nav-item" href="#">
+                    <span class="nav-icon">☰</span>
+                    <span>Note</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-controls">
+                    <button
+                        id="themeToggle"
+                        class="sidebar-toggle"
+                        aria-label="Toggle theme"
+                        title="Toggle theme"
+                        type="button"
+                    >
+                        <span class="toggle-icon">☼</span>
+                    </button>
+                </div>
+
+                <button
+                    id="logoutButton"
+                    class="logout-button"
+                    type="button"
+                    aria-label="Log out"
+                    title="Log out"
+                >
+                    <span class="avatar top-avatar">K</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="main">
+            <div class="content-wrapper home-layout">
+                <div class="content home-content">
+                    <section class="home-hero">
+                        <div class="welcome-card home-welcome-card">
+                            <div class="welcome-header home-header">
+                                <div class="welcome-text">
+                                    <span class="eyebrow welcome-date" id="currentDateDisplay">Today</span>
+                                    <h1 id="greetingTitle">Welcome back</h1>
+                                </div>
+                            </div>
+                            <p class="welcome-subtitle">Continue your learning routine and keep your study streak growing.</p>
+                        </div>
+                    </section>
+
+                    <section class="home-grid">
+                        <div class="home-panel">
+                            <div class="panel-topline">
+                                <span class="eyebrow">Quick access</span>
+                            </div>
+                            <div class="quick-grid">
+                                <a class="quick-card" href="dashboard.html">
+                                    <span class="quick-icon">◫</span>
+                                    <div>
+                                        <strong>Learning</strong>
+                                        <small>Study hub</small>
+                                    </div>
+                                </a>
+                                <a class="quick-card" href="english-home.html">
+                                    <span class="quick-icon english">E</span>
+                                    <div>
+                                        <strong>English</strong>
+                                        <small>Reading practice</small>
+                                    </div>
+                                </a>
+                                <a class="quick-card" href="chinese.html">
+                                    <span class="quick-icon chinese">中</span>
+                                    <div>
+                                        <strong>Chinese</strong>
+                                        <small>Continue learning</small>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="home-panel">
+                            <div class="panel-topline">
+                                <span class="eyebrow">Focus</span>
+                            </div>
+                            <div class="focus-card">
+                                <div class="focus-badge">Today</div>
+                                <h3>Study plan</h3>
+                                <ul>
+                                    <li>Complete one reading task</li>
+                                    <li>Review key vocabulary</li>
+                                    <li>Track your progress</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <aside class="leaderboard-sidebar pixel-leaderboard-sidebar">
+                    <div class="leaderboard-header pixel-hall-header">
+                        <span class="pixel-crown">👑</span>
+                        <div class="hall-title-wrap">
+                            <h3>HALL OF FAME</h3>
+                            <span class="hall-subtitle">Top Streak Champions</span>
+                        </div>
+                    </div>
+                    <div class="leaderboard-list" id="leaderboardList">
+                        <div class="leaderboard-item pixel-rank-item">
+                            <span class="leaderboard-rank first">1</span>
+                            <span class="leaderboard-name">Loading...</span>
+                            <span class="leaderboard-streak">--</span>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

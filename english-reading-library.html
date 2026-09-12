@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cambridge IELTS Reading Library</title>
+    <style>
+        :root {
+            --bg: #0b1020;
+            --panel: rgba(15, 23, 42, 0.8);
+            --panel-strong: rgba(18, 31, 57, 0.96);
+            --border: rgba(148, 163, 184, 0.25);
+            --text: #edf3ff;
+            --muted: #b7c5e0;
+            --primary: #7dd3fc;
+            --primary-strong: #38bdf8;
+            --accent: #fbbf24;
+            --success: #34d399;
+            --shadow: rgba(15, 23, 42, 0.35);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: radial-gradient(circle at top, #111827 0%, #0b1020 42%, #070b14 100%);
+            color: var(--text);
+        }
+
+        a { color: inherit; }
+
+        .page-shell {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 20px 48px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .back-link,
+        .primary-button,
+        .secondary-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .back-link {
+            background: rgba(15, 23, 42, 0.55);
+            color: var(--text);
+        }
+
+        .primary-button {
+            background: linear-gradient(135deg, var(--primary-strong), #2563eb);
+            border-color: rgba(125, 211, 252, 0.6);
+            color: #03111d;
+        }
+
+        .secondary-button {
+            background: rgba(15, 23, 42, 0.7);
+            color: var(--text);
+        }
+
+        .back-link:hover,
+        .primary-button:hover,
+        .secondary-button:hover,
+        .test-card:hover {
+            transform: translateY(-1px);
+        }
+
+        .brand-pill {
+            background: rgba(125, 211, 252, 0.12);
+            border: 1px solid rgba(125, 211, 252, 0.4);
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .hero {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.7), rgba(17, 24, 39, 0.95));
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 28px 22px;
+            box-shadow: 0 18px 45px var(--shadow);
+            margin-bottom: 26px;
+        }
+
+        .hero h1 {
+            margin: 0 0 12px;
+            font-size: clamp(2rem, 4vw, 3rem);
+            letter-spacing: -0.045em;
+        }
+
+        .hero p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 760px;
+        }
+
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .stat-pill {
+            background: rgba(100, 116, 139, 0.12);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 999px;
+            padding: 8px 12px;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .test-card {
+            background: linear-gradient(160deg, rgba(15, 23, 42, 0.8), rgba(20, 29, 46, 0.96));
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px 18px 16px;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.2);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .test-meta {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text);
+            background: rgba(125, 211, 252, 0.14);
+            border: 1px solid rgba(125, 211, 252, 0.3);
+            margin-bottom: 8px;
+        }
+
+        .test-card h2 {
+            margin: 0 0 8px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .test-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .test-tag {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .open-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            background: rgba(52, 211, 153, 0.15);
+            border: 1px solid rgba(52, 211, 153, 0.35);
+            color: #d8fff0;
+        }
+
+        .empty-state {
+            display: none;
+            border: 1px dashed rgba(148, 163, 184, 0.35);
+            border-radius: 16px;
+            padding: 32px 20px;
+            text-align: center;
+            color: var(--muted);
+            background: rgba(15, 23, 42, 0.45);
+        }
+
+        @media (max-width: 640px) {
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .hero {
+                padding: 22px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <div class="brand-row">
+                <a class="back-link" href="dashboard.html">← Dashboard</a>
+                <span class="brand-pill">Cambridge Reading</span>
+            </div>
+            <a class="primary-button" href="english.html">Open practice desk</a>
+        </header>
+
+        <section class="hero">
+            <h1>IELTS Reading Test Library</h1>
+            <p>
+                Choose one of the Cambridge Academic reading tests below to start a focused practice session.
+                Each test opens in the reading desk where you can read the passage and score your answers.
+            </p>
+            <div class="stats-row">
+                <span class="stat-pill" id="testCountPill">Loading tests...</span>
+                <span class="stat-pill">Academic</span>
+                <span class="stat-pill">Local dataset</span>
+            </div>
+        </section>
+
+        <div id="testGrid" class="test-grid" aria-live="polite"></div>
+        <div id="emptyState" class="empty-state">No Cambridge tests are available right now.</div>
+    </div>
+
+    <script src="js/english-library.js"></script>
+</body>
+</html>

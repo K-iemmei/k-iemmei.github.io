@@ -21,6 +21,31 @@
             </section>
 
             <section class="admin-card">
+                <div class="recommended-toggle">
+                    <p class="admin-label">Recommended scripts</p>
+                    <details id="engDetail" class="recommend-detail" open>
+                        <summary>English Script Recommend</summary>
+                        <div class="recommend-body">
+                            <pre id="engPre" class="recommend-pre" spellcheck="false"></pre>
+                            <div class="recommend-actions">
+                                <button id="engInsert" class="secondary-button" type="button">Insert to editor</button>
+                                <button id="engCopy" class="secondary-button" type="button">Copy</button>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details id="chiDetail" class="recommend-detail" open>
+                        <summary>Chinese Script Recommend</summary>
+                        <div class="recommend-body">
+                            <pre id="chiPre" class="recommend-pre" spellcheck="false"></pre>
+                            <div class="recommend-actions">
+                                <button id="chiInsert" class="secondary-button" type="button">Insert to editor</button>
+                                <button id="chiCopy" class="secondary-button" type="button">Copy</button>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
                 <label class="admin-label" for="adminToken">Admin token</label>
                 <input id="adminToken" class="admin-input" type="password" autocomplete="off" />
 
