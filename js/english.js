@@ -177,7 +177,7 @@ function renderPassage(title, text) {
     host.innerHTML = paragraphs || '<p>No passage available.</p>';
 }
 
-async async function loadTestList() {
+async function loadTestList() {
     const select = document.getElementById('testSelect');
     if (!select) return;
 
