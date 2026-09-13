@@ -160,7 +160,14 @@ function renderPassage(title, text) {
     if (titleHost) titleHost.textContent = title || 'Reading passage';
     if (!host) return;
 
-    const paragraphs = String(text)
+    const str = String(text || '').trim();
+    // If the content appears to be HTML, insert it directly (keeps original formatting)
+    if (str.startsWith('<')) {
+        host.innerHTML = str || '<p>No passage available.</p>';
+        return;
+    }
+
+    const paragraphs = str
         .split(/\n\s*\n/)
         .map((item) => item.trim())
         .filter(Boolean)
@@ -266,11 +273,30 @@ async function loadCurrentTest() {
         }
     }
 
-    const passage = extractPassageFromText(rawText || fallbackPassage);
-    const questions = buildQuestions(title, passage);
+    // If content looks like HTML, try to parse and extract the article content
+    let passageHtml = null;
+    let passageText = null;
+
+    if (/^\s*</.test(String(rawText || ''))) {
+        try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(rawText, 'text/html');
+            const el = doc.querySelector('article') || doc.querySelector('.entry-content') || doc.querySelector('.post-content') || doc.querySelector('#content') || doc.querySelector('main') || doc.body;
+            if (el) {
+                passageHtml = el.innerHTML;
+                passageText = el.innerText.replace(/\r/g, '');
+            }
+        } catch (e) {
+            passageText = String(rawText).replace(/<[^>]+>/g, '');
+        }
+    }
+
+    const plainPassage = passageText || extractPassageFromText((rawText && rawText.replace(/<[^>]+>/g, '')) || fallbackPassage);
+    const questions = buildQuestions(title, plainPassage);
     state.currentQuestions = questions;
 
-    renderPassage(title, passage);
+    // render: prefer HTML if available (keeps formatting), otherwise render plain text
+    renderPassage(title, passageHtml || plainPassage);
     renderQuestionList(questions);
     updateScoreSummary('Select a test and start practicing.', 'info');
     updateScoreChip(0, questions.length);
