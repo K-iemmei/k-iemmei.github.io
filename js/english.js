@@ -139,19 +139,59 @@ function renderQuestionList(questions) {
     const countHost = document.getElementById('questionCount');
     if (!host) return;
 
-    host.innerHTML = questions.map((question, index) => `
-        <div class="question-row">
-            <span class="question-label">${index + 1}.</span>
-            <span class="question-prompt">${question.prompt}</span>
-            <div class="answer-row">
-                <input type="text" class="answer-input" data-index="${index}" placeholder="Type your answer..." aria-label="Answer for question ${index + 1}" />
-            </div>
-        </div>
-    `).join('');
+    // Helper to escape HTML in prompts
+    const escapeHtml = (s) => String(s || '').replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-    if (countHost) {
-        countHost.textContent = `${questions.length} questions`;
-    }
+    const rows = questions.map((question, index) => {
+        const qType = String((question.type || 'unknown')).toLowerCase();
+        const prompt = escapeHtml(question.prompt || `Question ${index+1}`);
+        let inputHtml = '';
+
+        if (qType.includes('tf') || qType.includes('true') || qType.includes('tfng') || qType === 'tfng' || qType === 'true_false_not_given') {
+            // True / False / Not Given - radio buttons
+            inputHtml = `
+                <div class="tfng-group" data-index="${index}" data-type="tfng">
+                  <label><input type="radio" name="q${index}" value="True"> True</label>
+                  <label><input type="radio" name="q${index}" value="False"> False</label>
+                  <label><input type="radio" name="q${index}" value="Not Given"> Not Given</label>
+                </div>`;
+        } else if (qType.includes('multiple') || qType.includes('mcq') || (Array.isArray(question.choices) && question.choices.length > 0)) {
+            // Multiple choice - render choices if present
+            const choices = Array.isArray(question.choices) ? question.choices : [];
+            if (choices.length) {
+                inputHtml = `<div class="mcq-group" data-index="${index}" data-type="multiple-choice">` + choices.map((c,ci) => `
+                    <label><input type="radio" name="q${index}" value="${escapeHtml(String(c))}"> ${escapeHtml(String(c))}</label>`).join('') + '</div>';
+            } else {
+                // fallback to text input
+                inputHtml = `<div class="answer-row"><input type="text" class="answer-input" data-index="${index}" data-type="text" placeholder="Type your answer..." /></div>`;
+            }
+        } else if (qType.includes('match') || qType.includes('heading')) {
+            // Matching headings - if choices exist, present dropdown
+            const choices = Array.isArray(question.choices) ? question.choices : [];
+            if (choices.length) {
+                inputHtml = `<select data-index="${index}" data-type="matching-heading">
+                    <option value="">-- select heading --</option>` + choices.map((c) => `<option value="${escapeHtml(String(c))}">${escapeHtml(String(c))}</option>`).join('') + `</select>`;
+            } else {
+                inputHtml = `<div class="answer-row"><input type="text" class="answer-input" data-index="${index}" data-type="text" placeholder="Enter heading or number" /></div>`;
+            }
+        } else if (qType.includes('sentence') || qType.includes('completion')) {
+            // Sentence completion - single-line input (one word or short phrase)
+            inputHtml = `<div class="answer-row"><input type="text" class="answer-input" data-index="${index}" data-type="completion" placeholder="One word only (if required)" /></div>`;
+        } else {
+            // default: short answer text input
+            inputHtml = `<div class="answer-row"><input type="text" class="answer-input" data-index="${index}" data-type="text" placeholder="Type your answer..." /></div>`;
+        }
+
+        return `
+            <div class="question-row" data-qtype="${escapeHtml(qType)}">
+                <div class="question-header"><span class="question-label">${index + 1}.</span> <span class="question-prompt">${prompt}</span></div>
+                <div class="question-body">${inputHtml}</div>
+            </div>`;
+    }).join('');
+
+    host.innerHTML = rows || '<p>No questions available for this test.</p>';
+
+    if (countHost) countHost.textContent = `${questions.length} questions`;
 }
 
 function renderPassage(title, text) {
@@ -161,18 +201,15 @@ function renderPassage(title, text) {
     if (!host) return;
 
     const str = String(text || '').trim();
-    // If the content appears to be HTML, insert it directly (keeps original formatting)
-    if (str.startsWith('<')) {
-        host.innerHTML = str || '<p>No passage available.</p>';
-        return;
-    }
-
-    const paragraphs = str
-        .split(/\n\s*\n/)
-        .map((item) => item.trim())
-        .filter(Boolean)
-        .map((paragraph) => `<p>${paragraph.replace(/\n/g, ' ')}</p>`)
-        .join('');
+    // Always render passage as plain text paragraphs (strip any HTML for safety)
+    const cleaned = str.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+    const paragraphs = cleaned.split(/([\.|\?|\!]\s+)/).reduce((acc, cur, idx, arr) => {
+        // simple sentence-based grouping to form readable paragraphs if original text had no blank lines
+        if (cur.trim() === '') return acc;
+        if (acc.length === 0) acc.push(cur);
+        else acc[acc.length - 1] += cur;
+        return acc;
+    }, []).map(p => `<p>${p.trim()}</p>`).join('');
 
     host.innerHTML = paragraphs || '<p>No passage available.</p>';
 }
@@ -340,8 +377,8 @@ function updateScoreChip(correct, total) {
 }
 
 function submitCurrentTest() {
-    const items = Array.from(document.querySelectorAll('.answer-input'));
-    const total = state.currentQuestions.length || items.length || 0;
+    const questionRows = Array.from(document.querySelectorAll('.question-row'));
+    const total = questionRows.length || 0;
 
     if (!total) {
         updateScoreSummary('No question set is loaded yet.', 'error');
@@ -349,20 +386,55 @@ function submitCurrentTest() {
     }
 
     let correct = 0;
-    const answers = state.currentQuestions;
+    const answers = state.currentQuestions || [];
 
-    items.forEach((input, index) => {
-        const answer = answers[index]?.answer || '';
-        const isCorrect = checkAnswer(input.value, answer);
+    questionRows.forEach((row, index) => {
+        const q = answers[index] || {};
+        const qType = String((q.type || 'unknown')).toLowerCase();
+        let userValue = null;
+        // find inputs within row
+        const textInput = row.querySelector('input.answer-input');
+        const selectInput = row.querySelector('select');
+        const radioChecked = row.querySelector('input[type=radio]:checked');
+
+        if (textInput) userValue = textInput.value;
+        else if (selectInput) userValue = selectInput.value;
+        else if (radioChecked) userValue = radioChecked.value;
+        else userValue = '';
+
+        // scoring logic per type
+        let isCorrect = false;
+        if (qType === 'tfng' || qType.includes('true')) {
+            // normalize expected answer values to one of True/False/Not Given
+            const expected = (Array.isArray(q.answer) ? q.answer[0] : q.answer) || '';
+            isCorrect = String((userValue || '')).toLowerCase().trim() === String(expected || '').toLowerCase().trim();
+        } else if (qType.includes('multiple') || qType.includes('mcq')) {
+            const expected = (Array.isArray(q.answer) ? q.answer[0] : q.answer) || '';
+            isCorrect = String((userValue || '')).toLowerCase().trim() === String(expected || '').toLowerCase().trim();
+        } else if (qType.includes('completion') || qType.includes('sentence')) {
+            const expected = (Array.isArray(q.answer) ? q.answer[0] : q.answer) || '';
+            isCorrect = checkAnswer(userValue, expected);
+        } else {
+            // default: text matching heuristic
+            const expected = (Array.isArray(q.answer) ? q.answer[0] : q.answer) || '';
+            isCorrect = checkAnswer(userValue, expected);
+        }
+
         if (isCorrect) correct += 1;
 
-        const label = input.closest('.question-row');
-        if (label) {
-            const mark = label.querySelector('.badge-status');
-            if (mark) mark.remove();
-            const status = document.createElement('span');
-            status.className = isCorrect ? 'badge-correct badge-status' : 'badge-incorrect badge-status';
-            status.textContent = isCorrect ? ' ✓' : ' ✗';
+        // show status
+        const existing = row.querySelector('.badge-status');
+        if (existing) existing.remove();
+        const status = document.createElement('span');
+        status.className = isCorrect ? 'badge-correct badge-status' : 'badge-incorrect badge-status';
+        status.textContent = isCorrect ? '✓' : '✗';
+        const header = row.querySelector('.question-header') || row;
+        header.appendChild(status);
+    });
+
+    updateScoreChip(correct, total);
+    updateScoreSummary(`You scored ${correct} out of ${total}.`, 'success');
+}tent = isCorrect ? ' ✓' : ' ✗';
             label.appendChild(status);
         }
     });
