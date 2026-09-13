@@ -224,6 +224,30 @@ async function loadCurrentTest() {
 
     if (!test) return;
 
+    // Try to load a structured JSON file first (one-per-test DB)
+    const structuredPath = `data/cambridge_ielts_reading/structured/${test.slug}.json`;
+    try {
+        const resp = await fetch(structuredPath, { cache: 'no-store' });
+        if (resp.ok) {
+            const parsed = await resp.json();
+            const title = parsed.title || test.title || 'Reading passage';
+            const passageHtml = parsed.passage_html || null;
+            const passageText = parsed.passage_text || null;
+            const questions = Array.isArray(parsed.questions) ? parsed.questions : [];
+
+            state.currentQuestions = questions;
+            renderPassage(title, passageHtml || passageText || extractPassageFromText(passageText || ''));
+            renderQuestionList(questions);
+            updateScoreSummary('Structured test loaded.', 'info');
+            updateScoreChip(0, questions.length);
+            return;
+        }
+    } catch (e) {
+        // ignore structured loading errors and fallback to original loader
+        console.warn('Structured file not available or failed to load:', e);
+    }
+
+    // Fallback: load raw file (legacy behavior)
     let rawText = '';
     let title = test.title;
 

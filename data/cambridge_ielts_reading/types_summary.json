@@ -1,0 +1,7 @@
+﻿{
+    "types":  {
+                  "MultipleChoice":  71,
+                  "Other":  116,
+                  "SentenceCompletion":  73
+              }
+}
