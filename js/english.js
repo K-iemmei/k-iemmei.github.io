@@ -224,12 +224,42 @@ async function loadCurrentTest() {
         try {
             const response = await fetch(`data/cambridge_ielts_reading/${test.file}`, { cache: 'no-store' });
             if (response.ok) {
-                rawText = await response.text();
-                const detectedTitle = rawText
+                const text = await response.text();
+                // Try to parse JSON files saved from the crawler; fallback to raw text
+                try {
+                    const parsed = JSON.parse(text);
+                    // parsed may be: { content: '<p>...</p>' } or { content: { rendered: '...' } }
+                    if (parsed) {
+                        if (typeof parsed.content === 'string') {
+                            rawText = parsed.content;
+                        } else if (parsed.content && typeof parsed.content.rendered === 'string') {
+                            rawText = parsed.content.rendered;
+                        } else if (typeof parsed === 'string') {
+                            rawText = parsed;
+                        } else if (parsed.excerpt && typeof parsed.excerpt === 'string' && !parsed.content) {
+                            // sometimes content is missing but excerpt exists
+                            rawText = parsed.excerpt;
+                        } else {
+                            rawText = text;
+                        }
+
+                        // title may be a string or an object with rendered
+                        if (parsed.title) {
+                            if (typeof parsed.title === 'string') title = parsed.title;
+                            else if (parsed.title.rendered) title = parsed.title.rendered;
+                        }
+                    } else {
+                        rawText = text;
+                    }
+                } catch (e) {
+                    rawText = text;
+                }
+
+                const detectedTitle = String(rawText || title)
                     .split(/\n+/)
                     .map((line) => line.trim())
                     .find((line) => line && !/^(Skip to content|Cambridge IELTS|Export|Focus|Part\s+\d+|Read the text|You should spend|Practice Skimming|Questions\s+\d+)/i.test(line));
-                title = parseTestTitle(detectedTitle || test.title || 'Reading passage') || 'Reading passage';
+                title = parseTestTitle(detectedTitle || test.title || title) || 'Reading passage';
             }
         } catch (error) {
             console.warn('Unable to load reading test file:', error);
