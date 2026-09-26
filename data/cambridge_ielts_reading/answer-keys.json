@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "tests": {
+    "cambridge-ielts-19-academic-reading-test-1": {
+      "questions": {
+        "1": {
+          "answer": "FALSE",
+          "explanation": "The passage describes Murray as a talented outsider who had not won major tournaments five years earlier, rather than someone already expected to become world number one.",
+          "evidence": "Yet five years previously, he had been regarded as a talented outsider who entered but never won the major tournaments."
+        },
+        "2": {
+          "answer": "FALSE",
+          "explanation": "The racket-string change was described as subtle and largely unnoticed.",
+          "evidence": "Another change was so subtle as to pass more or less unnoticed."
+        },
+        "3": {
+          "answer": "NOT GIVEN",
+          "explanation": "The passage mentions a professional stringer, but does not say that most top players take one on tour.",
+          "evidence": "Touring professionals have their rackets customised to their specific needs"
+        },
+        "4": {
+          "answer": "FALSE",
+          "explanation": "The Bryan brothers' rackets are stated to weigh more than the average model.",
+          "evidence": "The rackets they use now weigh more than the average model"
+        },
+        "5": {
+          "answer": "NOT GIVEN",
+          "explanation": "The passage says Fischer started playing with the racket, but does not say that he designed it.",
+          "evidence": "the amateur German tennis player Werner Fischer started playing with the so-called spaghetti-strung racket."
+        },
+        "6": {
+          "answer": "TRUE",
+          "explanation": "Climatic conditions are listed as one of the factors that influence string adjustments.",
+          "evidence": "the court surface, climatic conditions, and game styles."
+        },
+        "7": {
+          "answer": "TRUE",
+          "explanation": "The passage directly attributes much of Sampras's serving power to added lead weights.",
+          "evidence": "much of the serving power of US professional player Pete Sampras was attributed to the addition of four to five lead weights"
+        },
+        "8": {
+          "answer": "paint",
+          "explanation": "The Bryan brothers experimented with different kinds of paint on their rackets.",
+          "evidence": "even experimented with different kinds of paint."
+        },
+        "9": {
+          "answer": "topspin",
+          "explanation": "The spaghetti-strung racket generated so much topspin that it was banned.",
+          "evidence": "It created a string bed that generated so much topspin"
+        },
+        "10": {
+          "answer": "training",
+          "explanation": "The passage compares racket modification with nutrition and training.",
+          "evidence": "an aspect of the game that is equal in significance to nutrition or training."
+        },
+        "11": {
+          "answer": "intestines",
+          "explanation": "Natural gut strings were made from the outer layer of sheep or cow intestines.",
+          "evidence": "natural gut made from the outer layer of sheep or cow intestines."
+        },
+        "12": {
+          "answer": "weights",
+          "explanation": "Sampras had lead weights added to his rackets.",
+          "evidence": "the addition of four to five lead weights onto his rackets"
+        },
+        "13": {
+          "answer": "grips",
+          "explanation": "Oliveira replaced the original grips on his rackets.",
+          "evidence": "replaced the original grips of his rackets"
+        }
+      }
+    }
+  }
+}

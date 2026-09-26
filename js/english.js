@@ -25,6 +25,8 @@ if (themeToggle) {
 const state = {
     tests: [],
     currentIndex: 0,
+    currentAnswerKey: null,
+    attempts: [],
 };
 
 const fallbackPassage = `Artificial intelligence is increasingly shaping the workplace, but its effect on employment is still a matter of debate. Some analysts argue that AI will replace many routine tasks, particularly in administration, data processing and basic customer service. These roles often involve repetitive work that can be automated with software. As a result, workers in these fields may need to retrain or focus on more complex responsibilities that require judgment, empathy and creativity.`;
@@ -73,51 +75,112 @@ function extractPassageFromText(rawText = '') {
     return cleaned || fallbackPassage;
 }
 
-function inferCorrectAnswerFromTitle(title = '', passage = '') {
-    const cleanedTitle = parseTestTitle(title) || 'Reading passage';
-    const shortTitle = cleanedTitle.replace(/\b(Academic|Reading|Test)\b/gi, '').trim();
-    const candidate = shortTitle || 'the main idea of the passage';
-
-    const yearMatch = (passage.match(/\b(19\d{2}|20\d{2})\b/g) || [])[0];
-    const regionMatch = (passage.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b/g) || []).find((word) => word.length > 4);
-
-    return {
-        mainTopic: cleanedTitle || 'the passage topic',
-        timeFocus: yearMatch || 'the period discussed in the text',
-        keySubject: regionMatch || candidate.split(' ').slice(0, 2).join(' '),
-        detailPhrase: candidate.split(' ').slice(0, 4).join(' '),
-    };
+function getQuestionType(instructions = '') {
+    const text = instructions.toLowerCase();
+    if (/true\s*\/\s*false\s*\/\s*not given|true[\s\S]*false[\s\S]*not given|statements agree/.test(text)) return 'true_false_not_given';
+    if (/yes\s*\/\s*no\s*\/\s*not given|yes[\s\S]*no[\s\S]*not given/.test(text)) return 'yes_no_not_given';
+    if (/choose.{0,60}heading|matching headings/.test(text)) return 'matching_headings';
+    if (/which paragraph (contains|mentions|refers to)/.test(text)) return 'matching_information';
+    if (/match.{0,40}(people|features|statements)/.test(text)) return 'matching_features';
+    if (/choose the correct letter|choose one letter/.test(text)) return 'multiple_choice';
+    if (/complete the flow.?chart/.test(text)) return 'flow_chart_completion';
+    if (/complete the table/.test(text)) return 'table_completion';
+    if (/complete the summary/.test(text)) return 'summary_completion';
+    if (/complete the notes/.test(text)) return 'note_completion';
+    if (/complete|choose one word|choose no more than/.test(text)) return 'sentence_completion';
+    return 'short_answer';
 }
 
-function buildQuestions(title, passage) {
-    const answers = inferCorrectAnswerFromTitle(title, passage);
-    return [
-        {
-            prompt: 'What is the main topic of this reading passage?',
-            answer: answers.mainTopic,
-            hint: 'Look at the title and the opening sentence.',
-        },
-        {
-            prompt: 'Which time period is the text mainly concerned with?',
-            answer: answers.timeFocus,
-            hint: 'Check the dates or historical context in the first paragraph.',
-        },
-        {
-            prompt: 'What makes the subject in this passage important?',
-            answer: answers.detailPhrase,
-            hint: 'Focus on the main idea and the significance described.',
-        },
-        {
-            prompt: 'Which key noun best captures the topic of the text?',
-            answer: answers.keySubject,
-            hint: 'Find the main subject or named thing in the passage.',
-        },
-        {
-            prompt: 'In one short phrase, describe the purpose of reading this text carefully.',
-            answer: 'to understand the main idea and key details',
-            hint: 'Think about why close reading matters.',
-        },
-    ];
+function parseQuestionGroups(rawText = '') {
+    const lines = String(rawText).replace(/\r/g, '').split('\n').map((line) => line.trim()).filter(Boolean);
+    const starts = [];
+
+    lines.forEach((line, index) => {
+        const match = line.match(/^Questions\s+(\d+)\s*[-–]\s*(\d+)/i);
+        if (match) starts.push({ index, first: Number(match[1]), last: Number(match[2]) });
+    });
+
+    return starts.map((section, sectionIndex) => {
+        const nextIndex = starts[sectionIndex + 1]?.index ?? lines.length;
+        const rawSectionLines = lines.slice(section.index + 1, nextIndex);
+        const footerIndex = rawSectionLines.findIndex((line) => /^(?:Part\s+\d+\s*:|Submit\b|Tip:|Home\b|Leave a Reply\b|Save my name\b|\d+\s+comments? on\b)/i.test(line));
+        const sectionLines = rawSectionLines.slice(0, footerIndex >= 0 ? footerIndex : undefined);
+        const questionNumbers = new Set(Array.from({ length: section.last - section.first + 1 }, (_, offset) => section.first + offset));
+        const firstQuestionLine = sectionLines.findIndex((line) => {
+            const leadingNumber = line.match(/^(\d{1,2})\s+(.+)$/);
+            return (leadingNumber && questionNumbers.has(Number(leadingNumber[1])))
+                || Array.from(questionNumbers).some((number) => new RegExp(`\\b${number}\\s+(?=\\S)`).test(line));
+        });
+        const instructionLines = sectionLines.slice(0, firstQuestionLine < 0 ? sectionLines.length : firstQuestionLine)
+            .filter((line) => !/^Practice this section only$/i.test(line));
+        const instructions = instructionLines.join(' ');
+        const questions = new Map();
+        let activeNumber = null;
+        let pendingOption = null;
+
+        sectionLines.forEach((line) => {
+            const numberedPrompt = line.match(/^(\d{1,2})\s+(.+)$/);
+            if (numberedPrompt && questionNumbers.has(Number(numberedPrompt[1]))) {
+                activeNumber = Number(numberedPrompt[1]);
+                questions.set(activeNumber, { id: `q${activeNumber}`, number: activeNumber, prompt: numberedPrompt[2], options: [] });
+                pendingOption = null;
+                return;
+            }
+
+            const embeddedNumbers = Array.from(line.matchAll(/\b(\d{1,2})\s+(?=\S)/g))
+                .filter((match) => questionNumbers.has(Number(match[1])));
+            if (embeddedNumbers.length) {
+                embeddedNumbers.forEach((match, index) => {
+                    const number = Number(match[1]);
+                    const start = match.index;
+                    const end = embeddedNumbers[index + 1]?.index ?? line.length;
+                    const before = index === 0 ? line.slice(0, start) : '';
+                    const after = line.slice(start + match[0].length, end);
+                    const prompt = `${before}_____ ${after}`.replace(/\s+/g, ' ').trim();
+                    if (prompt.length > 4) {
+                        questions.set(number, { id: `q${number}`, number, prompt, options: [] });
+                    }
+                });
+                activeNumber = null;
+                pendingOption = null;
+                return;
+            }
+
+            const optionLine = line.match(/^([A-F])(?:[.)]\s*|\s+)(.+)$/i);
+            if (activeNumber !== null && optionLine) {
+                questions.get(activeNumber).options.push({ id: optionLine[1].toUpperCase(), text: optionLine[2] });
+                pendingOption = null;
+                return;
+            }
+
+            if (activeNumber !== null && /^[A-F]$/i.test(line)) {
+                pendingOption = line.toUpperCase();
+                return;
+            }
+
+            if (activeNumber !== null && pendingOption && !/^(?:TRUE|FALSE|NOT GIVEN|YES|NO)$/i.test(line)) {
+                questions.get(activeNumber).options.push({ id: pendingOption, text: line });
+                pendingOption = null;
+                return;
+            }
+
+            if (activeNumber !== null && !/^(?:TRUE|FALSE|NOT GIVEN|YES|NO)$/i.test(line)) {
+                const question = questions.get(activeNumber);
+                question.prompt = `${question.prompt} ${line}`.trim();
+            }
+        });
+
+        return {
+            id: `group-${section.first}-${section.last}`,
+            type: getQuestionType(instructions),
+            title: `Questions ${section.first}-${section.last}`,
+            instructions,
+            questions: Array.from({ length: section.last - section.first + 1 }, (_, offset) => {
+                const number = section.first + offset;
+                return questions.get(number) || { id: `q${number}`, number, prompt: 'Question text is unavailable in this source.', options: [] };
+            }),
+        };
+    }).filter((group) => group.questions.length > 0);
 }
 
 function checkAnswer(inputValue, answerText) {
@@ -134,19 +197,40 @@ function checkAnswer(inputValue, answerText) {
     return matches >= Math.max(2, Math.ceil(accepted.length * 0.6));
 }
 
-function renderQuestionList(questions) {
+function escapeHtml(value = '') {
+    return String(value).replace(/[&<>"']/g, (character) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    })[character]);
+}
+
+function renderQuestionList(groups) {
     const host = document.getElementById('questionList');
     const countHost = document.getElementById('questionCount');
     if (!host) return;
 
-    host.innerHTML = questions.map((question, index) => `
-        <div class="question-row">
-            <span class="question-label">${index + 1}.</span>
-            <span class="question-prompt">${question.prompt}</span>
-            <div class="answer-row">
-                <input type="text" class="answer-input" data-index="${index}" placeholder="Type your answer..." aria-label="Answer for question ${index + 1}" />
-            </div>
-        </div>
+    const questions = groups.flatMap((group) => group.questions);
+    host.innerHTML = groups.map((group) => `
+        <section class="question-group" data-type="${escapeHtml(group.type)}">
+            <h3>${escapeHtml(group.title)}</h3>
+            <p class="question-instructions">${escapeHtml(group.instructions)}</p>
+            ${group.questions.map((question) => `
+                <div class="question-row" data-question-id="${escapeHtml(question.id)}">
+                    <span class="question-label">${question.number}.</span>
+                    <span class="question-prompt">${escapeHtml(question.prompt)}</span>
+                    <div class="answer-row">
+                        ${group.type === 'true_false_not_given' || group.type === 'yes_no_not_given'
+                            ? (group.type === 'true_false_not_given' ? ['TRUE', 'FALSE', 'NOT GIVEN'] : ['YES', 'NO', 'NOT GIVEN']).map((option) => `
+                                <label><input type="radio" class="answer-input" name="answer-${question.number}" data-question-id="${question.number}" value="${option}" /> ${option}</label>
+                            `).join('')
+                            : group.type === 'multiple_choice' && question.options.length
+                                ? question.options.map((option) => `
+                                    <label><input type="radio" class="answer-input" name="answer-${question.number}" data-question-id="${question.number}" value="${escapeHtml(option.id)}" /> ${escapeHtml(option.id)}. ${escapeHtml(option.text)}</label>
+                                `).join('')
+                                : `<input type="text" class="answer-input" data-question-id="${question.number}" placeholder="Your answer" aria-label="Answer for question ${question.number}" />`}
+                    </div>
+                </div>
+            `).join('')}
+        </section>
     `).join('');
 
     if (countHost) {
@@ -167,10 +251,10 @@ function renderPassage(title, text) {
         .map((paragraph) => `<p>${paragraph.replace(/\n/g, ' ')}</p>`)
         .join('');
 
-    host.innerHTML = paragraphs || '<p>No passage available.</p>';
+    host.innerHTML = paragraphs ? escapeHtml(paragraphs).replace(/&lt;p&gt;/g, '<p>').replace(/&lt;\/p&gt;/g, '</p>') : '<p>No passage available.</p>';
 }
 
-async async function loadTestList() {
+async function loadTestList() {
     const select = document.getElementById('testSelect');
     if (!select) return;
 
@@ -237,13 +321,27 @@ async function loadCurrentTest() {
     }
 
     const passage = extractPassageFromText(rawText || fallbackPassage);
-    const questions = buildQuestions(title, passage);
-    state.currentQuestions = questions;
+    const groups = parseQuestionGroups(rawText);
+    state.currentGroups = groups;
+    state.currentQuestions = groups.flatMap((group) => group.questions);
+    state.currentAnswerKey = await loadAnswerKey(test.slug);
 
     renderPassage(title, passage);
-    renderQuestionList(questions);
-    updateScoreSummary('Select a test and start practicing.', 'info');
-    updateScoreChip(0, questions.length);
+    renderQuestionList(groups);
+    updateScoreChip(0, state.currentQuestions.length);
+    await loadAttemptHistory();
+}
+
+async function loadAnswerKey(slug) {
+    try {
+        const response = await fetch('data/cambridge_ielts_reading/answer-keys.json', { cache: 'no-store' });
+        if (!response.ok) return null;
+        const bank = await response.json();
+        return bank.tests?.[slug] || null;
+    } catch (error) {
+        console.warn('Unable to load reading answer keys:', error);
+        return null;
+    }
 }
 
 function updateScoreSummary(message, type = 'info') {
@@ -259,47 +357,153 @@ function updateScoreChip(correct, total) {
     host.textContent = `${correct}/${total}`;
 }
 
-function submitCurrentTest() {
-    const items = Array.from(document.querySelectorAll('.answer-input'));
-    const total = state.currentQuestions.length || items.length || 0;
+async function submitCurrentTest() {
+    const answers = {};
+    state.currentQuestions.forEach((question) => {
+        const controls = Array.from(document.querySelectorAll(`.answer-input[data-question-id="${question.number}"]`));
+        const selected = controls.find((control) => control.type === 'radio' && control.checked);
+        answers[question.number] = selected?.value ?? controls.find((control) => control.type !== 'radio')?.value.trim() ?? '';
+    });
+    const total = state.currentQuestions.length || 0;
 
     if (!total) {
         updateScoreSummary('No question set is loaded yet.', 'error');
         return;
     }
 
-    let correct = 0;
-    const answers = state.currentQuestions;
-
-    items.forEach((input, index) => {
-        const answer = answers[index]?.answer || '';
-        const isCorrect = checkAnswer(input.value, answer);
-        if (isCorrect) correct += 1;
-
-        const label = input.closest('.question-row');
-        if (label) {
-            const mark = label.querySelector('.badge-status');
-            if (mark) mark.remove();
-            const status = document.createElement('span');
-            status.className = isCorrect ? 'badge-correct badge-status' : 'badge-incorrect badge-status';
-            status.textContent = isCorrect ? ' ✓' : ' ✗';
-            label.appendChild(status);
-        }
+    const keyQuestions = state.currentAnswerKey?.questions || {};
+    const graded = state.currentQuestions.filter((question) => keyQuestions[question.number]);
+    const results = state.currentQuestions.map((question) => {
+        const key = keyQuestions[question.number];
+        const response = answers[question.number];
+        const acceptedAnswers = key ? (Array.isArray(key.answer) ? key.answer : [key.answer]) : [];
+        const correct = Boolean(key && response && acceptedAnswers.some((answer) => normalizeAnswer(response) === normalizeAnswer(answer)));
+        return { ...question, response, key, correct, graded: Boolean(key) };
     });
+    const correct = results.filter((result) => result.graded && result.correct).length;
+    const score = graded.length ? Math.round((correct / graded.length) * 100) : null;
+    const test = state.tests[state.currentIndex];
+    const summary = score === null
+        ? 'Attempt completed, but this test has no answer key and could not be graded.'
+        : `Score: ${correct}/${graded.length} (${score}%).${total > graded.length ? ` ${total - graded.length} question${total - graded.length === 1 ? '' : 's'} not graded because the answer key is incomplete.` : ''}`;
 
-    const score = total > 0 ? Math.round((correct / total) * 100) : 0;
-    updateScoreChip(correct, total);
-    updateScoreSummary(`Your score: ${correct}/${total} (${score}%).`, score >= 60 ? 'success' : 'info');
+    if (score === null) {
+        updateScoreChip('—', total);
+    } else {
+        updateScoreChip(correct, graded.length);
+    }
+
+    const userId = localStorage.getItem('userId');
+    if (!userId || !window.supabase) {
+        updateScoreSummary(`${summary} Sign in to save this attempt to your history.`, 'info');
+        return;
+    }
+
+    const review = results.map((result) => ({
+        question_id: result.id,
+        question_number: result.number,
+        prompt: result.prompt,
+        response: result.response,
+        is_graded: result.graded,
+        is_correct: result.correct,
+        correct_answer: result.key?.answer ?? null,
+        explanation: result.key?.explanation || '',
+        evidence: result.key?.evidence || '',
+    }));
+
+    try {
+        await window.supabase.create('english_reading_attempts', {
+            user_id: userId,
+            test_slug: test?.slug || '',
+            test_title: test?.title || 'IELTS Reading',
+            correct_count: correct,
+            graded_count: graded.length,
+            total_count: total,
+            score_percent: score,
+            review,
+        });
+        updateScoreSummary(`${summary} Saved to practice history.`, score === null ? 'info' : (score >= 60 ? 'success' : 'info'));
+        await loadAttemptHistory();
+    } catch (error) {
+        console.error('Unable to save reading attempt:', error);
+        updateScoreSummary(`${summary} Could not save this attempt to the database.`, 'error');
+    }
 }
 
-function resetCurrentTest() {
-    document.querySelectorAll('.answer-input').forEach((input) => {
-        input.value = '';
-    });
+async function loadAttemptHistory() {
+    const host = document.getElementById('attemptHistory');
+    if (!host) return;
+    const test = state.tests[state.currentIndex];
+    const userId = localStorage.getItem('userId');
+    if (!userId || !window.supabase) {
+        state.attempts = [];
+        host.innerHTML = '<li>Sign in to save and view practice history.</li>';
+        return;
+    }
 
-    document.querySelectorAll('.badge-status').forEach((badge) => badge.remove());
-    updateScoreChip(0, state.currentQuestions.length || 0);
-    updateScoreSummary('Answers cleared. Start again when you are ready.', 'info');
+    try {
+        state.attempts = await window.supabase.get('english_reading_attempts', {
+            select: 'id,test_slug,test_title,correct_count,graded_count,total_count,score_percent,review,completed_at',
+            filters: { user_id: userId, test_slug: test?.slug || '' },
+            order: { column: 'completed_at', direction: 'desc' },
+        });
+        host.innerHTML = state.attempts.length
+            ? state.attempts.map((attempt) => {
+                const date = new Date(attempt.completed_at).toLocaleString();
+                const score = attempt.score_percent === null
+                    ? 'Ungraded'
+                    : `${attempt.correct_count}/${attempt.graded_count} (${attempt.score_percent}%)`;
+                return `<li>
+                    <span><time datetime="${escapeHtml(attempt.completed_at)}">${escapeHtml(date)}</time><strong>${escapeHtml(score)}</strong></span>
+                    <button type="button" class="history-review-button" data-attempt-id="${escapeHtml(attempt.id)}">Review answers</button>
+                </li>`;
+            }).join('')
+            : '<li>No attempts yet.</li>';
+    } catch (error) {
+        console.error('Unable to load reading attempt history:', error);
+        state.attempts = [];
+        host.innerHTML = '<li>Could not load practice history.</li>';
+    }
+}
+
+function renderAnswerReview(results) {
+    const host = document.getElementById('answerReview');
+    if (!host) return;
+    host.innerHTML = results.length ? `
+        ${results.map((result) => `
+            <article class="answer-review-item ${result.is_graded ? (result.is_correct ? 'is-correct' : 'is-incorrect') : 'is-ungraded'}">
+                <strong>Q${result.question_number}: ${result.is_graded ? (result.is_correct ? 'Correct' : 'Incorrect') : 'Not graded'}</strong>
+                <p>${escapeHtml(result.prompt || '')}</p>
+                <p>Your answer: ${escapeHtml(result.response || 'No answer')}</p>
+                ${result.correct_answer ? `<p>Correct answer: ${escapeHtml((Array.isArray(result.correct_answer) ? result.correct_answer : [result.correct_answer]).join(' / '))}</p>
+                    <p>${escapeHtml(result.explanation || '')}</p>
+                    ${result.evidence ? `<button type="button" class="evidence-button" data-evidence="${escapeHtml(result.evidence)}">Show evidence</button>` : ''}`
+                    : '<p>Answer key not available for this question.</p>'}
+            </article>
+        `).join('')}
+    ` : '';
+}
+
+function showEvidence(text) {
+    const passage = document.getElementById('readingPassage');
+    if (!passage || !text) return;
+    passage.querySelectorAll('mark.evidence-highlight').forEach((mark) => mark.replaceWith(document.createTextNode(mark.textContent)));
+    passage.normalize();
+    const walker = document.createTreeWalker(passage, NodeFilter.SHOW_TEXT);
+    const target = text.toLowerCase();
+    let node;
+    while ((node = walker.nextNode())) {
+        const start = node.textContent.toLowerCase().indexOf(target);
+        if (start < 0) continue;
+        const range = document.createRange();
+        range.setStart(node, start);
+        range.setEnd(node, start + text.length);
+        const mark = document.createElement('mark');
+        mark.className = 'evidence-highlight';
+        range.surroundContents(mark);
+        mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        break;
+    }
 }
 
 const select = document.getElementById('testSelect');
@@ -335,9 +539,26 @@ if (checkScoreButton) {
     checkScoreButton.addEventListener('click', submitCurrentTest);
 }
 
-const resetButton = document.getElementById('resetAnswers');
-if (resetButton) {
-    resetButton.addEventListener('click', resetCurrentTest);
+const answerReview = document.getElementById('answerReview');
+if (answerReview) {
+    answerReview.addEventListener('click', (event) => {
+        const evidenceButton = event.target.closest('.evidence-button');
+        if (evidenceButton) {
+            showEvidence(evidenceButton.dataset.evidence);
+        }
+    });
+}
+
+const attemptHistory = document.getElementById('attemptHistory');
+if (attemptHistory) {
+    attemptHistory.addEventListener('click', (event) => {
+        const button = event.target.closest('.history-review-button');
+        if (!button) return;
+        const attempt = state.attempts.find((item) => item.id === button.dataset.attemptId);
+        if (!attempt) return;
+        renderAnswerReview(attempt.review || []);
+        document.getElementById('answerReviewDialog')?.showModal();
+    });
 }
 
 loadTestList();
