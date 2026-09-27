@@ -134,16 +134,32 @@
 
             <section class="english-submit-panel">
                 <div class="submit-area">
-                    <button class="secondary-button" type="button" id="resetAnswers">Reset</button>
                     <button class="primary-button" type="button" id="submitAnswers">Submit answers</button>
                 </div>
-                <div class="english-submit-message" id="scoreSummary" aria-live="polite">
-                    Select a Cambridge reading test and start practicing.
-                </div>
+                <div class="english-submit-message" id="scoreSummary" aria-live="polite"></div>
+                <details class="attempt-history">
+                    <summary>Practice history</summary>
+                    <ol id="attemptHistory"><li>No attempts yet.</li></ol>
+                </details>
             </section>
         </main>
     </div>
 
-    <script src="js/english.js"></script>
+    <dialog id="answerReviewDialog" class="answer-review-dialog" aria-labelledby="answerReviewTitle">
+        <form method="dialog" class="review-dialog-header">
+            <h2 id="answerReviewTitle">Answer review</h2>
+            <button class="secondary-button" type="submit">Close</button>
+        </form>
+        <section id="answerReview" class="answer-review" aria-live="polite"></section>
+    </dialog>
+
+    <script src="js/config.js"></script>
+    <script src="js/supabase.configured.js"></script>
+    <script src="js/english/state.js"></script>
+    <script src="js/english/utils.js"></script>
+    <script src="js/english/renderer.js"></script>
+    <script src="js/english/loader.js"></script>
+    <script src="js/english/submit.js"></script>
+    <script src="js/english/index.js"></script>
 </body>
 </html>

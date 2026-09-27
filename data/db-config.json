@@ -1,0 +1,19 @@
+{
+  "env": "local",
+  "local": {
+    "db": {
+      "host": "localhost",
+      "port": 5432,
+      "database": "my_note",
+      "user": "postgres",
+      "password": "1"
+    }
+  },
+  "prod": {
+    "supabase": {
+      "url": "https://<your-supabase-project>.supabase.co",
+      "anonKey": "<anon-public-key>",
+      "serviceRoleKey": "<service-role-key - DO NOT COMMIT>"
+    }
+  }
+}

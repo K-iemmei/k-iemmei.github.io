@@ -1,0 +1,19 @@
+{
+  "name": "my-note-local-server",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install-deps": "npm install",
+    "parse-questions": "node ./scripts/parse_and_import_questions.js",
+    "parse-rendered": "node ./scripts/parse_and_import_questions_rendered.js",
+    "start-server": "node ./server/index.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "node-fetch": "^2.6.7",
+    "pg": "^8.11.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "puppeteer": "^21.3.8"
+  }
+}

@@ -1,6 +1,13 @@
 (function () {
-    const supabaseUrl = "https://lmqukgeyfmxprgkrujff.supabase.co";
-    // Browser must use the public anon key, not the secret service key.
+    // Dynamic config: prefer window.APP_CONFIG if present.
+    const cfg = (window.APP_CONFIG && typeof window.APP_CONFIG.get === 'function') ? window.APP_CONFIG.get() : (window.APP_CONFIG || {});
+
+    // Choose values depending on current env. For 'local' we expect a restBase (local API proxy).
+    const isLocal = cfg && cfg.env === 'local';
+
+    const supabaseUrl = isLocal ? (cfg.local && cfg.local.restBase ? cfg.local.restBase : 'http://localhost:3000') : (cfg.prod && cfg.prod.supabaseUrl ? cfg.prod.supabaseUrl : "https://lmqukgeyfmxprgkrujff.supabase.co");
+    // Browser must use the public anon key for prod; for local you may set cfg.local.apiKey if your proxy requires it.
+    const supabaseKey = isLocal ? (cfg.local && cfg.local.apiKey ? cfg.local.apiKey : '') : (cfg.prod && cfg.prod.supabaseKey ? cfg.prod.supabaseKey : "******");
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtcXVrZ2V5Zm14cHJna3J1amZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzQ5NTMsImV4cCI6MjA5ODgxMDk1M30.mz7NTaWXqcokWnuYb2k65dWmgvywpFpemnJcsO3UFk0";
 
     async function supabaseRequest(table, options = {}) {
