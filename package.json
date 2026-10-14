@@ -21,6 +21,7 @@
         "db:import-hosted-personal": "node tools/database/import-hosted-personal-data.cjs",
         "db:upload-reading-assets": "node tools/database/upload-reading-assets.cjs",
         "db:import-listening-pdf": "node tools/database/import-listening-pdf.cjs",
+        "db:export-listening": "node tools/database/export-listening-content.cjs",
         "db:upload-listening-audio": "node tools/database/upload-listening-audio.cjs",
         "format": "prettier --write \"apps/**/*.{js,json,html,css}\" \"tools/**/*.{js,cjs,mjs}\" \"tests/**/*.cjs\" \"docs/**/*.md\" \"README.md\" \"package.json\" \".github/workflows/*.yml\"",
         "format:check": "prettier --check \"apps/**/*.{js,json,html,css}\" \"tools/**/*.{js,cjs,mjs}\" \"tests/**/*.cjs\" \"docs/**/*.md\" \"README.md\" \"package.json\" \".github/workflows/*.yml\""

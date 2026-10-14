@@ -23,7 +23,8 @@ On the existing hosted project, apply only the new incremental migration; **do n
 ```powershell
 psql -w "$env:HOSTED_DATABASE_URL" -v ON_ERROR_STOP=1 -f database/migrations/011-listening-practice.sql
 psql -w "$env:HOSTED_DATABASE_URL" -v ON_ERROR_STOP=1 -f supabase/hosted-listening-migration.sql
-npm run db:import-listening-pdf -- --hosted
+npm run db:export-listening
+psql -w "$env:HOSTED_DATABASE_URL" -v ON_ERROR_STOP=1 -f .local/listening-content.sql
 supabase.cmd functions deploy app-api --project-ref skqtgplnejbujyejqilu
 ```
 
