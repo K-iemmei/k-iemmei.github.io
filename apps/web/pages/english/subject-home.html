@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>English | Daily Note</title>
+        <script>
+            if (localStorage.getItem('theme') === 'dark')
+                document.documentElement.dataset.theme = 'dark';
+        </script>
+        <link rel="stylesheet" href="styles/style.css" />
+        <link rel="stylesheet" href="styles/pages/subject-home.css" />
+    </head>
+    <body data-page="english-home" class="page-loading">
+        <div class="english-home">
+            <header class="english-topbar">
+                <a href="dashboard.html" class="back-link">&larr; Dashboard</a>
+                <button id="themeToggle" class="icon-button" aria-label="Toggle theme">
+                    Theme
+                </button>
+            </header>
+            <main class="english-content">
+                <div class="page-heading">
+                    <p class="eyebrow">English</p>
+                    <h1>Practice library</h1>
+                    <p>Choose a skill to continue your study session.</p>
+                </div>
+                <div class="category-grid" aria-label="English skills"></div>
+            </main>
+        </div>
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>

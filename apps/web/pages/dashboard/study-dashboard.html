@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Dashboard · Daily Practice</title>
+
+        <!-- Modern + soft pixel accent -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Pixelify+Sans:wght@500;600&display=swap"
+            rel="stylesheet"
+        />
+
+        <link rel="stylesheet" href="styles/style.css" />
+    </head>
+
+    <body data-page="dashboard">
+        <div class="app pixel-theme">
+            <aside class="sidebar">
+                <div class="brand">
+                    <div class="brand-mark">✦</div>
+                    <span>Daily Note</span>
+                </div>
+
+                <nav class="nav" aria-label="Sidebar navigation">
+                    <a class="nav-item" href="home.html">
+                        <span class="nav-icon">⌂</span>
+                        <span>Home</span>
+                    </a>
+                    <a class="nav-item active" href="dashboard.html">
+                        <span class="nav-icon">◫</span>
+                        <span>Learning</span>
+                    </a>
+                    <a class="nav-item" href="#">
+                        <span class="nav-icon">✎</span>
+                        <span>Blog</span>
+                    </a>
+                    <a class="nav-item" href="#">
+                        <span class="nav-icon">☰</span>
+                        <span>Note</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-bottom">
+                    <div class="sidebar-controls">
+                        <button
+                            id="themeToggle"
+                            class="sidebar-toggle"
+                            aria-label="Toggle theme"
+                            title="Toggle theme"
+                            type="button"
+                        >
+                            <span class="toggle-icon">☼</span>
+                        </button>
+                    </div>
+
+                    <button
+                        id="logoutButton"
+                        class="logout-button"
+                        type="button"
+                        aria-label="Log out"
+                        title="Log out"
+                    >
+                        <span class="avatar top-avatar">K</span>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main -->
+            <main class="main">
+                <div class="content-wrapper">
+                    <div class="content">
+                        <section class="section learning-subjects">
+                            <div class="section-header section-header-compact">
+                                <div class="section-title-wrap section-title-block"></div>
+                            </div>
+
+                            <div class="subject-grid pixel-subject-grid">
+                                <article
+                                    class="subject-card pixel-quest-card english-card"
+                                    data-go="english-home.html"
+                                >
+                                    <div class="subject-top">
+                                        <div class="subject-icon english pixel-subject-icon">E</div>
+                                    </div>
+
+                                    <div class="quest-info">
+                                        <h3>English</h3>
+                                    </div>
+                                </article>
+
+                                <article
+                                    class="subject-card pixel-quest-card chinese-card"
+                                    data-go="chinese.html"
+                                >
+                                    <div class="subject-top">
+                                        <div class="subject-icon chinese pixel-subject-icon">
+                                            中
+                                        </div>
+                                    </div>
+
+                                    <div class="quest-info">
+                                        <h3>Chinese</h3>
+                                    </div>
+                                </article>
+                            </div>
+                        </section>
+
+                        <section class="section activity-section">
+                            <div class="section-header activity-header activity-header-compact">
+                                <div class="section-title-wrap section-title-block">
+                                    <h2>Tracking log</h2>
+                                </div>
+
+                                <label
+                                    class="year-select-wrap pixel-select-wrap"
+                                    for="yearSelector"
+                                    aria-label="Select year"
+                                >
+                                    <select
+                                        id="yearSelector"
+                                        class="year-select pixel-select"
+                                        aria-label="Select year"
+                                    >
+                                        <option value="2026" selected>2026</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2024">2024</option>
+                                    </select>
+                                </label>
+                            </div>
+
+                            <div class="heatmap-card pixel-heatmap-card">
+                                <div class="heatmap-header">
+                                    <div class="heatmap-title-block">
+                                        <span class="pixel-dot-indicator english-dot"></span>
+                                        <h3>English log</h3>
+                                    </div>
+                                </div>
+
+                                <div class="heatmap-wrapper">
+                                    <div id="heatmap-english" class="heatmap pixel-heatmap"></div>
+                                </div>
+                            </div>
+
+                            <div class="heatmap-card pixel-heatmap-card">
+                                <div class="heatmap-header">
+                                    <div class="heatmap-title-block">
+                                        <span class="pixel-dot-indicator chinese-dot"></span>
+                                        <h3>Chinese log</h3>
+                                    </div>
+                                </div>
+
+                                <div class="heatmap-wrapper">
+                                    <div id="heatmap-chinese" class="heatmap pixel-heatmap"></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="section statistics-section">
+                            <div class="section-header section-header-compact">
+                                <div class="section-title-wrap section-title-block">
+                                    <h2>Performance overview</h2>
+                                </div>
+                            </div>
+
+                            <div class="statistics-placeholder">
+                                <div
+                                    class="placeholder-chart"
+                                    aria-label="Statistics chart placeholder"
+                                >
+                                    <span>Chart coming soon</span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <aside class="leaderboard-sidebar pixel-leaderboard-sidebar">
+                        <div class="leaderboard-header pixel-hall-header">
+                            <span class="pixel-crown">👑</span>
+                            <div class="hall-title-wrap">
+                                <h3>HALL OF FAME</h3>
+                                <span class="hall-subtitle">Top Streak Champions</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-list" id="leaderboardList">
+                            <div class="leaderboard-item pixel-rank-item">
+                                <span class="leaderboard-rank first">1</span>
+                                <span class="leaderboard-name">Loading...</span>
+                                <span class="leaderboard-streak">--</span>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </main>
+        </div>
+
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>

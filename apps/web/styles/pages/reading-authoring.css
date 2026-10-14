@@ -1,0 +1,108 @@
+.author-shell {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+    color: var(--text);
+}
+.author-header,
+.author-toolbar,
+.editor-heading,
+.author-save {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.author-header h1 {
+    margin: 16px 0 8px;
+}
+.author-header p,
+.author-save span {
+    color: var(--text-secondary);
+}
+.author-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+.author-shell label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+.author-shell input,
+.author-shell textarea,
+.author-shell select {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font: inherit;
+}
+.author-shell textarea {
+    resize: vertical;
+    line-height: 1.6;
+}
+.author-shell fieldset {
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    background: var(--surface);
+}
+.author-shell legend {
+    padding: 0 8px;
+    font-weight: 700;
+}
+.group-editor {
+    border-left: 4px solid var(--accent) !important;
+}
+.question-editor {
+    background: var(--bg) !important;
+}
+.author-shell small {
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+.author-shell button {
+    cursor: pointer;
+}
+.author-shell .remove-button {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    padding: 7px 12px;
+    border-radius: 8px;
+}
+#authorMessage {
+    min-height: 24px;
+}
+#authorMessage[data-kind='error'] {
+    color: #c0392b;
+}
+#authorMessage[data-kind='success'] {
+    color: #15803d;
+}
+.author-save {
+    position: sticky;
+    bottom: 0;
+    background: var(--surface);
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+@media (max-width: 650px) {
+    .author-grid {
+        grid-template-columns: 1fr;
+    }
+    .author-shell fieldset {
+        padding: 12px;
+    }
+}

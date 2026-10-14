@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Vocabulary decks | Daily Note</title>
+        <script>
+            try {
+                if (localStorage.getItem('theme') === 'dark')
+                    document.documentElement.dataset.theme = 'dark';
+            } catch {}
+        </script>
+        <link rel="stylesheet" href="styles/tokens.css" />
+        <link rel="stylesheet" href="styles/pages/vocabulary.css" />
+    </head>
+    <body data-page="vocabulary">
+        <div class="vocab-shell">
+            <header class="vocab-topbar">
+                <a class="back-link" href="english-home.html">&larr; English</a>
+                <span class="topbar-label">VOCABULARY</span>
+                <button
+                    class="quiet-button"
+                    id="themeToggle"
+                    type="button"
+                    aria-label="Toggle theme"
+                >
+                    Theme
+                </button>
+            </header>
+            <main>
+                <section class="page-intro">
+                    <div>
+                        <p class="eyebrow">Your collection</p>
+                        <h1>Vocabulary decks</h1>
+                        <p>Build your word bank and review cards when they are due.</p>
+                    </div>
+                    <div class="intro-actions">
+                        <a class="primary-button" href="vocabulary-deck.html"
+                            ><span aria-hidden="true">+</span> Create deck</a
+                        >
+                        <label class="outline-button" for="apkgInput">Import Anki .apkg</label>
+                        <input id="apkgInput" type="file" accept=".apkg" hidden />
+                    </div>
+                </section>
+                <p id="pageMessage" class="page-message" role="status" aria-live="polite"></p>
+                <section class="activity-panel" aria-labelledby="activityHeading">
+                    <div class="activity-heading">
+                        <div>
+                            <h2 id="activityHeading">Learning activity</h2>
+                            <p id="activitySummary">Loading progress…</p>
+                        </div>
+                        <label class="limit-control"
+                            >Cards per day
+                            <select
+                                id="dailyLimit"
+                                aria-label="Maximum distinct cards to study per day"
+                            >
+                                <option value="null">Unlimited</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div
+                        id="activityChart"
+                        class="activity-chart"
+                        role="img"
+                        aria-label="Cards studied each day during the last 30 days"
+                    ></div>
+                    <div class="chart-labels"><span>30 days ago</span><span>Today</span></div>
+                </section>
+                <section aria-labelledby="deckHeading">
+                    <div class="section-heading">
+                        <h2 id="deckHeading">All decks</h2>
+                        <span id="deckCount"></span>
+                    </div>
+                    <div id="deckList" class="deck-grid" aria-live="polite">
+                        <p class="loading-note">Loading decks…</p>
+                    </div>
+                </section>
+            </main>
+        </div>
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>

@@ -1,0 +1,13 @@
+{
+    "index.html": "auth/login.html",
+    "home.html": "dashboard/home.html",
+    "dashboard.html": "dashboard/study-dashboard.html",
+    "english-home.html": "english/subject-home.html",
+    "vocabulary.html": "english/vocabulary.html",
+    "vocabulary-deck.html": "english/vocabulary-deck.html",
+    "english-reading-library.html": "english/reading-library.html",
+    "english.html": "english/reading-practice.html",
+    "chinese.html": "chinese/reading-practice.html",
+    "admin.html": "english/reading-authoring.html",
+    "sql-console.html": "admin/sql-console.html"
+}

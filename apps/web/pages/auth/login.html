@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Daily Practice</title>
+
+        <link rel="stylesheet" href="styles/style.css" />
+    </head>
+
+    <body data-page="login">
+        <main class="login-page">
+            <div class="login-card">
+                <div class="login-header">
+                    <h1>Login</h1>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Username"
+                            autocomplete="username"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Password"
+                            autocomplete="current-password"
+                            required
+                        />
+                    </div>
+
+                    <p id="loginMessage" class="login-message"></p>
+
+                    <button type="submit" class="login-button">Login</button>
+                </form>
+            </div>
+        </main>
+
+        <button
+            id="themeToggle"
+            class="theme-toggle"
+            aria-label="Toggle theme"
+            title="Toggle theme"
+        >
+            ◐
+        </button>
+
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>

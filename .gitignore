@@ -1,2 +1,19 @@
-env 
-.env 
+node_modules/
+dist/
+coverage/
+.local/
+.env
+.env.*
+!.env.example
+database/exports/
+env/
+.venv/
+__pycache__/
+
+# User-provided books and extracted private study content
+data/imports/*
+!data/imports/README.md
+data/imports/*.pdf
+data/imports/extracted/
+
+data/imports/reading-assets/

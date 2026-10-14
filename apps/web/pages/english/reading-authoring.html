@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Reading authoring | My Note</title>
+        <link rel="stylesheet" href="styles/style.css" />
+        <link rel="stylesheet" href="styles/pages/reading-authoring.css" />
+    </head>
+    <body data-page="reading-author">
+        <main class="author-shell">
+            <header class="author-header">
+                <div>
+                    <a href="english-reading-library.html">Reading library</a> /
+                    <a href="dashboard.html">Dashboard</a>
+                    <h1>Reading authoring</h1>
+                    <p>
+                        Write your passages, build question groups, then publish a test for
+                        practice.
+                    </p>
+                </div>
+                <button
+                    id="themeToggle"
+                    type="button"
+                    class="icon-button"
+                    aria-label="Toggle theme"
+                >
+                    Theme
+                </button>
+            </header>
+            <section class="author-toolbar">
+                <label
+                    >Your tests
+                    <select id="authorTestSelect">
+                        <option value="">New test</option>
+                    </select></label
+                ><button id="newTestButton" type="button" class="secondary-button">New test</button
+                ><a id="previewTestLink" hidden>Open practice</a>
+            </section>
+            <p id="authorMessage" role="status" aria-live="polite"></p>
+            <form id="authorForm">
+                <p>
+                    Drafts may leave accepted answers empty. Add and verify every answer before
+                    publishing.
+                </p>
+                <fieldset id="authorFields">
+                    <legend>Test details</legend>
+                    <div class="author-grid">
+                        <label
+                            >Title<input
+                                required
+                                maxlength="200"
+                                data-path="title"
+                                id="authorTitle" /></label
+                        ><label
+                            >Slug<input
+                                required
+                                pattern="[a-z0-9]+(-[a-z0-9]+)*"
+                                data-path="slug"
+                                id="authorSlug" /></label
+                        ><label
+                            >Category / source<input
+                                required
+                                list="readingCategories"
+                                data-path="category"
+                                id="authorCategory"
+                            /><datalist id="readingCategories">
+                                <option>Cambridge Test</option>
+                                <option>IELTS</option>
+                                <option>General Reading</option>
+                            </datalist></label
+                        ><label
+                            >Status<select data-path="status" id="authorStatus">
+                                <option value="draft">Draft</option>
+                                <option value="published">Published</option>
+                                <option value="archived">Archived</option>
+                            </select></label
+                        >
+                    </div>
+                    <label
+                        >Description<textarea
+                            data-path="description"
+                            id="authorDescription"
+                            rows="2"
+                        ></textarea>
+                    </label>
+                    <div id="passageEditors"></div>
+                    <button type="button" data-action="add-passage" class="secondary-button">
+                        Add passage
+                    </button>
+                </fieldset>
+                <div class="author-save">
+                    <button id="saveReadingButton" type="submit" class="primary-button">
+                        Save reading test</button
+                    ><span>All passages and questions are saved together.</span>
+                </div>
+            </form>
+        </main>
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Vocabulary deck | Daily Note</title>
+        <script>
+            try {
+                if (localStorage.getItem('theme') === 'dark')
+                    document.documentElement.dataset.theme = 'dark';
+            } catch {}
+        </script>
+        <link rel="stylesheet" href="styles/tokens.css" />
+        <link rel="stylesheet" href="styles/pages/vocabulary.css" />
+    </head>
+    <body data-page="vocabulary-deck">
+        <div class="vocab-shell">
+            <header class="vocab-topbar">
+                <a class="back-link" href="vocabulary.html">&larr; All decks</a>
+                <span class="topbar-label">VOCABULARY</span>
+                <button
+                    class="quiet-button"
+                    id="themeToggle"
+                    type="button"
+                    aria-label="Toggle theme"
+                >
+                    Theme
+                </button>
+            </header>
+            <main>
+                <section class="page-intro deck-intro">
+                    <div>
+                        <p class="eyebrow" id="deckEyebrow">New collection</p>
+                        <h1 id="deckTitle">Create a deck</h1>
+                        <p id="deckDescription">
+                            Keep related words together and review them over time.
+                        </p>
+                    </div>
+                    <div class="deck-stats" id="deckStats" hidden>
+                        <span><strong id="totalCount">0</strong> cards</span
+                        ><span><strong id="dueCount">0</strong> due now</span>
+                    </div>
+                </section>
+                <p id="pageMessage" class="page-message" role="status" aria-live="polite"></p>
+                <section class="editor-panel" id="createPanel">
+                    <div class="panel-heading">
+                        <span class="step-number">01</span>
+                        <div>
+                            <h2>Deck details</h2>
+                            <p>Give this collection a name you will recognize.</p>
+                        </div>
+                    </div>
+                    <form id="deckForm" class="field-grid">
+                        <label
+                            >Deck name
+                            <input
+                                name="name"
+                                placeholder="e.g. IELTS Academic Vocabulary"
+                                maxlength="120"
+                                required
+                        /></label>
+                        <label
+                            >Description
+                            <textarea
+                                name="description"
+                                placeholder="Optional note about this deck"
+                                maxlength="1000"
+                                rows="3"
+                            ></textarea>
+                        </label>
+                        <button class="primary-button" type="submit">
+                            Create deck <span aria-hidden="true">&rarr;</span>
+                        </button>
+                    </form>
+                </section>
+                <div id="deckWorkspace" hidden>
+                    <nav class="deck-tabs" aria-label="Deck sections">
+                        <button type="button" data-tab="study" aria-selected="true">Study</button
+                        ><button type="button" data-tab="cards" aria-selected="false">Cards</button>
+                    </nav>
+                    <section id="studyPanel" class="study-panel" aria-label="Study cards">
+                        <div class="study-heading"><span id="studyProgress"></span></div>
+                        <div class="flashcard" id="studyCard">
+                            <p class="loading-note">Finding a card…</p>
+                        </div>
+                        <div class="review-actions" id="reviewActions" hidden>
+                            <button type="button" data-minutes="3">3 minutes</button>
+                            <button type="button" data-minutes="10">10 minutes</button>
+                            <button type="button" data-minutes="15">15 minutes</button>
+                            <button type="button" data-minutes="1440">1 day</button>
+                            <button type="button" data-minutes="4320">3 days</button>
+                        </div>
+                    </section>
+                    <section id="cardsPanel" class="cards-panel" hidden aria-label="Manage cards">
+                        <div class="cards-layout">
+                            <div class="editor-panel">
+                                <div class="panel-heading">
+                                    <span class="step-number">+</span>
+                                    <div>
+                                        <h2>Add a word</h2>
+                                        <p>A word and its meaning are enough to start.</p>
+                                    </div>
+                                </div>
+                                <form id="cardForm" class="field-grid">
+                                    <label
+                                        >Word
+                                        <input
+                                            name="term"
+                                            placeholder="e.g. resilient"
+                                            maxlength="500"
+                                            required
+                                    /></label>
+                                    <label
+                                        >Meaning
+                                        <textarea
+                                            name="meaning"
+                                            placeholder="Definition or translation"
+                                            maxlength="4000"
+                                            rows="3"
+                                            required
+                                        ></textarea>
+                                    </label>
+                                    <label
+                                        >Example
+                                        <textarea
+                                            name="example"
+                                            placeholder="A sentence using this word (optional)"
+                                            maxlength="4000"
+                                            rows="3"
+                                        ></textarea>
+                                    </label>
+                                    <label
+                                        >Audio path
+                                        <input
+                                            name="audio_path"
+                                            placeholder="Optional local audio path"
+                                            maxlength="1000"
+                                    /></label>
+                                    <button class="primary-button" type="submit">Add card</button>
+                                </form>
+                            </div>
+                            <div class="card-list-panel">
+                                <div class="section-heading">
+                                    <h2>Words in this deck</h2>
+                                    <span id="cardCountLabel"></span>
+                                </div>
+                                <div id="cardList" class="card-list"></div>
+                                <button
+                                    id="loadMoreCards"
+                                    class="outline-button load-more"
+                                    type="button"
+                                    hidden
+                                >
+                                    Load more words
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>

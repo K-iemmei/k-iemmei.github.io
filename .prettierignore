@@ -1,0 +1,10 @@
+/node_modules/
+/dist/
+/.local/
+/archive/
+/database/
+/data/
+**/env/**
+**/.venv/**
+**/__pycache__/**
+docs/legacy-reading-import.md

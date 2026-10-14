@@ -1,19 +1,40 @@
 {
-  "name": "my-note-local-server",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "install-deps": "npm install",
-    "parse-questions": "node ./scripts/parse_and_import_questions.js",
-    "parse-rendered": "node ./scripts/parse_and_import_questions_rendered.js",
-    "start-server": "node ./server/index.js"
-  },
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.12",
-    "node-fetch": "^2.6.7",
-    "pg": "^8.11.0",
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "puppeteer": "^21.3.8"
-  }
+    "name": "my-note",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "node apps/api/start-server.js",
+        "start": "node apps/api/start-server.js",
+        "check": "node tools/project/check.cjs",
+        "test": "node --test tests/unit/*.test.cjs",
+        "test:integration": "node --test tests/integration/*.test.cjs",
+        "test:browser": "node tests/browser/smoke.cjs",
+        "build:pages": "node tools/site/build.cjs",
+        "preview:pages": "node tools/site/preview.cjs",
+        "db:backup": "node tools/database/backup.cjs",
+        "db:migrate": "node tools/database/migrate.cjs",
+        "db:seed": "node tools/database/seed.cjs",
+        "db:user": "node tools/database/create-local-user.cjs",
+        "db:setup": "npm run db:migrate && npm run db:seed && npm run db:user",
+        "db:export": "node tools/database/export-supabase.cjs",
+        "db:export-personal": "node tools/database/export-personal-data.cjs",
+        "db:import-hosted-personal": "node tools/database/import-hosted-personal-data.cjs",
+        "db:upload-reading-assets": "node tools/database/upload-reading-assets.cjs",
+        "format": "prettier --write \"apps/**/*.{js,json,html,css}\" \"tools/**/*.{js,cjs,mjs}\" \"tests/**/*.cjs\" \"docs/**/*.md\" \"README.md\" \"package.json\" \".github/workflows/*.yml\"",
+        "format:check": "prettier --check \"apps/**/*.{js,json,html,css}\" \"tools/**/*.{js,cjs,mjs}\" \"tests/**/*.cjs\" \"docs/**/*.md\" \"README.md\" \"package.json\" \".github/workflows/*.yml\""
+    },
+    "dependencies": {
+        "adm-zip": "^0.6.1",
+        "better-sqlite3": "^13.0.3",
+        "cheerio": "^1.0.0-rc.12",
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "node-fetch": "^2.6.7",
+        "pg": "^8.11.0",
+        "puppeteer": "^21.3.8",
+        "sql.js": "^1.13.0"
+    },
+    "devDependencies": {
+        "prettier": "^3.9.9"
+    }
 }

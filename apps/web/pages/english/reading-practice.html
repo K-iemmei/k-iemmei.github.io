@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Reading practice | My Note</title>
+        <link rel="stylesheet" href="styles/tokens.css" />
+        <link rel="stylesheet" href="styles/pages/reading-practice.css" />
+    </head>
+    <body data-page="reading" data-mobile-panel="passage">
+        <div class="practice-workspace">
+            <header class="practice-topbar">
+                <a
+                    href="english-reading-library.html"
+                    class="library-link"
+                    aria-label="Back to reading library"
+                    >&larr; <span>Library</span></a
+                >
+                <div class="practice-context">
+                    <span class="workspace-label">READING PRACTICE</span>
+                    <p id="examTitle">Choose a passage</p>
+                </div>
+                <div class="topbar-actions">
+                    <button type="button" id="practiceHistoryButton" class="quiet-button">
+                        History
+                    </button>
+                    <a href="admin.html" class="quiet-button author-link">Edit content</a>
+                    <button
+                        id="themeToggle"
+                        type="button"
+                        class="quiet-button theme-button"
+                        aria-label="Toggle theme"
+                    >
+                        Theme
+                    </button>
+                </div>
+            </header>
+            <div class="practice-controls">
+                <label class="test-picker"
+                    ><span>Passage</span
+                    ><select id="testSelect" aria-label="Choose reading test"></select
+                ></label>
+                <div class="text-size-controls" aria-label="Text size">
+                    <span>Text size</span
+                    ><button id="decreaseReadingFont" type="button" aria-label="Decrease text size">
+                        A&minus;</button
+                    ><button id="increaseReadingFont" type="button" aria-label="Increase text size">
+                        A+
+                    </button>
+                </div>
+            </div>
+            <div class="mobile-panel-tabs" aria-label="Reading view">
+                <button type="button" data-panel="passage" aria-pressed="true">Passage</button
+                ><button type="button" data-panel="questions" aria-pressed="false">
+                    Questions
+                </button>
+            </div>
+            <main class="reading-columns">
+                <section
+                    class="reading-pane"
+                    id="passagePane"
+                    aria-label="Reading passage"
+                    tabindex="0"
+                >
+                    <div class="pane-caption">READ THE PASSAGE</div>
+                    <h1 id="readingTitle">Loading passage...</h1>
+                    <details class="passage-info">
+                        <summary>About this passage</summary>
+                        <p id="readingDescription"></p>
+                    </details>
+                    <article id="readingPassage"></article>
+                </section>
+                <button
+                    type="button"
+                    class="pane-resizer"
+                    id="paneResizer"
+                    aria-label="Resize passage and questions panels"
+                    title="Drag to resize panels"
+                ></button>
+                <section
+                    class="questions-pane"
+                    id="questionsPane"
+                    aria-label="Reading questions"
+                    tabindex="0"
+                >
+                    <header class="questions-heading">
+                        <h2>Your answers</h2>
+                        <span id="questionCount">0 questions</span>
+                    </header>
+                    <p class="answer-hint">Complete the blanks and choose your answers below.</p>
+                    <div id="questionList"></div>
+                </section>
+            </main>
+            <footer class="practice-footer">
+                <div class="footer-navigation">
+                    <span class="navigation-label">Questions</span>
+                    <nav id="questionNavigation" aria-label="Question navigation"></nav>
+                    <span id="answeredCount" aria-live="polite">0 / 0 answered</span>
+                </div>
+                <div class="footer-actions">
+                    <div class="footer-status">
+                        <span id="scoreChip" class="score-chip" hidden></span>
+                        <p id="scoreSummary" aria-live="polite"></p>
+                    </div>
+                    <button type="button" id="reviewLatestButton" class="quiet-button" hidden>
+                        View results</button
+                    ><button type="button" id="submitAnswers" class="submit-button">
+                        Submit answers <span aria-hidden="true">&rarr;</span>
+                    </button>
+                </div>
+            </footer>
+        </div>
+        <dialog id="historyDialog" class="reading-dialog" aria-labelledby="historyTitle">
+            <form method="dialog" class="review-dialog-header">
+                <h2 id="historyTitle">Practice history</h2>
+                <button type="submit" class="quiet-button">Close</button>
+            </form>
+            <details class="attempt-history" open>
+                <summary>Saved attempts</summary>
+                <ol id="attemptHistory">
+                    <li>No attempts yet.</li>
+                </ol>
+            </details>
+        </dialog>
+        <dialog id="answerReviewDialog" class="reading-dialog" aria-labelledby="answerReviewTitle">
+            <form method="dialog" class="review-dialog-header">
+                <h2 id="answerReviewTitle">Answer review</h2>
+                <button type="submit" class="quiet-button">Close</button>
+            </form>
+            <section id="answerReview" class="answer-review" aria-live="polite"></section>
+        </dialog>
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>
