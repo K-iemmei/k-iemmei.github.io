@@ -1,6 +1,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { readingApi } from './reading.ts';
 import { vocabularyApi } from './vocabulary.ts';
+import { listeningApi } from './listening.ts';
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
 const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
@@ -147,6 +148,8 @@ Deno.serve(async (req) => {
                 body,
                 url,
             );
+        else if (path.startsWith('/api/listening'))
+            result = await listeningApi(admin, user, path.replace(/^\/api\//, ''), req.method, body);
         if (result === undefined) return json({ error: 'Unknown API route' }, 404);
         if (result?.__noContent) return new Response(null, { status: 204, headers: cors });
         if (result?.__binary)

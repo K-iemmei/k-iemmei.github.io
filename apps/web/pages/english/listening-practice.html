@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Listening practice | My Note</title>
+        <link rel="stylesheet" href="styles/style.css" />
+        <link rel="stylesheet" href="styles/pages/listening.css" />
+    </head>
+    <body data-page="listening">
+        <main class="listening-shell listening-practice">
+            <header class="listening-topbar">
+                <a href="english-listening-library.html">&larr; Listening library</a
+                ><button id="themeToggle" type="button">Theme</button>
+            </header>
+            <div class="listening-heading">
+                <p class="eyebrow">IELTS LISTENING</p>
+                <h1 id="listeningTitle">Loading part...</h1>
+                <p id="listeningSubtitle"></p>
+            </div>
+            <section class="audio-panel" aria-label="Audio player">
+                <div>
+                    <strong>Audio</strong>
+                    <p id="audioStatus">Checking audio file...</p>
+                </div>
+                <audio id="listeningAudio" controls preload="metadata" hidden></audio>
+                <div class="audio-actions">
+                    <button type="button" id="rewindAudio" disabled>&larr; 5 sec</button
+                    ><label
+                        >Speed
+                        <select id="audioSpeed" disabled>
+                            <option value="0.75">0.75×</option>
+                            <option value="1" selected>1×</option>
+                            <option value="1.25">1.25×</option>
+                            <option value="1.5">1.5×</option>
+                        </select></label
+                    >
+                </div>
+            </section>
+            <div class="mode-tabs" role="tablist" aria-label="Listening mode">
+                <button type="button" data-mode="exam" aria-selected="true">IELTS questions</button
+                ><button type="button" data-mode="dictation" aria-selected="false">
+                    Dictation
+                </button>
+            </div>
+            <section id="examPanel" class="listening-workspace">
+                <div class="worksheet">
+                    <div class="section-caption">QUESTION SHEET</div>
+                    <p id="sourceNote" class="source-note"></p>
+                    <div id="worksheetText" class="worksheet-text"></div>
+                </div>
+                <div class="answer-panel">
+                    <div class="section-caption">YOUR ANSWERS</div>
+                    <p>
+                        Enter answers 1–10 for this part. The original question wording is shown on
+                        the left.
+                    </p>
+                    <form id="examForm">
+                        <div id="answerGrid" class="answer-grid"></div>
+                        <button class="listening-submit" type="submit">Submit answers</button>
+                    </form>
+                </div>
+            </section>
+            <section id="dictationPanel" class="dictation-panel" hidden>
+                <div class="section-caption">DICTATION</div>
+                <h2>Write what you hear</h2>
+                <p>Replay the audio as often as you need. Your attempt is saved when you submit.</p>
+                <form id="dictationForm">
+                    <textarea
+                        id="dictationText"
+                        rows="14"
+                        placeholder="Type the spoken words here..."
+                        aria-label="Dictation transcript"
+                    ></textarea>
+                    <div class="dictation-footer">
+                        <span id="dictationWordCount">0 words</span
+                        ><button class="listening-submit" type="submit">Submit dictation</button>
+                    </div>
+                </form>
+            </section>
+            <section
+                id="listeningResult"
+                class="listening-result"
+                role="status"
+                aria-live="polite"
+                hidden
+            ></section>
+        </main>
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>

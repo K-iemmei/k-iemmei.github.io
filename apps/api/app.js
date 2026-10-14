@@ -3,6 +3,7 @@ const { createReadingRouter } = require('./modules/reading/reading-routes');
 const { createAuthoringRouter } = require('./modules/reading/reading-authoring-routes');
 const { createDataRouter } = require('./modules/data/data-routes');
 const { createVocabularyRouter } = require('./modules/vocabulary/vocabulary-routes');
+const { createListeningRouter } = require('./modules/listening/listening-routes');
 const { registerAuth, requireAuthentication } = require('./modules/auth/local-auth');
 function createApp({ database } = {}) {
     const app = express();
@@ -30,6 +31,7 @@ function createApp({ database } = {}) {
     app.use('/api/tests', requireAuthentication(db), createReadingRouter(db));
     app.use('/api/data', requireAuthentication(db), createDataRouter(db));
     app.use('/api/vocabulary', requireAuthentication(db), createVocabularyRouter(db));
+    app.use('/api/listening', requireAuthentication(db), createListeningRouter(db));
     app.get('/health', (req, res) => res.json({ ok: true }));
     app.post('/api/admin/sql', async (req, res, next) => {
         if (!process.env.ADMIN_TOKEN || req.get('x-admin-token') !== process.env.ADMIN_TOKEN)

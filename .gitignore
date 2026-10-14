@@ -17,3 +17,7 @@ data/imports/*.pdf
 data/imports/extracted/
 
 data/imports/reading-assets/
+data/imports/listening-audio/
+data/listening-audio/
+data/*.mp3
+eng.traineddata

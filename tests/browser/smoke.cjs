@@ -31,7 +31,9 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
     });
     let browser;
     try {
+        console.log('Browser: launching');
         browser = await puppeteer.launch({ headless: 'new', timeout: 20000 });
+        console.log('Browser: launched');
         const page = await browser.newPage();
         const errors = [];
         page.on('pageerror', (error) => errors.push(error.message));
@@ -46,6 +48,7 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
             request.continue();
         });
         await page.goto(base + '/dashboard.html', { waitUntil: 'networkidle0' });
+        console.log('Browser: login redirect loaded');
         assert.match(page.url(), /index.html/);
         await page.goto(base + '/', { waitUntil: 'networkidle0' });
         assert.equal(await page.$eval('body', (body) => body.dataset.page), 'login');
@@ -55,8 +58,35 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
             page.waitForNavigation({ waitUntil: 'networkidle0' }),
             page.click('#loginForm button[type="submit"]'),
         ]);
+        console.log('Browser: logged in');
         assert.match(page.url(), /dashboard.html/);
         assert.ok(!(await page.evaluate(() => document.cookie)).includes('my_note_session'));
+        if (!live) {
+            console.log('Listening: seed fixture');
+            await fixture.pool.query(`INSERT INTO public.listening_sessions
+                (slug,book_number,test_number,part_number,title,question_text,first_question,last_question,transcript,answer_key,audio_filename)
+                VALUES ('cambridge-20-test-1-part-1',20,1,1,'Cambridge 20 · Test 1 · Part 1','Complete (1) .....',1,10,'The blue train arrives today.','{"1":"blue"}','0-cam20-test-1-part-1.mp3')`);
+            await page.goto(base + '/english-listening-library.html', {
+                waitUntil: 'networkidle0',
+            });
+            console.log('Listening: library loaded');
+            await page.click('a[href*="english-listening.html?session="]');
+            console.log('Listening: opened part');
+            await page.waitForSelector('#answerGrid [data-answer="1"]');
+            await page.type('#answerGrid [data-answer="1"]', 'blue');
+            await page.click('#examForm button[type="submit"]');
+            await page.waitForFunction(() =>
+                document.getElementById('listeningResult').textContent.includes('100%'),
+            );
+            console.log('Listening: exam graded');
+            await page.click('[data-mode="dictation"]');
+            await page.type('#dictationText', 'The blue train arrives today.');
+            await page.click('#dictationForm button[type="submit"]');
+            await page.waitForFunction(() =>
+                document.getElementById('listeningResult').textContent.includes('100%'),
+            );
+            console.log('Listening: dictation graded');
+        }
         await page.goto(base + '/english-home.html', { waitUntil: 'networkidle0' });
         await Promise.all([
             page.waitForNavigation({ waitUntil: 'networkidle0' }),

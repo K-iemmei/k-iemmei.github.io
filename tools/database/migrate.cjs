@@ -25,8 +25,25 @@ async function migrate(options = databaseOptions()) {
                     [name],
                 );
                 if (existing.rows.length) {
-                    if (existing.rows[0].checksum !== hash)
-                        throw new Error('Applied migration changed: ' + name);
+                    if (existing.rows[0].checksum !== hash) {
+                        // Older Windows checkouts stored CRLF plus a trailing empty line.
+                        // Accept only byte-for-byte line-ending variants, then record the
+                        // current hash so future real SQL edits still fail safely.
+                        const legacyVariants = [
+                            sql.replace(/\r?\n/g, '\r\n'),
+                            (sql + '\n').replace(/\r?\n/g, '\r\n'),
+                        ];
+                        const sameSql = legacyVariants.some(
+                            (variant) =>
+                                crypto.createHash('sha256').update(variant).digest('hex') ===
+                                existing.rows[0].checksum,
+                        );
+                        if (!sameSql) throw new Error('Applied migration changed: ' + name);
+                        await client.query(
+                            'UPDATE app_private.migrations SET checksum=$2 WHERE name=$1',
+                            [name, hash],
+                        );
+                    }
                     continue;
                 }
                 await client.query('BEGIN');

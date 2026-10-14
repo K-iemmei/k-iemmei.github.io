@@ -2,7 +2,7 @@
 export const activityTypes = Object.freeze({
     flashcards: { label: 'Flashcards', status: 'planned' },
     reading: { label: 'Reading', status: 'available' },
-    listening: { label: 'Listening', status: 'planned' },
+    listening: { label: 'Listening', status: 'available' },
     grammar: { label: 'Grammar', status: 'planned' },
     vocabulary: { label: 'Vocabulary', status: 'planned' },
 });
@@ -20,7 +20,11 @@ export const subjects = [
                 href: 'english-reading-library.html',
                 description: 'Practice your manually authored reading tests.',
             },
-            { type: 'listening', description: 'Audio practice and submitted answers.' },
+            {
+                type: 'listening',
+                href: 'english-listening-library.html',
+                description: 'IELTS parts and dictation practice.',
+            },
             { type: 'grammar', description: 'Practice sentence patterns and common errors.' },
             {
                 type: 'vocabulary',

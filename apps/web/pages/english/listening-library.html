@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Listening Library | My Note</title>
+        <link rel="stylesheet" href="styles/style.css" />
+        <link rel="stylesheet" href="styles/pages/listening.css" />
+    </head>
+    <body data-page="listening-library">
+        <main class="listening-shell">
+            <header class="listening-topbar">
+                <a href="english-home.html">&larr; English</a
+                ><button id="themeToggle" type="button">Theme</button>
+            </header>
+            <div class="listening-heading">
+                <p class="eyebrow">ENGLISH / LISTENING</p>
+                <h1>Listening library</h1>
+                <p>
+                    Choose one part at a time. Practise the IELTS questions or switch to dictation.
+                </p>
+            </div>
+            <div class="listening-filters">
+                <input
+                    id="listeningSearch"
+                    type="search"
+                    placeholder="Search Cambridge, test or part"
+                    aria-label="Search listening sessions"
+                /><span id="listeningCount">Loading...</span>
+            </div>
+            <div id="listeningGrid" class="listening-grid" aria-live="polite"></div>
+            <nav
+                id="listeningPages"
+                class="listening-pages"
+                aria-label="Listening library pages"
+            ></nav>
+        </main>
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>

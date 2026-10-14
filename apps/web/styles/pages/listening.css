@@ -1,0 +1,380 @@
+body[data-page^='listening'] {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+}
+.listening-practice [hidden] {
+    display: none !important;
+}
+.listening-shell {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 24px 72px;
+}
+.listening-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 46px;
+}
+.listening-topbar a,
+.listening-topbar button {
+    color: var(--text-secondary);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 13px;
+    text-decoration: none;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+.listening-heading {
+    margin-bottom: 30px;
+}
+.listening-heading .eyebrow,
+.section-caption {
+    margin: 0 0 9px;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+.listening-heading h1 {
+    margin: 0;
+    font-size: clamp(30px, 4vw, 43px);
+    letter-spacing: -0.045em;
+    line-height: 1.1;
+}
+.listening-heading p:last-child {
+    margin: 10px 0 0;
+    color: var(--text-secondary);
+}
+.listening-filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0 0 18px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+.listening-filters input {
+    width: min(430px, 100%);
+    padding: 12px 14px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    font: inherit;
+}
+.listening-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 15px;
+}
+.listening-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 142px;
+    padding: 19px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    color: var(--text);
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(24, 37, 40, 0.035);
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+.listening-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 16px 30px rgba(24, 37, 40, 0.09);
+}
+.listening-card-kicker {
+    color: var(--accent);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+.listening-card h2 {
+    margin: 13px 0 8px;
+    font-size: 22px;
+    line-height: 1.1;
+    font-weight: 650;
+    letter-spacing: -0.025em;
+}
+.listening-card-detail {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+.listening-card-arrow {
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    font-size: 20px;
+    color: var(--accent);
+}
+.listening-card-status {
+    align-self: flex-start;
+    margin-top: 9px;
+    padding: 2px 7px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-muted);
+    font-size: 10px;
+}
+.source-note {
+    margin: 0 0 17px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+.listening-pages {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 28px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+.listening-pages button,
+.audio-actions button {
+    padding: 8px 12px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    cursor: pointer;
+}
+.listening-pages button:disabled,
+.audio-actions button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+.listening-empty {
+    grid-column: 1/-1;
+    padding: 32px;
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+    color: var(--text-secondary);
+}
+.listening-practice {
+    max-width: 1320px;
+}
+.listening-practice .listening-topbar {
+    margin-bottom: 28px;
+}
+.audio-panel {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+}
+.audio-panel strong {
+    font-size: 14px;
+}
+.audio-panel p {
+    margin: 3px 0 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+.audio-panel audio {
+    flex: 1 1 320px;
+    height: 42px;
+}
+.audio-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+.audio-actions select {
+    margin-left: 6px;
+    padding: 7px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+.mode-tabs {
+    display: flex;
+    gap: 7px;
+    margin: 24px 0 15px;
+    border-bottom: 1px solid var(--border);
+}
+.mode-tabs button {
+    padding: 11px 17px;
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+.mode-tabs button[aria-selected='true'] {
+    border-bottom-color: var(--accent);
+    color: var(--accent);
+    font-weight: 650;
+}
+.listening-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(300px, 0.8fr);
+    gap: 15px;
+    align-items: start;
+}
+.worksheet,
+.answer-panel,
+.dictation-panel,
+.listening-result {
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+}
+.worksheet-text {
+    font: 16px/1.72 var(--font-reading);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+.inline-answer {
+    width: 116px;
+    padding: 3px 5px;
+    border: 0;
+    border-bottom: 1px solid var(--accent);
+    color: var(--text);
+    background: var(--fill-tertiary);
+    font: 15px var(--font-sans);
+}
+.answer-panel {
+    position: sticky;
+    top: 16px;
+}
+.answer-panel p,
+.dictation-panel p {
+    margin: 0 0 18px;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+.answer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+.answer-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+.answer-item span {
+    min-width: 20px;
+    color: var(--text-muted);
+    font-weight: 650;
+}
+.answer-item input,
+.dictation-panel textarea {
+    min-width: 0;
+    width: 100%;
+    padding: 10px;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    font: inherit;
+    box-sizing: border-box;
+}
+.listening-submit {
+    margin-top: 18px;
+    padding: 11px 17px;
+    color: var(--accent-text);
+    background: var(--accent);
+    border: 0;
+    border-radius: 9px;
+    font: inherit;
+    font-weight: 650;
+    cursor: pointer;
+}
+.listening-submit:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+.dictation-panel h2 {
+    margin: 0 0 6px;
+    font-size: 22px;
+}
+.dictation-panel textarea {
+    resize: vertical;
+    font: 16px/1.65 var(--font-reading);
+}
+.dictation-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+.listening-result {
+    margin-top: 16px;
+}
+.listening-result h2 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+.listening-result p {
+    color: var(--text-secondary);
+}
+.review-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+}
+.review-grid div {
+    display: grid;
+    grid-template-columns: 25px 1fr;
+    gap: 3px 8px;
+    padding: 8px;
+    border: 1px solid var(--border-light);
+    border-radius: 7px;
+}
+.review-grid span:last-child {
+    grid-column: 2;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+.transcript-review {
+    white-space: pre-wrap;
+    font: 16px/1.7 var(--font-reading);
+}
+@media (max-width: 780px) {
+    .listening-shell {
+        padding: 20px 15px 50px;
+    }
+    .listening-workspace {
+        grid-template-columns: 1fr;
+    }
+    .answer-panel {
+        position: static;
+    }
+    .worksheet,
+    .answer-panel,
+    .dictation-panel {
+        padding: 18px;
+    }
+    .review-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -33,6 +33,8 @@ From **English > Reading Library > Create reading test**, or `/admin.html` after
 
 Supported types: matching headings, choose heading, classification, summary completion, sentence completion, True/False/Not Given, Yes/No/Not Given, multiple choice, short answer and list selection. Drafts may leave answer keys empty; unkeyed questions are saved as ungraded. Publishing requires all answer keys. Published tests appear in the library; drafts are visible to their author. Authors can reload and edit their own tests. Version checks prevent stale edits/submissions.
 
+Listening has a per-part library, IELTS question mode, dictation, a protected MP3 player and saved attempts. See [Listening workflow](docs/listening-workflow.md) for PDF OCR coverage, local/hosted migrations and audio file naming.
+
 Migration `006-manual-reading.sql` deliberately resets the old Reading tables and attempts once. Old crawled Reading content and its seed/import workflow have been removed. Re-running migrations or seeds preserves newly authored tests. Back up an existing database before first applying this migration.
 
 ## Layout
