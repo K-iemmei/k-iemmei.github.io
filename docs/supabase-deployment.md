@@ -17,7 +17,7 @@ The generated content files are about 2.7 MB. A direct `psql` connection is more
 
 ## Publish Pages
 
-In GitHub repository **Settings → Secrets and variables → Actions**, add variable `SUPABASE_URL` and secret `SUPABASE_ANON_KEY`. In **Settings → Pages**, select **GitHub Actions** as the source. Push the repository to `main` or run the `Publish GitHub Pages` workflow manually. The workflow builds `dist/` and publishes it; it does not include the PostgreSQL server or private exports. A project site uses `https://<account>.github.io/my-note/`; internal links are relative so they work under that prefix.
+In GitHub repository **Settings → Secrets and variables → Actions**, add variable `SUPABASE_URL` and secret `SUPABASE_ANON_KEY`. In **Settings → Pages**, select **GitHub Actions** as the source. Push the repository to `main` or run the `Publish GitHub Pages` workflow manually. The workflow builds `dist/` and publishes it; it does not include the PostgreSQL server or private exports. This repository is now the account's user site at **https://k-iemmei.github.io/**. Internal links are relative and also work when previewed under `/my-note/` locally.
 
 For a local static preview, set the public URL and anon key in the shell, run `npm run build:pages`, then `npm run preview:pages` and open `http://localhost:4173/my-note/`. `file://` is insufficient for ES modules and Auth requests.
 

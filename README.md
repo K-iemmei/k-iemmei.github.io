@@ -4,7 +4,7 @@ A learning app for English, Chinese and Data / AI / ML. Local development uses E
 
 ## GitHub Pages build
 
-`npm.cmd run build:pages` writes `dist/` when `SUPABASE_URL` and `SUPABASE_ANON_KEY` are set. The Pages workflow publishes that folder under the repository path, including `/my-note/`. The static bundle contains no database password, service-role key, original book files, private images or SQL console. Hosted setup and the local-to-Supabase data transfer are documented in [Supabase deployment](docs/supabase-deployment.md).
+`npm.cmd run build:pages` writes `dist/` when `SUPABASE_URL` and `SUPABASE_ANON_KEY` are set. The Pages workflow publishes that folder at **https://k-iemmei.github.io/**. The static bundle contains no database password, service-role key, original book files, private images or SQL console. Hosted setup and the local-to-Supabase data transfer are documented in [Supabase deployment](docs/supabase-deployment.md).
 
 Run `npm.cmd run preview:pages` after building to preview the same project path at **http://localhost:4173/my-note/** without starting Express API or local PostgreSQL.
 
