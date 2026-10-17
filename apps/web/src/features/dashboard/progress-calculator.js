@@ -1,4 +1,10 @@
+import { englishProgress } from '../../domain/english-tracking.js';
+
 export function normalizeDailyProgress(record = {}) {
+    if ('reading_submissions' in record || 'listening_seconds' in record) {
+        const { points } = englishProgress(record);
+        return { total: points, completed: points, ratio: Math.min(1, points / 3) };
+    }
     const totalFromExplicit = Number(
         record.total_count ??
             record.total_exercises ??

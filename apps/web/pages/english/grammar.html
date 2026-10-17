@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>English Grammar | Daily Note</title>
+        <script>
+            try {
+                if (localStorage.getItem('theme') === 'dark')
+                    document.documentElement.dataset.theme = 'dark';
+            } catch {}
+        </script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles/tokens.css" />
+        <link rel="stylesheet" href="styles/pages/grammar.css" />
+    </head>
+    <body data-page="grammar">
+        <a class="grammar-skip" href="#grammarMain">Skip to content</a>
+        <div class="grammar-shell">
+            <header class="grammar-topbar">
+                <a class="grammar-back" href="english-home.html"
+                    ><span aria-hidden="true">←</span> English</a
+                >
+                <a class="grammar-wordmark" href="english-grammar.html" data-course>GRAMMAR</a>
+                <button
+                    id="themeToggle"
+                    class="grammar-theme"
+                    type="button"
+                    role="switch"
+                    aria-label="Dark mode"
+                    aria-checked="false"
+                    data-theme-switch
+                >
+                    <span>Dark mode</span
+                    ><span class="grammar-switch" aria-hidden="true"><span></span></span>
+                </button>
+            </header>
+            <main id="grammarMain" tabindex="-1">
+                <section id="grammarLibrary" aria-labelledby="grammarHeading">
+                    <div class="grammar-hero">
+                        <div>
+                            <p class="grammar-eyebrow">English · Learning path</p>
+                            <h1 id="grammarHeading" tabindex="-1">Grammar, made clear.</h1>
+                            <p class="grammar-intro">
+                                Từ câu đầu tiên đến cách diễn đạt tinh tế. Học cách dùng, hiểu ngữ
+                                cảnh và áp dụng vào cuộc sống.
+                            </p>
+                            <div class="grammar-facts">
+                                <span id="grammarLessonCount">72 lessons</span
+                                ><span>12 topic groups</span><span>Basic → Advanced</span>
+                            </div>
+                        </div>
+                        <div class="grammar-progress-card">
+                            <div class="grammar-progress-heading">
+                                <span>Your progress</span
+                                ><span id="grammarProgressCount">0 / 72</span>
+                            </div>
+                            <progress
+                                id="grammarProgress"
+                                value="0"
+                                max="72"
+                                aria-label="Lessons marked completed on this browser"
+                            ></progress>
+                            <a
+                                id="grammarContinue"
+                                class="grammar-primary"
+                                href="english-grammar.html?lesson=word-classes"
+                                data-lesson="word-classes"
+                                >Start learning <span aria-hidden="true">→</span></a
+                            >
+                            <span class="grammar-progress-scope"
+                                >Trình độ là gợi ý lộ trình. Tiến độ lưu trên trình duyệt này.</span
+                            >
+                        </div>
+                    </div>
+                    <div class="grammar-toolbar">
+                        <label class="grammar-search"
+                            ><svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                aria-hidden="true"
+                            >
+                                <circle cx="10.5" cy="10.5" r="6.5" />
+                                <path d="m16 16 5 5" /></svg
+                            ><span class="grammar-sr-only">Search grammar topics</span
+                            ><input
+                                id="grammarSearch"
+                                type="search"
+                                placeholder="Tìm chủ điểm: thì, articles, điều kiện…"
+                                autocomplete="off"
+                        /></label>
+                        <label class="grammar-level-filter"
+                            ><span class="grammar-sr-only">Filter by level</span
+                            ><select id="grammarLevel">
+                                <option value="all">All levels</option>
+                                <option>A1</option>
+                                <option>A2</option>
+                                <option>B1</option>
+                                <option>B2</option>
+                                <option>C1</option>
+                            </select></label
+                        >
+                    </div>
+                    <div class="grammar-filter-row">
+                        <div
+                            class="grammar-status-filters"
+                            role="group"
+                            aria-label="Filter lessons by progress"
+                        >
+                            <button type="button" data-status="all" aria-pressed="true">
+                                All topics</button
+                            ><button type="button" data-status="remaining" aria-pressed="false">
+                                To learn</button
+                            ><button type="button" data-status="completed" aria-pressed="false">
+                                Completed</button
+                            ><button type="button" data-status="saved" aria-pressed="false">
+                                Saved
+                            </button>
+                        </div>
+                        <p id="grammarResultsCount" role="status" aria-live="polite"></p>
+                    </div>
+                    <div id="grammarUnits" class="grammar-unit-grid"><p>Loading lessons…</p></div>
+                    <div id="grammarEmpty" class="grammar-empty" hidden>
+                        <h2>Không tìm thấy bài phù hợp</h2>
+                        <p>Thử từ khóa khác hoặc bỏ bộ lọc.</p>
+                        <button id="grammarResetFilters" class="grammar-secondary" type="button">
+                            Clear filters
+                        </button>
+                    </div>
+                </section>
+                <section id="grammarReader" hidden aria-label="Grammar lesson"></section>
+                <p id="grammarNotice" class="grammar-notice" role="status" aria-live="polite"></p>
+            </main>
+            <footer class="grammar-footer">
+                <span>Daily Note · English Grammar</span
+                ><a href="english-home.html">English library <span aria-hidden="true">↗</span></a>
+            </footer>
+        </div>
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>

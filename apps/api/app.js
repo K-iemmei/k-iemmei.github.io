@@ -4,9 +4,12 @@ const { createAuthoringRouter } = require('./modules/reading/reading-authoring-r
 const { createDataRouter } = require('./modules/data/data-routes');
 const { createVocabularyRouter } = require('./modules/vocabulary/vocabulary-routes');
 const { createListeningRouter } = require('./modules/listening/listening-routes');
+const { createTrackingRouter } = require('./modules/tracking/tracking-routes');
+const { createPublishingRouter } = require('./modules/publishing/publishing-routes');
 const { registerAuth, requireAuthentication } = require('./modules/auth/local-auth');
 function createApp({ database } = {}) {
     const app = express();
+    app.use('/api/notes/assets', express.json({ limit: '3mb' }));
     app.use(express.json({ limit: '1mb' }));
     // Local dev server only: reject foreign hosts/origins even if reached through DNS rebinding.
     app.use((req, res, next) => {
@@ -32,6 +35,8 @@ function createApp({ database } = {}) {
     app.use('/api/data', requireAuthentication(db), createDataRouter(db));
     app.use('/api/vocabulary', requireAuthentication(db), createVocabularyRouter(db));
     app.use('/api/listening', requireAuthentication(db), createListeningRouter(db));
+    app.use('/api/tracking', requireAuthentication(db), createTrackingRouter(db));
+    app.use(['/api/notes', '/api/blog'], requireAuthentication(db), createPublishingRouter(db));
     app.get('/health', (req, res) => res.json({ ok: true }));
     app.post('/api/admin/sql', async (req, res, next) => {
         if (!process.env.ADMIN_TOKEN || req.get('x-admin-token') !== process.env.ADMIN_TOKEN)

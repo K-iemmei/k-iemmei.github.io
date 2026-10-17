@@ -2,6 +2,15 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+        <script>
+            // Apply the saved theme before the first paint, without waiting for modules.
+            try {
+                if (localStorage.getItem('theme') === 'dark')
+                    document.documentElement.dataset.theme = 'dark';
+            } catch {
+                // Storage can be unavailable; keep the default light theme.
+            }
+        </script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Listening practice | My Note</title>
         <link rel="stylesheet" href="styles/style.css" />
@@ -22,6 +31,9 @@
                 <div>
                     <strong>Audio</strong>
                     <p id="audioStatus">Checking audio file...</p>
+                    <p id="listeningTrackingStatus" role="status">
+                        Listening time is saved while audio plays.
+                    </p>
                 </div>
                 <audio id="listeningAudio" controls preload="metadata" hidden></audio>
                 <div class="audio-actions">

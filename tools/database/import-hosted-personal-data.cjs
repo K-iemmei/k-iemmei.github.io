@@ -3,6 +3,9 @@ const path = require('node:path');
 const { Client } = require('pg');
 const source = path.resolve(__dirname, '../../database/exports/personal-data.json');
 const ordered = [
+    'personal_notes',
+    'note_assets',
+    'blog_posts',
     'vocabulary_decks',
     'vocabulary_cards',
     'vocabulary_reviews',
@@ -38,9 +41,11 @@ const ordered = [
             [hosted],
         );
         for (const table of ordered) {
-            const rows = (data.tables[table] || []).map((row) =>
-                'user_id' in row ? { ...row, user_id: hosted } : row,
-            );
+            const rows = (data.tables[table] || []).map((row) => ({
+                ...row,
+                ...('user_id' in row ? { user_id: hosted } : {}),
+                ...(table === 'blog_posts' ? { author_id: hosted } : {}),
+            }));
             if (!rows.length) continue;
             const columns = Object.keys(rows[0]);
             if (columns.some((column) => !/^[a-z_]+$/.test(column)))

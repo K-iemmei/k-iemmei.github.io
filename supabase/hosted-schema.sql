@@ -143,4 +143,7 @@ INSERT INTO storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
 VALUES('reading-assets','reading-assets',false,20971520,ARRAY['image/png'])
 ON CONFLICT(id) DO NOTHING;
 UPDATE storage.buckets SET public=false,file_size_limit=20971520,allowed_mime_types=ARRAY['image/png'] WHERE id='reading-assets';
+-- Included in a newly exported schema; existing projects use hosted-notes-migration.sql.
+REVOKE ALL ON FUNCTION public.app_notes_api(UUID,TEXT,UUID,JSONB) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.app_notes_api(UUID,TEXT,UUID,JSONB) TO service_role;
 COMMIT;

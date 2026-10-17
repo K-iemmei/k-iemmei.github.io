@@ -37,6 +37,16 @@ function notify(text, kind = 'info') {
     message.textContent = text;
     message.dataset.kind = kind;
 }
+function syncEditorUrl() {
+    const url = new URL(window.location.href);
+    if (model.id) url.searchParams.set('test', model.slug);
+    else url.searchParams.delete('test');
+    window.history.replaceState({}, '', url);
+}
+function enableEditor(enabled) {
+    document.getElementById('authorFields').disabled = !enabled;
+    document.getElementById('saveReadingButton').disabled = !enabled;
+}
 function at(path) {
     return path.split('.').reduce((value, key) => value[key], model);
 }
@@ -206,6 +216,7 @@ async function refreshList() {
             )
             .join('');
     select.value = model.id || '';
+    return tests;
 }
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -220,6 +231,7 @@ form.addEventListener('submit', async (event) => {
             { method: model.id ? 'PUT' : 'POST', body: JSON.stringify(model) },
         );
         model = await apiRequest('/api/reading/author/tests/' + saved.id);
+        syncEditorUrl();
         dirty = false;
         render();
         await refreshList();
@@ -244,6 +256,8 @@ select.addEventListener('change', async () => {
         dirty = false;
         render();
         notify('');
+        syncEditorUrl();
+        enableEditor(true);
     } catch (error) {
         notify(error.message, 'error');
     }
@@ -253,6 +267,8 @@ document.getElementById('newTestButton').addEventListener('click', () => {
     model = blankTest();
     dirty = false;
     select.value = '';
+    syncEditorUrl();
+    enableEditor(true);
     render();
     notify('');
 });
@@ -262,5 +278,22 @@ window.addEventListener('beforeunload', (event) => {
         event.returnValue = '';
     }
 });
-render();
-await refreshList();
+enableEditor(false);
+try {
+    const tests = await refreshList();
+    const requested = new URLSearchParams(window.location.search).get('test');
+    if (requested) {
+        const test = tests.find((test) => test.slug === requested || test.id === requested);
+        if (!test)
+            throw new Error(
+                'This reading test is unavailable or you do not have permission to edit it.',
+            );
+        model = await apiRequest('/api/reading/author/tests/' + encodeURIComponent(test.id));
+        select.value = model.id;
+        syncEditorUrl();
+    }
+    render();
+    enableEditor(true);
+} catch (error) {
+    notify(error.message, 'error');
+}

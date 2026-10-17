@@ -3,6 +3,9 @@ const path = require('node:path');
 const { pool } = require('../../apps/api/database-pool');
 const output = path.resolve(__dirname, '../../database/exports/personal-data.json');
 const sources = {
+    personal_notes: 'SELECT * FROM personal_notes WHERE user_id=$1 ORDER BY id',
+    note_assets: 'SELECT * FROM note_assets WHERE user_id=$1 ORDER BY id',
+    blog_posts: 'SELECT * FROM blog_posts WHERE author_id=$1 ORDER BY note_id',
     vocabulary_decks: 'SELECT * FROM vocabulary_decks WHERE user_id=$1 ORDER BY id',
     vocabulary_cards:
         'SELECT c.* FROM vocabulary_cards c JOIN vocabulary_decks d ON d.id=c.deck_id WHERE d.user_id=$1 ORDER BY c.id',

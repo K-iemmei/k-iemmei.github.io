@@ -34,7 +34,10 @@ export async function apiRequest(path, options = {}) {
     if (response.status === 401 && !path.endsWith('/login')) {
         window.location.replace(hosted ? 'index.html' : '/index.html');
     }
-    if (!response.ok) throw new Error(result.error || 'Request failed');
+    if (!response.ok)
+        throw Object.assign(new Error(result.error || 'Request failed'), {
+            status: response.status,
+        });
     return result;
 }
 function request(table, options = {}) {

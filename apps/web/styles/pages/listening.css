@@ -300,7 +300,7 @@ body[data-page^='listening'] {
     margin-top: 18px;
     padding: 11px 17px;
     color: var(--accent-text);
-    background: var(--accent);
+    background: var(--accent-fill);
     border: 0;
     border-radius: 9px;
     font: inherit;

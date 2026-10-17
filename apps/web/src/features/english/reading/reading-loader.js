@@ -80,6 +80,11 @@ export const loader = {
 
     async loadCurrentTest() {
         const test = state.tests[state.currentIndex] || state.tests[0];
+        const editLink = document.getElementById('editReadingLink');
+        if (editLink)
+            editLink.href = test?.slug
+                ? `admin.html?test=${encodeURIComponent(test.slug)}`
+                : 'admin.html';
         const titleHost = document.getElementById('examTitle');
         if (titleHost) {
             titleHost.textContent = test ? test.title : 'IELTS Reading Practice';

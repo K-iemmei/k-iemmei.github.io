@@ -2,9 +2,9 @@ import { normalizeDailyProgress } from './progress-calculator.js';
 import { generateHeatmap } from './heatmap-renderer.js';
 import { loadDashboardData, loadLeaderboard } from './dashboard-repository.js';
 import { clearSession } from '../../core/session-storage.js';
-import { renderSubjectLinks } from '../catalog/subject-card-renderer.js';
 import { escapeHtml } from '../../shared/escape-html.js';
 import { database } from '../../core/database-client.js';
+import { englishProgress, trackingDate } from '../../domain/english-tracking.js';
 let dashboardData = {};
 
 // =========================
@@ -17,6 +17,8 @@ const username =
     'User';
 
 const usernameDisplay = document.getElementById('usernameDisplay');
+const sidebarUserName = document.getElementById('sidebarUserName');
+if (sidebarUserName) sidebarUserName.textContent = username;
 
 const topAvatar = document.querySelector('.top-avatar');
 
@@ -30,7 +32,7 @@ if (usernameDisplay) {
 
 if (topAvatar) {
     topAvatar.textContent = username.trim().charAt(0).toUpperCase() || 'U';
-    topAvatar.title = `Log out ${username}`;
+    topAvatar.title = username;
 }
 
 if (currentDateDisplay) {
@@ -56,9 +58,10 @@ async function loadDashboardUserName() {
 
         if (greetingTitle) greetingTitle.textContent = `Hello ${databaseName}`;
         if (usernameDisplay) usernameDisplay.textContent = databaseName;
+        if (sidebarUserName) sidebarUserName.textContent = databaseName;
         if (topAvatar) {
             topAvatar.textContent = String(databaseName).trim().charAt(0).toUpperCase() || 'U';
-            topAvatar.title = `Log out ${databaseName}`;
+            topAvatar.title = databaseName;
         }
     } catch (error) {
         console.warn('Unable to load dashboard user name:', error);
@@ -73,9 +76,15 @@ const logoutButton = document.getElementById('logoutButton');
 
 if (logoutButton) {
     logoutButton.addEventListener('click', async () => {
-        await clearSession();
-
-        window.location.href = 'index.html';
+        logoutButton.disabled = true;
+        try {
+            await clearSession();
+            window.location.href = 'index.html';
+        } catch (error) {
+            console.error('Unable to log out:', error);
+            logoutButton.disabled = false;
+            logoutButton.title = 'Could not log out. Try again.';
+        }
     });
 }
 
@@ -117,9 +126,41 @@ function refreshHeatmaps() {
     if (chiBadge) chiBadge.textContent = `${chineseDays} ACTIVE DAYS`;
 
     generateHeatmap('heatmap-english', 0, englishRecords);
+    renderEnglishLog(englishRecords, year);
     generateHeatmap('heatmap-chinese', 0, chineseRecords);
     updateActivitySummary([...englishRecords, ...chineseRecords]);
     updateTodayQuestTracker(englishRecords, chineseRecords);
+}
+
+function renderEnglishLog(records, year) {
+    const host = document.getElementById('englishTrackingSummary');
+    const rows = document.getElementById('englishTrackingRows');
+    if (!host || !rows) return;
+    if (dashboardData.englishTrackingError) {
+        host.textContent = 'Unable to load English log. Reload to retry.';
+        rows.replaceChildren();
+        return;
+    }
+    const selected = records.filter((record) => record.activity_date.startsWith(`${year}-`));
+    const total = selected.reduce(
+        (sum, record) => {
+            const progress = englishProgress(record);
+            return {
+                reading: sum.reading + progress.reading,
+                minutes: sum.minutes + progress.minutes,
+            };
+        },
+        { reading: 0, minutes: 0 },
+    );
+    host.textContent = `${year}: ${total.reading} Reading submissions · ${total.minutes.toFixed(1)} Listening minutes`;
+    rows.innerHTML =
+        selected
+            .sort((a, b) => b.activity_date.localeCompare(a.activity_date))
+            .map((record) => {
+                const progress = englishProgress(record);
+                return `<tr><th scope="row">${escapeHtml(record.activity_date)}</th><td>${progress.reading}</td><td>${progress.minutes.toFixed(1)}</td><td>${progress.points.toFixed(1)}</td></tr>`;
+            })
+            .join('') || '<tr><td colspan="4">No activity recorded for this year.</td></tr>';
 }
 
 function updateTodayQuestTracker(englishRecords = [], chineseRecords = []) {
@@ -216,44 +257,90 @@ subjectCards.forEach((card) => {
 function renderLeaderboard(leaderboard) {
     const listHost = document.getElementById('leaderboardList');
     if (!listHost) return;
-
-    if (leaderboard.length === 0) {
-        listHost.innerHTML = `
-            <div class="leaderboard-item pixel-rank-item">
-                <span class="leaderboard-rank">-</span>
-                <span class="leaderboard-name">No heroes yet</span>
-                <span class="leaderboard-streak">0d</span>
-            </div>
-        `;
+    if (!leaderboard.length) {
+        listHost.textContent = 'No users yet.';
         return;
     }
-
+    const currentUser = localStorage.getItem('userId');
     listHost.innerHTML = leaderboard
-        .map((user, index) => {
+        .map((user) => {
+            const rank = Number(user.rank);
             const rankClass =
-                index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : '';
-            const medal =
-                index === 0 ? 'ðŸ‘‘' : index === 1 ? 'ðŸ¥ˆ' : index === 2 ? 'ðŸ¥‰' : `${index + 1}`;
-            return `
-            <div class="leaderboard-item pixel-rank-item">
-                <span class="leaderboard-rank ${rankClass}">${medal}</span>
-                <span class="leaderboard-name">${escapeHtml(user.name)}</span>
-                <span class="leaderboard-streak">ðŸ”¥ ${user.streak}d</span>
-            </div>
-        `;
+                rank === 1 ? 'first' : rank === 2 ? 'second' : rank === 3 ? 'third' : '';
+            const points = Number(user.points);
+            const label =
+                points > 0 && points < 0.01
+                    ? '&lt;0.01'
+                    : points.toLocaleString('en-US', { maximumFractionDigits: 2 });
+            const own = user.user_id === currentUser;
+            const detail =
+                Number(user.reading_submissions) +
+                ' Reading submits · ' +
+                (Number(user.listening_seconds) / 60).toFixed(1) +
+                ' Listening min';
+            return (
+                '<div class="leaderboard-item pixel-rank-item' +
+                (own ? ' leaderboard-self' : '') +
+                '" title="' +
+                escapeHtml(detail) +
+                '">' +
+                '<span class="leaderboard-rank ' +
+                rankClass +
+                '">' +
+                rank +
+                '</span>' +
+                '<span class="leaderboard-name">' +
+                escapeHtml(user.name) +
+                (own ? ' (you)' : '') +
+                '</span>' +
+                '<span class="leaderboard-streak">' +
+                label +
+                ' pts</span></div>'
+            );
         })
         .join('');
 }
 
+const leaderboardDateInput = document.getElementById('leaderboardDate');
+if (leaderboardDateInput) leaderboardDateInput.value = trackingDate();
+let leaderboardRequest = 0;
+async function refreshLeaderboard() {
+    const list = document.getElementById('leaderboardList');
+    const status = document.getElementById('leaderboardStatus');
+    if (!list || !leaderboardDateInput) return;
+    const request = ++leaderboardRequest;
+    list.setAttribute('aria-busy', 'true');
+    try {
+        const users = await loadLeaderboard(leaderboardDateInput.value);
+        if (request !== leaderboardRequest) return;
+        renderLeaderboard(users);
+        if (status)
+            status.textContent =
+                leaderboardDateInput.value + ' · UTC+7 · ' + users.length + ' users';
+    } catch (error) {
+        if (request !== leaderboardRequest) return;
+        console.warn('Unable to load Hall of Fame:', error);
+        list.textContent = 'Unable to load users. Use Refresh to retry.';
+        if (status) status.textContent = 'Hall of Fame unavailable';
+    } finally {
+        if (request === leaderboardRequest) list.removeAttribute('aria-busy');
+    }
+}
+leaderboardDateInput?.addEventListener('change', refreshLeaderboard);
+document.getElementById('leaderboardRefresh')?.addEventListener('click', refreshLeaderboard);
+setInterval(() => {
+    if (!document.hidden) refreshLeaderboard();
+}, 60000);
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) refreshLeaderboard();
+});
+
 async function initializeDashboard() {
+    // Hall of Fame loads independently so a failed personal log cannot block the user list.
+    const leaderboard = refreshLeaderboard();
     [dashboardData] = await Promise.all([loadDashboardData(), loadDashboardUserName()]);
     refreshHeatmaps();
-
-    // Load and render leaderboard
-    const leaderboard = await loadLeaderboard();
-    renderLeaderboard(leaderboard);
+    await leaderboard;
 }
 
 initializeDashboard();
-
-renderSubjectLinks(document.querySelector('.subject-grid'));

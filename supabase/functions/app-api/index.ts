@@ -2,6 +2,8 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 import { readingApi } from './reading.ts';
 import { vocabularyApi } from './vocabulary.ts';
 import { listeningApi } from './listening.ts';
+import { trackingApi } from './tracking.ts';
+import { publishingApi } from './publishing.ts';
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
 const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
@@ -17,7 +19,11 @@ const cors = {
 const json = (data, status = 200) =>
     new Response(JSON.stringify(data), {
         status,
-        headers: { ...cors, 'Content-Type': 'application/json; charset=utf-8' },
+        headers: {
+            ...cors,
+            'Content-Type': 'application/json; charset=utf-8',
+            'Cache-Control': 'no-store',
+        },
     });
 const checked = (result) => {
     if (result.error) throw new Error(result.error.message);
@@ -135,7 +141,11 @@ Deno.serve(async (req) => {
                 ? await req.json()
                 : null;
         let result;
-        if (path.startsWith('/api/data/'))
+        if (/^\/api\/(notes|blog)(\/|$)/.test(path))
+            result = await publishingApi(admin, user, path, req.method, body, url);
+        else if (path.startsWith('/api/tracking/'))
+            result = await trackingApi(admin, user, path, req.method, body, url);
+        else if (path.startsWith('/api/data/'))
             result = await dataApi(user, path, req.method, body, url);
         else if (path.startsWith('/api/tests') || path.startsWith('/api/reading/'))
             result = await readingApi(admin, user, path.replace(/^\/api\//, ''), req.method, body);
@@ -149,7 +159,13 @@ Deno.serve(async (req) => {
                 url,
             );
         else if (path.startsWith('/api/listening'))
-            result = await listeningApi(admin, user, path.replace(/^\/api\//, ''), req.method, body);
+            result = await listeningApi(
+                admin,
+                user,
+                path.replace(/^\/api\//, ''),
+                req.method,
+                body,
+            );
         if (result === undefined) return json({ error: 'Unknown API route' }, 404);
         if (result?.__noContent) return new Response(null, { status: 204, headers: cors });
         if (result?.__binary)
@@ -159,6 +175,9 @@ Deno.serve(async (req) => {
         return json(result, req.method === 'POST' ? 201 : 200);
     } catch (error) {
         console.error(error);
-        return json({ error: error instanceof Error ? error.message : 'Request failed' }, 400);
+        return json(
+            { error: error instanceof Error ? error.message : 'Request failed' },
+            [400, 404, 409, 413].includes(error?.status) ? error.status : 400,
+        );
     }
 });

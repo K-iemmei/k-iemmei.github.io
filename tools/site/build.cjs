@@ -17,7 +17,11 @@ function removePreviousBuild(target) {
     }
 }
 
-function buildSite({ url = process.env.SUPABASE_URL, key = process.env.SUPABASE_ANON_KEY } = {}) {
+function buildSite({
+    url = process.env.SUPABASE_URL,
+    key = process.env.SUPABASE_ANON_KEY,
+    prepareRichAssets = require('./rich-assets.cjs').buildRichAssets,
+} = {}) {
     if (!/^https:\/\/[a-z0-9.-]+\.supabase\.co\/?$/i.test(url || ''))
         throw new Error('SUPABASE_URL must be an https://...supabase.co project URL');
     if (!key || !/^[\w.-]{20,}$/.test(key))
@@ -28,6 +32,7 @@ function buildSite({ url = process.env.SUPABASE_URL, key = process.env.SUPABASE_
     fs.cpSync(path.join(web, 'src'), path.join(output, 'src'), { recursive: true });
     fs.cpSync(path.join(web, 'styles'), path.join(output, 'styles'), { recursive: true });
     fs.mkdirSync(path.join(output, 'vendor'), { recursive: true });
+    prepareRichAssets(path.join(output, 'vendor/rich'));
     for (const file of ['sql-wasm.js', 'sql-wasm.wasm'])
         fs.copyFileSync(
             path.join(root, 'node_modules/sql.js/dist', file),

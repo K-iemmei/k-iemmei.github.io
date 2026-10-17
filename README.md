@@ -35,6 +35,12 @@ Supported types: matching headings, choose heading, classification, summary comp
 
 Listening has a per-part library, IELTS question mode, dictation, a protected MP3 player and saved attempts. See [Listening workflow](docs/listening-workflow.md) for PDF OCR coverage, local/hosted migrations and audio file naming.
 
+The dashboard English log combines Reading submission counts and Listening playback minutes. See [English tracking](docs/english-tracking.md) for the heatmap formula and incremental deployment steps.
+
+Grammar provides 72 bilingual lessons from basic sentence structure to advanced grammar, with practical examples, short checks, search, bookmarks and browser progress. See [Grammar course](docs/grammar-course.md) for content editing and validation.
+
+Notes are private per user and can be posted as shared Blog articles. The editor supports Markdown, LaTeX, highlighted code, charts, Mermaid diagrams and protected image uploads. See [Notes and Blog](docs/notes-and-blog.md) for privacy behavior and deployment.
+
 Migration `006-manual-reading.sql` deliberately resets the old Reading tables and attempts once. Old crawled Reading content and its seed/import workflow have been removed. Re-running migrations or seeds preserves newly authored tests. Back up an existing database before first applying this migration.
 
 ## Layout

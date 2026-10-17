@@ -1,9 +1,11 @@
 import { apiRequest } from '../../core/database-client.js';
 import { escapeHtml as h } from '../../shared/escape-html.js';
+import { trackListeningAudio } from './listening-tracker.js';
 
 const slug = new URLSearchParams(location.search).get('session');
 const result = document.getElementById('listeningResult');
 const audio = document.getElementById('listeningAudio');
+trackListeningAudio(audio);
 let session;
 function showResult(html) {
     result.hidden = false;

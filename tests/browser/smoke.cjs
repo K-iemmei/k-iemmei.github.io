@@ -60,6 +60,38 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
         ]);
         console.log('Browser: logged in');
         assert.match(page.url(), /dashboard.html/);
+        await page.setViewport({ width: 1440, height: 1000 });
+        await page.waitForSelector('#sidebarUserName');
+        fs.mkdirSync('.local/dashboard-preview', { recursive: true });
+        await page.screenshot({ path: '.local/dashboard-preview/light.png', fullPage: true });
+        await page.click('#themeToggle');
+        assert.equal(
+            await page.$eval('#themeToggle', (el) => el.getAttribute('aria-checked')),
+            'true',
+        );
+        assert.match(await page.$eval('#themeToggle', (el) => el.textContent), /Dark mode/);
+        assert.ok(await page.$('#themeToggle svg'));
+        await page.reload({ waitUntil: 'networkidle0' });
+        assert.equal(
+            await page.$eval('#themeToggle', (el) => el.getAttribute('aria-checked')),
+            'true',
+        );
+        await page.screenshot({ path: '.local/dashboard-preview/dark.png', fullPage: true });
+        await page.setViewport({ width: 390, height: 844 });
+        assert.equal(
+            await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+            true,
+        );
+        assert.equal(await page.$eval('.sidebar', (el) => getComputedStyle(el).display), 'flex');
+        assert.match(await page.$eval('#logoutButton', (el) => el.textContent), /Log out/);
+        await page.screenshot({ path: '.local/dashboard-preview/mobile.png', fullPage: true });
+        await page.click('#themeToggle');
+        assert.equal(
+            await page.$eval('#themeToggle', (el) => el.getAttribute('aria-checked')),
+            'false',
+        );
+        await page.setViewport({ width: 1440, height: 1000 });
+        console.log('Dashboard: sidebar, theme persistence and mobile layout verified');
         assert.ok(!(await page.evaluate(() => document.cookie)).includes('my_note_session'));
         if (!live) {
             console.log('Listening: seed fixture');
@@ -86,6 +118,44 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
                 document.getElementById('listeningResult').textContent.includes('100%'),
             );
             console.log('Listening: dictation graded');
+            // Play a short local WAV to exercise actual media events and durable tracking.
+            await page.evaluate(async () => {
+                const samples = 16000 * 2;
+                const bytes = new ArrayBuffer(44 + samples * 2);
+                const view = new DataView(bytes);
+                const text = (offset, value) =>
+                    [...value].forEach((char, i) => view.setUint8(offset + i, char.charCodeAt(0)));
+                text(0, 'RIFF');
+                view.setUint32(4, 36 + samples * 2, true);
+                text(8, 'WAVE');
+                text(12, 'fmt ');
+                view.setUint32(16, 16, true);
+                view.setUint16(20, 1, true);
+                view.setUint16(22, 1, true);
+                view.setUint32(24, 16000, true);
+                view.setUint32(28, 32000, true);
+                view.setUint16(32, 2, true);
+                view.setUint16(34, 16, true);
+                text(36, 'data');
+                view.setUint32(40, samples * 2, true);
+                const audio = document.getElementById('listeningAudio');
+                audio.src = URL.createObjectURL(new Blob([bytes], { type: 'audio/wav' }));
+                audio.hidden = false;
+                await audio.play();
+                await new Promise((resolve) =>
+                    audio.addEventListener('ended', resolve, { once: true }),
+                );
+                const { flushListeningActivity } =
+                    await import('/src/features/english/listening-tracker.js');
+                await flushListeningActivity();
+            });
+            const playback = await fixture.pool.query(
+                'SELECT sum(seconds) AS seconds FROM public.listening_activity WHERE user_id=$1',
+                [fixture.userId],
+            );
+            assert.ok(Number(playback.rows[0].seconds) >= 1.5);
+            assert.ok(Number(playback.rows[0].seconds) < 5);
+            console.log('Listening: actual playback saved');
         }
         await page.goto(base + '/english-home.html', { waitUntil: 'networkidle0' });
         await Promise.all([
@@ -188,6 +258,79 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
             page.click('#previewTestLink'),
         ]);
         await page.waitForSelector('.answer-input');
+        await Promise.all([
+            page.waitForNavigation({ waitUntil: 'networkidle0' }),
+            page.click('#editReadingLink'),
+        ]);
+        await page.waitForFunction(
+            (id) =>
+                document.getElementById('authorTestSelect').value === id &&
+                !document.getElementById('authorFields').disabled,
+            {},
+            created.id,
+        );
+        assert.equal(await page.$eval('#authorSlug', (el) => el.value), model.slug);
+        await page.reload({ waitUntil: 'networkidle0' });
+        await page.waitForFunction(
+            (id) =>
+                document.getElementById('authorTestSelect').value === id &&
+                !document.getElementById('authorFields').disabled,
+            {},
+            created.id,
+        );
+        if (!live) {
+            const otherModel = structuredClone(model);
+            otherModel.slug = 'browser-edit-other-reading';
+            otherModel.title = 'Other Reading for Edit';
+            const otherTest = await page.evaluate(async (body) => {
+                const { apiRequest } = await import('/src/core/database-client.js');
+                return apiRequest('/api/reading/author/tests', {
+                    method: 'POST',
+                    body: JSON.stringify(body),
+                });
+            }, otherModel);
+            await page.goto(base + '/english.html?test=' + encodeURIComponent(model.slug), {
+                waitUntil: 'networkidle0',
+            });
+            await page.waitForSelector('.answer-input');
+            const otherOption = await page.$$eval(
+                '#testSelect option',
+                (options) =>
+                    options.find((option) => option.textContent === 'Other Reading for Edit').value,
+            );
+            await page.select('#testSelect', otherOption);
+            await page.waitForFunction(
+                () => document.getElementById('examTitle').textContent === 'Other Reading for Edit',
+            );
+            assert.match(
+                await page.$eval('#editReadingLink', (el) => el.href),
+                /test=browser-edit-other-reading/,
+            );
+            await Promise.all([
+                page.waitForNavigation({ waitUntil: 'networkidle0' }),
+                page.click('#editReadingLink'),
+            ]);
+            await page.waitForFunction(
+                (id) =>
+                    document.getElementById('authorTestSelect').value === id &&
+                    !document.getElementById('authorFields').disabled,
+                {},
+                otherTest.id,
+            );
+            assert.equal(await page.$eval('#authorSlug', (el) => el.value), otherModel.slug);
+            await page.goto(base + '/admin.html?test=missing-reading', {
+                waitUntil: 'networkidle0',
+            });
+            await page.waitForFunction(
+                () => document.getElementById('authorMessage').dataset.kind === 'error',
+            );
+            assert.equal(await page.$eval('#saveReadingButton', (el) => el.disabled), true);
+        }
+        await page.goto(base + '/english.html?test=' + encodeURIComponent(model.slug), {
+            waitUntil: 'networkidle0',
+        });
+        await page.waitForSelector('.answer-input');
+        console.log('Reading: Edit content opens the selected test directly and survives reload');
         assert.equal(await page.$$eval('#readingPassage > section', (els) => els.length), 2);
         assert.equal(await page.$$eval('.question-group', (els) => els.length), 11);
         assert.equal(await page.$$eval('.completion-text .inline-input', (els) => els.length), 1);
@@ -244,6 +387,27 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
         await page.click('.history-review-button');
         await page.waitForFunction(() => document.getElementById('answerReviewDialog').open);
         await page.goto(base + '/dashboard.html', { waitUntil: 'networkidle0' });
+        await page.waitForFunction(() =>
+            document
+                .getElementById('englishTrackingSummary')
+                .textContent.includes('Reading submissions'),
+        );
+        if (!live) {
+            await page.waitForFunction(() =>
+                document.getElementById('leaderboardStatus').textContent.includes('users'),
+            );
+            assert.ok(await page.$('#leaderboardList .leaderboard-self'));
+            assert.match(await page.$eval('#leaderboardList', (el) => el.textContent), /pts/);
+            assert.match(
+                await page.$eval('#englishTrackingSummary', (el) => el.textContent),
+                /1 Reading submissions/,
+            );
+            assert.equal(await page.$$eval('#englishTrackingRows tr', (rows) => rows.length), 1);
+            assert.match(
+                await page.$eval('#heatmap-english .level-2', (el) => el.title),
+                /Reading: 1 submissions/,
+            );
+        }
         await Promise.all([
             page.waitForNavigation({ waitUntil: 'networkidle0' }),
             page.click('#logoutButton'),

@@ -1,29 +1,27 @@
 :root {
-    --bg: #f6f7f9;
+    --bg: #f5f8fc;
     --surface: #ffffff;
-    --surface-hover: #f1f4f7;
+    --surface-hover: #edf4fc;
+    --text: #233247;
+    --text-secondary: #56677d;
+    --text-muted: #75869a;
+    --border: #dce6f1;
+    --border-light: #eaf0f7;
 
-    --text: #20252b;
-    --text-secondary: #59636e;
-    --text-muted: #7b858f;
-
-    --border: #dfe4e8;
-    --border-light: #edf0f2;
-
-    --accent: #176b63;
-    --accent-text: #ffffff;
-
-    --fill-tertiary: #f3f4f6;
-    --green-20: #eafaf1;
-    --green-40: #8bd8ac;
-    --green-60: #2bb673;
-    --green-80: #1d8d59;
-
-    --heat-0: #eef3f9;
-    --heat-1: #e4f7ea;
-    --heat-2: #bfecc7;
-    --heat-3: #8dd6a5;
-    --heat-4: #2ea76d;
+    /* Blue ink for readable labels; pale blue fills for primary controls. */
+    --accent: #356fa6;
+    --accent-fill: #c2ddfb;
+    --accent-text: #224a74;
+    --fill-tertiary: #edf3fa;
+    --green-20: #edf5ff;
+    --green-40: #bdd8f8;
+    --green-60: #75a9e3;
+    --green-80: #356fa6;
+    --heat-0: #eef3fa;
+    --heat-1: #e2efff;
+    --heat-2: #c5ddfa;
+    --heat-3: #9bc4f3;
+    --heat-4: #72a9e7;
 
     --sidebar-width: 230px;
     --font-sans: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -32,29 +30,25 @@
 }
 
 [data-theme='dark'] {
-    --bg: #171a1b;
-    --surface: #202526;
-    --surface-hover: #293031;
-
-    --text: #edf1ee;
-    --text-secondary: #bdc8c3;
-    --text-muted: #8f9e98;
-
-    --border: #37413f;
-    --border-light: #2d3634;
-
-    --accent: #76c5b8;
-    --accent-text: #11201d;
-
-    --fill-tertiary: #232b31;
-    --green-20: #1d2d26;
-    --green-40: #2d5c4f;
-    --green-60: #5cc29a;
-    --green-80: #8fe2bf;
-
-    --heat-0: #20272d;
-    --heat-1: #24372f;
-    --heat-2: #2c584b;
-    --heat-3: #3d826e;
-    --heat-4: #6ad0a3;
+    --bg: #171e28;
+    --surface: #202b39;
+    --surface-hover: #2a384a;
+    --text: #edf3fc;
+    --text-secondary: #bdcce0;
+    --text-muted: #91a5be;
+    --border: #394b61;
+    --border-light: #2e3d50;
+    --accent: #a7ceff;
+    --accent-fill: #a7ceff;
+    --accent-text: #193757;
+    --fill-tertiary: #253345;
+    --green-20: #24384f;
+    --green-40: #3c618a;
+    --green-60: #83b7f0;
+    --green-80: #b4d7ff;
+    --heat-0: #273448;
+    --heat-1: #2b4565;
+    --heat-2: #416b9c;
+    --heat-3: #689bd3;
+    --heat-4: #9dcaff;
 }

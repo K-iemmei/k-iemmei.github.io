@@ -3,7 +3,10 @@ export function initTheme() {
     function apply(theme) {
         if (theme === 'dark') document.documentElement.dataset.theme = 'dark';
         else document.documentElement.removeAttribute('data-theme');
-        if (button) button.textContent = theme === 'dark' ? '☾' : '☼';
+        if (button?.hasAttribute('data-theme-switch')) {
+            button.setAttribute('aria-checked', String(theme === 'dark'));
+            button.title = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+        } else if (button) button.textContent = theme === 'dark' ? '☾' : '☼';
     }
     apply(localStorage.getItem('theme'));
     button?.addEventListener('click', () => {

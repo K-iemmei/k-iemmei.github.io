@@ -30,7 +30,7 @@ textarea {
 }
 [data-theme='dark'] .login-page {
     background:
-        radial-gradient(circle at 15% 10%, rgba(118, 197, 184, 0.08), transparent 32%), var(--bg);
+        radial-gradient(circle at 15% 10%, rgba(167, 206, 255, 0.08), transparent 32%), var(--bg);
 }
 [data-theme='dark'] .login-card,
 [data-theme='dark'] .home-panel,
@@ -42,7 +42,7 @@ textarea {
     box-shadow: 0 20px 55px rgba(31, 42, 48, 0.09);
 }
 .login-button {
-    background: var(--accent);
+    background: var(--accent-fill);
     border-color: var(--accent);
 }
 .login-button:hover {
@@ -204,7 +204,7 @@ a {
     border: 1px solid var(--accent);
     border-radius: 12px;
 
-    background: var(--accent);
+    background: var(--accent-fill);
     color: var(--accent-text);
 
     font: inherit;
@@ -1442,7 +1442,7 @@ a {
 }
 
 .primary-button {
-    background: var(--accent);
+    background: var(--accent-fill);
     border-color: var(--accent);
     color: var(--accent-text);
 }
@@ -1514,7 +1514,7 @@ a {
     display: grid;
     place-items: center;
     border-radius: 8px;
-    background: var(--accent);
+    background: var(--accent-fill);
     color: var(--accent-text);
     font-size: 14px;
     font-weight: 700;
@@ -2012,7 +2012,7 @@ a {
 
     border-radius: inherit;
 
-    background: var(--accent);
+    background: var(--accent-fill);
 }
 
 .progress-fill.complete {
@@ -2437,7 +2437,7 @@ a {
     --pixel-accent-gold: #f59e0b;
     --pixel-accent-blue: #3b82f6;
     --pixel-accent-red: #ef4444;
-    --pixel-accent-green: #10b981;
+    --pixel-accent-green: #75a9e3;
 }
 
 [data-theme='dark'] {
@@ -2447,7 +2447,7 @@ a {
     --pixel-bg-card-subtle: #1e222b;
     --pixel-accent-gold: #fbbf24;
     --pixel-accent-blue: #60a5fa;
-    --pixel-accent-green: #34d399;
+    --pixel-accent-green: #a7ceff;
 }
 
 .pixel-theme {
@@ -2978,7 +2978,7 @@ a {
 .leaderboard-streak {
     font-size: 11px;
     font-weight: 700;
-    color: #1f9d63;
+    color: var(--accent);
 }
 
 /* ---- Responsive ---- */
@@ -3127,4 +3127,76 @@ body[data-page='dashboard'] .pixel-leaderboard-sidebar {
         min-height: 126px;
         aspect-ratio: auto;
     }
+}
+
+/* English activity totals and daily log */
+#englishTrackingSummary {
+    margin: 10px 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+.english-log-details {
+    margin-top: 16px;
+    font-size: 13px;
+}
+.english-log-details summary {
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+.english-log-table-wrap {
+    overflow: auto;
+    max-height: 320px;
+    margin-top: 12px;
+}
+.english-log-details table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+.english-log-details th,
+.english-log-details td {
+    padding: 8px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+/* Daily Hall of Fame */
+.leaderboard-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 8px;
+}
+.leaderboard-controls label {
+    flex-basis: 100%;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+.leaderboard-controls input,
+.leaderboard-controls button {
+    min-width: 0;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+}
+.leaderboard-controls button {
+    cursor: pointer;
+}
+#leaderboardStatus {
+    color: var(--text-secondary);
+    font-size: 11px;
+    margin: 8px 0;
+}
+#leaderboardList {
+    max-height: 460px;
+    overflow-y: auto;
+}
+.leaderboard-self {
+    outline: 1px solid var(--accent);
+    outline-offset: -1px;
+    border-radius: 6px;
 }

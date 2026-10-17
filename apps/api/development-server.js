@@ -6,6 +6,17 @@ const { authenticate } = require('./modules/auth/local-auth');
 function createDevelopmentApp(options) {
     const app = createApp(options);
     const web = path.join(root, 'apps/web');
+    let richStatic;
+    app.use('/vendor/rich', async (req, res, next) => {
+        try {
+            richStatic ||= express.static(
+                await require('../../tools/site/rich-assets.cjs').getLocalRichAssets(),
+            );
+            richStatic(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    });
     app.use('/src', express.static(path.join(web, 'src')));
     app.use('/styles', express.static(path.join(web, 'styles')));
     app.use(express.static(path.join(web, 'public')));

@@ -1,5 +1,10 @@
 import { normalizeDailyProgress } from './progress-calculator.js';
+import { englishProgress } from '../../domain/english-tracking.js';
 export function generateHeatmap(elementId, seed, records = []) {
+    const english = elementId === 'heatmap-english';
+    const englishByDate = new Map(
+        records.map((record) => [record.activity_date, englishProgress(record)]),
+    );
     const container = document.getElementById(elementId);
 
     if (!container) return;
@@ -110,13 +115,15 @@ export function generateHeatmap(elementId, seed, records = []) {
 
                 if (!dailyProgress || dailyProgress.total <= 0) {
                     cell.classList.add('heat-empty');
-                    cell.title = `${date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} · 0/0 exercises`;
+                    cell.title = `${date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} · ${english ? 'Reading: 0 submissions · Listening: 0 min' : '0/0 exercises'}`;
                     grid.appendChild(cell);
                     continue;
                 }
 
                 let level = 0;
-                if (dailyProgress.ratio >= 0.75) {
+                if (english) {
+                    level = englishByDate.get(dateKey)?.level || 0;
+                } else if (dailyProgress.ratio >= 0.75) {
                     level = 4;
                 } else if (dailyProgress.ratio >= 0.5) {
                     level = 3;
@@ -139,6 +146,10 @@ export function generateHeatmap(elementId, seed, records = []) {
                 });
 
                 cell.title = `${formattedDate} · ${dailyProgress.completed}/${dailyProgress.total} exercises`;
+                if (english) {
+                    const progress = englishByDate.get(dateKey);
+                    cell.title = `${formattedDate} · Reading: ${progress.reading} submissions · Listening: ${progress.minutes.toFixed(1)} min · ${progress.points.toFixed(1)} points`;
+                }
                 grid.appendChild(cell);
             }
         }

@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Blog | Daily Note</title>
+        <script>
+            try {
+                if (localStorage.getItem('theme') === 'dark')
+                    document.documentElement.dataset.theme = 'dark';
+            } catch {}
+        </script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles/style.css" />
+        <link rel="stylesheet" href="styles/pages/dashboard.css" />
+        <link rel="stylesheet" href="styles/pages/writing.css" />
+    </head>
+    <body data-page="blog" class="publishing-page">
+        <a class="writing-skip" href="#writingMain">Skip to content</a>
+        <div class="app pixel-theme">
+            <aside class="sidebar" aria-label="Main navigation">
+                <a class="brand" href="home.html"
+                    ><span class="brand-mark"
+                        ><svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M6 4h8l4 4v12H6zM14 4v5h4M9 13h6M9 16h4" /></svg></span
+                    ><span
+                        >Daily Note<span class="brand-subtitle"
+                            >A little progress, every day.</span
+                        ></span
+                    ></a
+                >
+                <div class="sidebar-nav-group">
+                    <p class="sidebar-section-label">Workspace</p>
+                    <nav class="nav" aria-label="Sidebar navigation">
+                        <a class="nav-item" href="home.html"
+                            ><span class="nav-icon"
+                                ><svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"
+                                    /></svg></span
+                            ><span>Home</span></a
+                        ><a class="nav-item" href="dashboard.html"
+                            ><span class="nav-icon"
+                                ><svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <rect x="3" y="3" width="7" height="7" rx="2" />
+                                    <rect x="14" y="3" width="7" height="7" rx="2" />
+                                    <rect x="3" y="14" width="7" height="7" rx="2" />
+                                    <rect x="14" y="14" width="7" height="7" rx="2" /></svg></span
+                            ><span>Learning</span></a
+                        ><a class="nav-item active" href="blog.html" aria-current="page"
+                            ><span class="nav-icon"
+                                ><svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"
+                                    /></svg></span
+                            ><span>Blog</span></a
+                        ><a class="nav-item" href="notes.html"
+                            ><span class="nav-icon"
+                                ><svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <rect x="5" y="3" width="15" height="18" rx="2" />
+                                    <path d="M3 7h4M3 12h4M3 17h4M11 8h5M11 12h5" /></svg></span
+                            ><span>Note</span></a
+                        >
+                    </nav>
+                </div>
+                <div class="sidebar-bottom">
+                    <div class="sidebar-account">
+                        <span class="avatar top-avatar" aria-hidden="true">U</span>
+                        <div class="sidebar-account-copy">
+                            <span id="sidebarUserName">Your account</span
+                            ><span>Personal workspace</span>
+                        </div>
+                    </div>
+                    <button
+                        id="themeToggle"
+                        class="sidebar-action sidebar-theme"
+                        type="button"
+                        role="switch"
+                        aria-label="Dark mode"
+                        aria-checked="false"
+                        data-theme-switch
+                    >
+                        <span class="sidebar-action-icon"
+                            ><svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    d="M20.5 13a8.5 8.5 0 0 1-9.5-9.5A8.5 8.5 0 1 0 20.5 13Z"
+                                /></svg></span
+                        ><span>Dark mode</span
+                        ><span class="theme-switch-track" aria-hidden="true"><span></span></span>
+                    </button>
+                    <button id="logoutButton" class="sidebar-action sidebar-logout" type="button">
+                        <span class="sidebar-action-icon"
+                            ><svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13"
+                                /></svg></span
+                        ><span>Log out</span>
+                    </button>
+                </div>
+            </aside>
+            <main class="main writing-main" id="writingMain">
+                <div class="writing-shell">
+                    <header class="writing-topbar">
+                        <div class="writing-breadcrumb">
+                            <a href="home.html">Home</a><span>/</span><span>Blog</span>
+                        </div>
+                        <a class="writing-primary" href="note.html"
+                            ><span aria-hidden="true">+</span> New note</a
+                        >
+                    </header>
+                    <section class="writing-hero">
+                        <div>
+                            <p class="writing-eyebrow">The shared notebook</p>
+                            <h1>Ideas worth sharing.</h1>
+                            <p>Discover what others are learning, building and thinking about.</p>
+                        </div>
+                        <div class="writing-hero-mark" aria-hidden="true">B.</div>
+                    </section>
+                    <div class="writing-list-toolbar">
+                        <label class="writing-search"
+                            ><span class="writing-sr-only">Search Blog</span
+                            ><svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                aria-hidden="true"
+                            >
+                                <circle cx="10" cy="10" r="6" />
+                                <path d="m15 15 6 6" /></svg
+                            ><input
+                                id="writingSearch"
+                                type="search"
+                                placeholder="Search posts, authors or tags..."
+                                maxlength="100" /></label
+                        ><button id="writingRefresh" class="writing-secondary" type="button">
+                            Refresh
+                        </button>
+                    </div>
+                    <div class="writing-list-heading">
+                        <h2>From the community</h2>
+                        <p id="writingResultCount" role="status"></p>
+                    </div>
+                    <div id="writingGrid" class="writing-grid" aria-label="Blog"></div>
+                    <section id="writingEmpty" class="writing-empty" hidden>
+                        <span aria-hidden="true">B.</span>
+                        <h2>A new chapter starts here.</h2>
+                        <p>Published notes appear here for all signed-in users.</p>
+                        <a href="note.html" class="writing-primary">Write the first post</a>
+                    </section>
+                    <nav class="writing-pagination" aria-label="Blog pages">
+                        <button
+                            id="writingPrevious"
+                            class="writing-secondary"
+                            type="button"
+                            disabled
+                        >
+                            &larr; Previous</button
+                        ><button id="writingNext" class="writing-secondary" type="button" disabled>
+                            Next &rarr;
+                        </button>
+                    </nav>
+                    <p
+                        id="writingMessage"
+                        class="writing-message"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
+                </div>
+            </main>
+        </div>
+        <dialog id="writingConfirm" class="writing-dialog">
+            <form method="dialog">
+                <h2>Confirm action</h2>
+                <p></p>
+                <div class="writing-dialog-actions">
+                    <button class="writing-secondary" value="cancel">Cancel</button
+                    ><button class="writing-danger" value="confirm">Confirm</button>
+                </div>
+            </form>
+        </dialog>
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>

@@ -121,7 +121,7 @@ a {
     white-space: nowrap;
 }
 .primary-button {
-    background: var(--accent);
+    background: var(--accent-fill);
     color: var(--accent-text);
 }
 .outline-button {
@@ -212,7 +212,7 @@ a {
     width: 100%;
     height: var(--bar-height);
     border-radius: 4px 4px 0 0;
-    background: var(--accent);
+    background: var(--accent-fill);
     opacity: 0.78;
 }
 .activity-bar:hover span {

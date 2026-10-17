@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Note editor | Daily Note</title>
+        <script>
+            try {
+                if (localStorage.getItem('theme') === 'dark')
+                    document.documentElement.dataset.theme = 'dark';
+            } catch {}
+        </script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles/style.css" />
+        <link rel="stylesheet" href="styles/pages/dashboard.css" />
+        <link rel="stylesheet" href="styles/pages/writing.css" />
+        <link rel="stylesheet" href="vendor/rich/rendering.css" />
+    </head>
+    <body data-page="note-editor" class="publishing-page">
+        <a class="writing-skip" href="#writingMain">Skip to content</a>
+        <div class="app pixel-theme">
+            <aside class="sidebar" aria-label="Main navigation">
+                <a class="brand" href="home.html"
+                    ><span class="brand-mark"
+                        ><svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M6 4h8l4 4v12H6zM14 4v5h4M9 13h6M9 16h4" /></svg></span
+                    ><span
+                        >Daily Note<span class="brand-subtitle"
+                            >A little progress, every day.</span
+                        ></span
+                    ></a
+                >
+                <div class="sidebar-nav-group">
+                    <p class="sidebar-section-label">Workspace</p>
+                    <nav class="nav" aria-label="Sidebar navigation">
+                        <a class="nav-item" href="home.html"
+                            ><span class="nav-icon"
+                                ><svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"
+                                    /></svg></span
+                            ><span>Home</span></a
+                        ><a class="nav-item" href="dashboard.html"
+                            ><span class="nav-icon"
+                                ><svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <rect x="3" y="3" width="7" height="7" rx="2" />
+                                    <rect x="14" y="3" width="7" height="7" rx="2" />
+                                    <rect x="3" y="14" width="7" height="7" rx="2" />
+                                    <rect x="14" y="14" width="7" height="7" rx="2" /></svg></span
+                            ><span>Learning</span></a
+                        ><a class="nav-item" href="blog.html"
+                            ><span class="nav-icon"
+                                ><svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"
+                                    /></svg></span
+                            ><span>Blog</span></a
+                        ><a class="nav-item active" href="notes.html" aria-current="page"
+                            ><span class="nav-icon"
+                                ><svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <rect x="5" y="3" width="15" height="18" rx="2" />
+                                    <path d="M3 7h4M3 12h4M3 17h4M11 8h5M11 12h5" /></svg></span
+                            ><span>Note</span></a
+                        >
+                    </nav>
+                </div>
+                <div class="sidebar-bottom">
+                    <div class="sidebar-account">
+                        <span class="avatar top-avatar" aria-hidden="true">U</span>
+                        <div class="sidebar-account-copy">
+                            <span id="sidebarUserName">Your account</span
+                            ><span>Personal workspace</span>
+                        </div>
+                    </div>
+                    <button
+                        id="themeToggle"
+                        class="sidebar-action sidebar-theme"
+                        type="button"
+                        role="switch"
+                        aria-label="Dark mode"
+                        aria-checked="false"
+                        data-theme-switch
+                    >
+                        <span class="sidebar-action-icon"
+                            ><svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    d="M20.5 13a8.5 8.5 0 0 1-9.5-9.5A8.5 8.5 0 1 0 20.5 13Z"
+                                /></svg></span
+                        ><span>Dark mode</span
+                        ><span class="theme-switch-track" aria-hidden="true"><span></span></span>
+                    </button>
+                    <button id="logoutButton" class="sidebar-action sidebar-logout" type="button">
+                        <span class="sidebar-action-icon"
+                            ><svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13"
+                                /></svg></span
+                        ><span>Log out</span>
+                    </button>
+                </div>
+            </aside>
+            <main class="main writing-main" id="writingMain">
+                <div class="writing-shell">
+                    <header class="writing-topbar">
+                        <div class="writing-breadcrumb">
+                            <a href="notes.html">Notes</a><span>/</span><span>Editor</span>
+                        </div>
+                        <div class="note-header-actions">
+                            <span id="noteSaveStatus" role="status">Loading...</span
+                            ><button id="noteSave" class="writing-secondary" type="button" disabled>
+                                Save privately</button
+                            ><button id="notePost" class="writing-primary" type="button" disabled>
+                                Post to Blog
+                            </button>
+                        </div>
+                    </header>
+                    <div class="note-visibility">
+                        <span class="writing-badge">Private note</span
+                        ><span id="notePublicationStatus">Visible only to you</span
+                        ><a id="notePublishedLink" hidden>View posted version &rarr;</a>
+                    </div>
+                    <div id="noteRecovery" class="note-recovery" hidden>
+                        <span
+                            >A local draft is available. Restore it into the editor or keep the
+                            saved version.</span
+                        ><button id="noteRestoreDraft" class="writing-secondary" type="button">
+                            Restore draft</button
+                        ><button id="noteDiscardDraft" class="writing-secondary" type="button">
+                            Keep saved version
+                        </button>
+                    </div>
+                    <label class="writing-sr-only" for="noteTitle">Note title</label
+                    ><input
+                        id="noteTitle"
+                        class="note-title"
+                        maxlength="160"
+                        placeholder="Untitled note"
+                        disabled
+                    />
+                    <div class="note-tags-row">
+                        <label for="noteTags">Tags</label
+                        ><input
+                            id="noteTags"
+                            placeholder="learning, ideas, code..."
+                            disabled
+                        /><span id="noteWordCount">0 words</span>
+                    </div>
+                    <div class="editor-toolbar" aria-label="Formatting tools">
+                        <button type="button" data-insert="heading" title="Insert heading">
+                            H2</button
+                        ><button type="button" data-insert="bold" title="Bold">
+                            <strong>B</strong></button
+                        ><button type="button" data-insert="italic" title="Italic">
+                            <em>I</em></button
+                        ><button type="button" data-insert="list" title="Bullet list">List</button
+                        ><button type="button" data-insert="quote" title="Blockquote">Quote</button
+                        ><button type="button" data-insert="code">Code</button
+                        ><button type="button" data-insert="math">LaTeX</button
+                        ><button type="button" data-insert="chart">Chart</button
+                        ><button type="button" data-insert="diagram">Diagram</button
+                        ><button type="button" data-insert="table">Table</button
+                        ><button type="button" id="noteImageButton">Image</button
+                        ><input
+                            type="file"
+                            id="noteImageFile"
+                            accept="image/png,image/jpeg,image/gif,image/webp"
+                            hidden
+                        /><button type="button" id="noteFormatHelp" class="editor-help">
+                            Formatting
+                        </button>
+                    </div>
+                    <div class="editor-view-row">
+                        <span>Markdown editor</span>
+                        <div class="editor-mode-group" role="group" aria-label="Editor view">
+                            <button type="button" data-editor-mode="write" aria-pressed="false">
+                                Write</button
+                            ><button type="button" data-editor-mode="split" aria-pressed="true">
+                                Split</button
+                            ><button type="button" data-editor-mode="preview" aria-pressed="false">
+                                Preview
+                            </button>
+                        </div>
+                    </div>
+                    <div id="editorLayout" class="editor-layout" data-mode="split">
+                        <div class="editor-write-pane">
+                            <label class="writing-sr-only" for="noteBody"
+                                >Note content in Markdown</label
+                            ><textarea
+                                id="noteBody"
+                                maxlength="200000"
+                                placeholder="Start writing..."
+                                spellcheck="false"
+                                disabled
+                            ></textarea>
+                        </div>
+                        <article class="editor-preview-pane" aria-label="Live preview">
+                            <h1 id="notePreviewTitle">Untitled note</h1>
+                            <div id="notePreview" class="rich-content"></div>
+                        </article>
+                    </div>
+                    <footer class="note-footer">
+                        <span
+                            >Autosaved privately. Posting shares a copy with all signed-in
+                            users.</span
+                        >
+                        <div>
+                            <button
+                                id="noteUnpublish"
+                                class="writing-text-button"
+                                type="button"
+                                hidden
+                            >
+                                Unpublish</button
+                            ><button
+                                id="noteDelete"
+                                class="writing-text-button danger"
+                                type="button"
+                                disabled
+                            >
+                                Delete note
+                            </button>
+                        </div>
+                    </footer>
+                    <dialog id="formatHelp" class="writing-dialog format-help">
+                        <form method="dialog">
+                            <header>
+                                <h2>Write your way.</h2>
+                                <button class="writing-secondary" value="close">Close</button>
+                            </header>
+                            <p>
+                                Markdown handles the structure; the toolbar inserts examples you can
+                                edit.
+                            </p>
+                            <dl>
+                                <dt>Text</dt>
+                                <dd>
+                                    <code>## Heading</code>, <code>**bold**</code>,
+                                    <code>*italic*</code>, <code>- list item</code>,
+                                    <code>&gt; quote</code>
+                                </dd>
+                                <dt>Links &amp; images</dt>
+                                <dd>
+                                    <code>[label](https://example.com)</code>. Use Image to upload a
+                                    private PNG, JPEG, GIF or WebP (up to 2 MB). HTTPS image links
+                                    also work.
+                                </dd>
+                                <dt>LaTeX</dt>
+                                <dd>
+                                    <code>$x^2$</code> inline, or <code>$$</code> on separate lines
+                                    around a display formula.
+                                </dd>
+                                <dt>Code</dt>
+                                <dd>
+                                    Use fenced blocks with a language:
+                                    <code>&#96;&#96;&#96;python</code>,
+                                    <code>&#96;&#96;&#96;javascript</code>,
+                                    <code>&#96;&#96;&#96;sql</code>...
+                                </dd>
+                                <dt>Charts</dt>
+                                <dd>
+                                    Use a <code>chart</code> fence with JSON:
+                                    <code
+                                        >{"type":"bar","labels":["A","B"],"datasets":[{"label":"Score","data":[3,5]}]}</code
+                                    >. Types: bar, line, pie, doughnut, radar.
+                                </dd>
+                                <dt>Diagrams</dt>
+                                <dd>
+                                    Use a <code>mermaid</code> fence. Start with
+                                    <code>flowchart LR</code>, then
+                                    <code>A[Idea] --&gt; B[Result]</code>.
+                                </dd>
+                            </dl>
+                            <p>
+                                Raw HTML and scripts are shown as text. Code blocks are displayed,
+                                never executed.
+                            </p>
+                        </form>
+                    </dialog>
+                    <p
+                        id="writingMessage"
+                        class="writing-message"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
+                </div>
+            </main>
+        </div>
+        <dialog id="writingConfirm" class="writing-dialog">
+            <form method="dialog">
+                <h2>Confirm action</h2>
+                <p></p>
+                <div class="writing-dialog-actions">
+                    <button class="writing-secondary" value="cancel">Cancel</button
+                    ><button class="writing-danger" value="confirm">Confirm</button>
+                </div>
+            </form>
+        </dialog>
+        <script type="module" src="src/app.js"></script>
+    </body>
+</html>
