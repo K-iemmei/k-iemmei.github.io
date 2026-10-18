@@ -1,0 +1,99 @@
+﻿/* Parchment, sage and terracotta form the shared three-colour palette. */
+html:root body[data-page] .pixel-theme {
+    background: var(--bg);
+}
+html:root body[data-page] .sidebar {
+    background: var(--surface);
+}
+html:root body[data-page] .topbar,
+html:root body[data-page] .pixel-topbar {
+    background: var(--surface);
+    border-color: var(--border);
+}
+html:root body[data-page] .brand-mark,
+html:root body[data-page] .pixel-mark,
+html:root body[data-page] .category-icon {
+    background: var(--accent-fill);
+    color: var(--accent-text);
+}
+html:root body[data-page] .subject-card--english,
+html:root body[data-page] .english-card {
+    background: var(--accent-soft);
+    border-color: var(--border);
+}
+html:root body[data-page] .subject-card--chinese,
+html:root body[data-page] .chinese-card {
+    background: var(--warm-soft);
+    border-color: var(--border);
+}
+html:root body[data-page] .subject-card--data-ai-ml {
+    background: var(--surface-hover);
+    border-color: var(--border);
+}
+html:root body[data-page] .subject-icon--english {
+    background: var(--surface);
+    color: var(--accent);
+}
+html:root body[data-page] .subject-icon--chinese,
+html:root body[data-page] .chinese-card .pixel-subject-icon {
+    background: var(--surface);
+    color: var(--warm);
+}
+html:root body[data-page] .subject-icon--data-ai-ml {
+    background: var(--surface);
+    color: var(--text-secondary);
+}
+html:root body[data-page] .home-welcome-card,
+html:root body[data-page] .welcome-header {
+    background: var(--surface);
+}
+html:root body[data-page] .pixel-theme .pixel-select,
+html:root body[data-page] .pixel-icon-btn,
+html:root body[data-page] .pixel-avatar-btn {
+    background: var(--surface);
+    color: var(--text);
+}
+html:root body[data-page] .english-home .category-card:nth-child(2n) .category-icon {
+    background: var(--warm-soft);
+    color: var(--warm);
+}
+html:root body[data-page] .english-home .category-card {
+    box-shadow: none;
+}
+html:root body[data-page] .hero {
+    box-shadow: none;
+}
+html:root body[data-page] .hero h1,
+html:root body[data-page] .home-heading h1,
+html:root body[data-page] .page-heading h1 {
+    font-family: var(--font-reading);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+}
+html:root body[data-page] .test-card:hover {
+    border-color: var(--accent);
+}
+html:root body[data-page] .pixel-leaderboard-sidebar {
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+    box-shadow: none !important;
+}
+html:root body[data-page] .pixel-rank-item {
+    background: var(--surface-hover) !important;
+    border-color: var(--border) !important;
+}
+html:root body[data-page] .pixel-rank-item:first-child {
+    background: var(--warm-soft) !important;
+}
+html:root body[data-page] .sidebar .brand,
+html:root body[data-page] .nav-item,
+html:root body[data-page] .sidebar-action {
+    color: var(--text-secondary);
+}
+html:root body[data-page] .sidebar .nav-item.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+}
+html:root body[data-page] .brand {
+    color: var(--text);
+}

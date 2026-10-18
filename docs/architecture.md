@@ -43,4 +43,6 @@ Imported single-passage exercises can retain book numbering with `metadata.sourc
 
 Home loads account-scoped todos and city/news preferences through `/api/home` and the shared `app_home_api` database gateway. Task changes require their saved version, preventing stale tabs from overwriting edits. New tasks are pinned; completion and pin state persist across devices. Direct browser access to these tables and RPC is revoked on Supabase.
 
-The default weather location is Hà Nội; users can search for another city. Open-Meteo supplies current weather and a three-day forecast, with GeoNames search attribution. News uses allowlisted VnExpress RSS categories, displaying linked headlines and publication dates only. The API caches headlines for five minutes; a failed refresh can show a labelled cache up to 24 hours old. Todo writes, weather and news have separate error states.
+The default weather location is Hà Nội; users can search for another city. Open-Meteo supplies a forecast for the next three days, starting tomorrow, with GeoNames search attribution. News uses allowlisted VnExpress RSS categories, displaying four linked headlines with short RSS summaries and publication dates. The API caches headlines for five minutes; a failed refresh can show a labelled cache up to 24 hours old. Todo writes, weather and news have separate error states.
+
+The shared UI uses parchment, sage and terracotta through `tokens.css` and `vintage.css`, with matching dark-mode tones. Home keeps task items above the add form so the checklist remains the focal point.

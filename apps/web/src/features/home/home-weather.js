@@ -1,27 +1,49 @@
 ﻿import { escapeHtml as h } from '../../shared/escape-html.js';
 const $ = (id) => document.getElementById(id);
 const conditions = (code) =>
-    code === 0
-        ? 'Clear sky'
-        : code <= 3
-          ? 'Partly cloudy'
-          : code <= 48
-            ? 'Fog'
-            : code <= 57
-              ? 'Drizzle'
-              : code <= 67
-                ? 'Rain'
-                : code <= 77
-                  ? 'Snow'
-                  : code <= 82
-                    ? 'Rain showers'
-                    : code <= 86
-                      ? 'Snow showers'
-                      : 'Thunderstorms';
+    !Number.isFinite(code)
+        ? 'Forecast unavailable'
+        : code === 0
+          ? 'Clear sky'
+          : code <= 3
+            ? 'Partly cloudy'
+            : code <= 48
+              ? 'Fog'
+              : code <= 57
+                ? 'Drizzle'
+                : code <= 67
+                  ? 'Rain'
+                  : code <= 77
+                    ? 'Snow'
+                    : code <= 82
+                      ? 'Rain showers'
+                      : code <= 86
+                        ? 'Snow showers'
+                        : 'Thunderstorms';
 async function json(url) {
     const r = await fetch(url, { signal: AbortSignal.timeout(12000) });
     if (!r.ok) throw new Error('Weather service unavailable. Please retry.');
     return r.json();
+}
+export function forecastDays(daily) {
+    return (daily?.time || [])
+        .slice(1, 4)
+        .map((date, offset) => {
+            const i = offset + 1;
+            return {
+                date,
+                low: Math.round(daily.temperature_2m_min?.[i]),
+                high: Math.round(daily.temperature_2m_max?.[i]),
+                code: daily.weather_code?.[i],
+                rain: daily.precipitation_probability_max?.[i],
+            };
+        })
+        .filter(
+            (day) =>
+                /^\d{4}-\d{2}-\d{2}$/.test(day.date) &&
+                Number.isFinite(day.low) &&
+                Number.isFinite(day.high),
+        );
 }
 export function initWeather(saveCity) {
     let city = null,
@@ -42,16 +64,16 @@ export function initWeather(saveCity) {
             const params = new URLSearchParams({
                 latitude: city.latitude,
                 longitude: city.longitude,
-                current: 'temperature_2m,apparent_temperature,weather_code,wind_speed_10m',
-                daily: 'temperature_2m_max,temperature_2m_min,precipitation_probability_max',
+                daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',
                 timezone: 'auto',
-                forecast_days: '3',
+                forecast_days: '4',
             });
             const d = await json('https://api.open-meteo.com/v1/forecast?' + params);
             if (token !== request) return;
-            if (!d.current || !d.daily) throw new Error('Weather data unavailable. Please retry.');
+            const days = forecastDays(d.daily);
+            if (days.length !== 3) throw new Error('Forecast unavailable. Please retry.');
             $('weatherContent').innerHTML =
-                `<h3 class="weather-city">${h(city.name)}</h3><div class="weather-now"><strong>${Math.round(d.current.temperature_2m)}°</strong><span>${h(conditions(d.current.weather_code))}<small>Feels like ${Math.round(d.current.apparent_temperature)}° · Wind ${Math.round(d.current.wind_speed_10m)} km/h</small></span></div><div class="weather-days">${d.daily.time.map((day, i) => `<div><span>${i === 0 ? 'Today' : h(new Date(day + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'short' }))}</span><strong>${Math.round(d.daily.temperature_2m_min[i])}° / ${Math.round(d.daily.temperature_2m_max[i])}°</strong><span>Rain ${d.daily.precipitation_probability_max[i] ?? '—'}%</span></div>`).join('')}</div><p class="home-muted weather-updated">Updated ${h(d.current.time.slice(11, 16))} · ${h(d.timezone)}</p>`;
+                `<h3 class="weather-city">${h(city.name)}</h3><p class="forecast-caption">Next 3 days</p><div class="weather-days">${days.map((day) => `<div><time datetime="${h(day.date)}">${h(new Date(day.date + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }))}</time><span class="forecast-condition">${h(conditions(day.code))}</span><strong>${day.low}° <span>/</span> ${day.high}°</strong><span>Rain ${h(day.rain ?? '—')}%</span></div>`).join('')}</div>`;
         } catch (e) {
             if (token === request) {
                 $('weatherContent').textContent = '';

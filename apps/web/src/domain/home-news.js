@@ -8,7 +8,8 @@ const cache = new Map();
 function text(value) {
     return value
         .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
-        .replace(/<[^>]*>/g, '')
+        .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/<[^>]*>/g, ' ')
         .replace(
             /&(?:amp|lt|gt|quot|apos|#39);/g,
             (s) =>
@@ -21,6 +22,11 @@ function text(value) {
                     '&#39;': "'",
                 })[s],
         )
+        .replace(/&#(x[0-9a-f]+|[0-9]+);/gi, (_, n) => {
+            const code = n[0].toLowerCase() === 'x' ? parseInt(n.slice(1), 16) : Number(n);
+            return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : '';
+        })
+        .replace(/\s+/g, ' ')
         .trim();
 }
 export function parseNews(xml) {
@@ -34,7 +40,8 @@ export function parseNews(xml) {
                 );
             const title = field('title'),
                 link = field('link'),
-                published = field('pubDate');
+                published = field('pubDate'),
+                summary = field('description').slice(0, 260);
             try {
                 const u = new URL(link);
                 if (u.protocol !== 'https:' || u.hostname !== 'vnexpress.net') return null;
@@ -43,12 +50,12 @@ export function parseNews(xml) {
             }
             const timestamp = Date.parse(published);
             return title && Number.isFinite(timestamp)
-                ? { title, url: link, published_at: new Date(timestamp).toISOString() }
+                ? { title, summary, url: link, published_at: new Date(timestamp).toISOString() }
                 : null;
         })
         .filter(Boolean)
         .sort((a, b) => b.published_at.localeCompare(a.published_at))
-        .slice(0, 12);
+        .slice(0, 4);
 }
 export async function loadNews(category = 'latest', fetcher = fetch) {
     category ||= 'latest';

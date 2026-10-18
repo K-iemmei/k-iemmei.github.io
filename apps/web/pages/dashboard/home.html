@@ -22,6 +22,7 @@
         <link rel="stylesheet" href="styles/style.css" />
         <link rel="stylesheet" href="styles/pages/dashboard.css" />
         <link rel="stylesheet" href="styles/pages/home.css" />
+        <link rel="stylesheet" href="styles/vintage.css" />
     </head>
     <body data-page="home">
         <div class="app pixel-theme">
@@ -205,6 +206,12 @@
                             <h2 id="todoHeading">To-do</h2>
                             <span id="todoCount" class="home-muted"></span>
                         </div>
+                        <div class="todo-toolbar">
+                            <label><input id="pinnedOnly" type="checkbox" /> Pinned only</label
+                            ><button id="todoRefresh" type="button">Refresh</button>
+                        </div>
+                        <p id="todoMessage" class="home-message" role="status">Loading tasks…</p>
+                        <ul id="todoList" class="todo-list" aria-label="Your tasks"></ul>
                         <form id="todoForm" class="inline-form">
                             <label class="home-sr-only" for="todoInput">New task</label
                             ><input
@@ -214,12 +221,6 @@
                                 required
                             /><button type="submit">Add</button>
                         </form>
-                        <div class="todo-toolbar">
-                            <label><input id="pinnedOnly" type="checkbox" /> Pinned only</label
-                            ><button id="todoRefresh" type="button">Refresh</button>
-                        </div>
-                        <p id="todoMessage" class="home-message" role="status">Loading tasks…</p>
-                        <ul id="todoList" class="todo-list" aria-label="Your tasks"></ul>
                     </section>
                     <section class="daily-panel news-panel" aria-labelledby="newsHeading">
                         <div class="daily-panel-heading">

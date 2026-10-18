@@ -191,7 +191,7 @@ async function loadNews() {
         $('newsList').innerHTML = data.items
             .map(
                 (item) =>
-                    `<article class="news-item"><time datetime="${h(item.published_at)}">${h(new Date(item.published_at).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }))}</time><a href="${h(item.url)}" target="_blank" rel="noopener noreferrer">${h(item.title)}<span aria-hidden="true"> ↗</span></a></article>`,
+                    `<article class="news-item"><time datetime="${h(item.published_at)}">${h(new Date(item.published_at).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }))}</time><a href="${h(item.url)}" target="_blank" rel="noopener noreferrer">${h(item.title)}<span aria-hidden="true"> ↗</span></a>${item.summary ? `<p class="news-summary">${h(item.summary)}</p>` : ''}</article>`,
             )
             .join('');
         $('newsMessage').textContent = data.stale

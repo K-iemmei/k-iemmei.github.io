@@ -335,3 +335,104 @@ body[data-page='home'] .app {
         grid-template-columns: minmax(0, 1fr);
     }
 }
+/* Keep the checklist prominent; compose new tasks underneath it. */
+.todo-panel {
+    border-top: 4px solid var(--accent);
+    background: linear-gradient(160deg, var(--surface), var(--accent-soft));
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+}
+.todo-panel .daily-panel-heading h2 {
+    font-family: var(--font-reading);
+    font-size: 26px;
+}
+.todo-list {
+    flex: 1;
+    min-height: 160px;
+    padding: 4px 0 18px;
+}
+.todo-item {
+    background: var(--surface);
+    padding: 14px 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+}
+.todo-item:last-child {
+    border-bottom: 1px solid var(--border-light);
+}
+.todo-title {
+    font-size: 15px;
+    font-weight: 500;
+}
+.todo-panel #todoForm {
+    margin-top: 14px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+.weather-panel {
+    border-top: 4px solid var(--warm);
+}
+.weather-days {
+    gap: 8px;
+    margin-top: 18px;
+}
+.weather-days > div {
+    padding: 16px 10px;
+    background: var(--warm-soft);
+    gap: 12px;
+}
+.weather-days time {
+    color: var(--warm);
+    font-weight: 600;
+    line-height: 1.6;
+}
+.weather-days strong {
+    font-size: 19px;
+    white-space: nowrap;
+    font-family: var(--font-reading);
+}
+.weather-days strong span {
+    color: var(--text-muted);
+}
+.forecast-caption {
+    margin: 0;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+.forecast-condition {
+    min-height: 30px;
+    font-size: 12px;
+}
+.news-summary {
+    margin: 10px 0 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.8;
+}
+.news-item > a {
+    font-family: var(--font-reading);
+    font-size: 20px;
+    line-height: 1.45;
+}
+.news-panel {
+    border-top: 4px solid var(--warm);
+}
+.news-panel h2 {
+    color: var(--warm);
+}
+.news-item {
+    padding: 20px 0;
+}
+@media (max-width: 540px) {
+    .weather-days > div {
+        padding: 12px 8px;
+    }
+    .weather-days strong {
+        font-size: 17px;
+    }
+    .todo-main {
+        gap: 8px;
+    }
+}

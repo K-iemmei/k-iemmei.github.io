@@ -1,28 +1,31 @@
 :root {
-    --bg: #f5f8fc;
-    --surface: #ffffff;
-    --surface-hover: #edf4fc;
-    --text: #233247;
-    --text-secondary: #56677d;
-    --text-muted: #75869a;
-    --border: #dce6f1;
-    --border-light: #eaf0f7;
+    --bg: #f4efe5;
+    --surface: #fbf8f1;
+    --surface-hover: #ebe9dc;
+    --text: #35392e;
+    --text-secondary: #626855;
+    --text-muted: #787d6a;
+    --border: #d8d5c5;
+    --border-light: #e6e1d4;
 
-    /* Blue ink for readable labels; pale blue fills for primary controls. */
-    --accent: #356fa6;
-    --accent-fill: #c2ddfb;
-    --accent-text: #224a74;
-    --fill-tertiary: #edf3fa;
-    --green-20: #edf5ff;
-    --green-40: #bdd8f8;
-    --green-60: #75a9e3;
-    --green-80: #356fa6;
-    --heat-0: #eef3fa;
-    --heat-1: #e2efff;
-    --heat-2: #c5ddfa;
-    --heat-3: #9bc4f3;
-    --heat-4: #72a9e7;
+    /* Vintage palette: parchment, sage and terracotta, with tonal neutrals. */
+    --accent-soft: #e7ebdd;
+    --accent: #5b7054;
+    --accent-fill: #dce3ce;
+    --accent-text: #364831;
+    --fill-tertiary: #e9e4d6;
+    --green-20: #edf0e4;
+    --green-40: #cbd7b9;
+    --green-60: #91a47c;
+    --green-80: #5b7054;
+    --heat-0: #e9e6d9;
+    --heat-1: #e0e5d3;
+    --heat-2: #c6d2b3;
+    --heat-3: #a4b68c;
+    --heat-4: #738b61;
 
+    --warm: #a45f45;
+    --warm-soft: #eee0d3;
     --sidebar-width: 230px;
     --font-sans: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-reading: 'Literata', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
@@ -30,25 +33,28 @@
 }
 
 [data-theme='dark'] {
-    --bg: #171e28;
-    --surface: #202b39;
-    --surface-hover: #2a384a;
-    --text: #edf3fc;
-    --text-secondary: #bdcce0;
-    --text-muted: #91a5be;
-    --border: #394b61;
-    --border-light: #2e3d50;
-    --accent: #a7ceff;
-    --accent-fill: #a7ceff;
-    --accent-text: #193757;
-    --fill-tertiary: #253345;
-    --green-20: #24384f;
-    --green-40: #3c618a;
-    --green-60: #83b7f0;
-    --green-80: #b4d7ff;
-    --heat-0: #273448;
-    --heat-1: #2b4565;
-    --heat-2: #416b9c;
-    --heat-3: #689bd3;
-    --heat-4: #9dcaff;
+    --warm: #dcaa87;
+    --warm-soft: #493c30;
+    --bg: #252820;
+    --surface: #30352a;
+    --surface-hover: #3c4334;
+    --text: #f1eddf;
+    --text-secondary: #c7c9b5;
+    --text-muted: #a0a68d;
+    --border: #535a47;
+    --border-light: #454d3b;
+    --accent-soft: #3b4732;
+    --accent: #b6c69b;
+    --accent-fill: #b6c69b;
+    --accent-text: #26351f;
+    --fill-tertiary: #39422f;
+    --green-20: #34412e;
+    --green-40: #536849;
+    --green-60: #8fa779;
+    --green-80: #c5d4af;
+    --heat-0: #3c4333;
+    --heat-1: #46583a;
+    --heat-2: #647e50;
+    --heat-3: #90a977;
+    --heat-4: #bfcea7;
 }
