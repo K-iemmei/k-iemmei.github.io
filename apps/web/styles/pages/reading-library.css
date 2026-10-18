@@ -27,6 +27,10 @@ body[data-page='reading-library'] {
     margin-bottom: 26px;
 }
 
+[data-theme='dark'] body[data-page='reading-library'] .topbar {
+    background: var(--surface);
+}
+
 .brand-row {
     display: flex;
     align-items: center;
