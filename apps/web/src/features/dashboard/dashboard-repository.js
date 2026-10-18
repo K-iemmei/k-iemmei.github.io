@@ -9,10 +9,6 @@ export async function loadDashboardData() {
     }
 
     try {
-        const subjects = await database.get('subjects', {
-            select: 'id, slug, name, color, description',
-        });
-
         const loadActivity = async (resultTable, fallbackSubjectId = null) => {
             try {
                 return await database.get(resultTable, {
@@ -36,14 +32,17 @@ export async function loadDashboardData() {
         };
 
         // Flush any playback saved before leaving Listening, then fetch authoritative totals.
-        await flushListeningActivity().catch(() => {});
         let englishTrackingError = false;
-        const [englishActivities, chineseActivities] = await Promise.all([
-            apiRequest('/api/tracking/english').catch((error) => {
-                console.warn('Unable to load English tracking:', error);
-                englishTrackingError = true;
-                return [];
-            }),
+        const [subjects, englishActivities, chineseActivities] = await Promise.all([
+            database.get('subjects', { select: 'id, slug, name, color, description' }),
+            flushListeningActivity()
+                .catch(() => {})
+                .then(() => apiRequest('/api/tracking/english'))
+                .catch((error) => {
+                    console.warn('Unable to load English tracking:', error);
+                    englishTrackingError = true;
+                    return [];
+                }),
             loadActivity('chinese_daily_results'),
         ]);
 

@@ -1,3 +1,4 @@
+import { clearPreferenceCache } from './page-cache.js';
 import { deployment } from './deployment-config.js';
 import { cloudUser, cloudLogout } from './supabase-session.js';
 
@@ -12,6 +13,7 @@ export function saveSession(user) {
     localStorage.removeItem('isLoggedIn');
 }
 export async function clearSession() {
+    clearPreferenceCache();
     if (deployment.mode === 'supabase') {
         await cloudLogout();
         for (const key of ['username', 'userId', 'user', 'accessToken', 'isLoggedIn'])

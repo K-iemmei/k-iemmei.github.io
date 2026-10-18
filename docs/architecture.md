@@ -48,3 +48,11 @@ The default weather location is Hà Nội; users can search for another city. Op
 The shared UI uses parchment, sage and terracotta through `tokens.css` and `vintage.css`, with matching dark-mode tones. Home keeps task items above the add form so the checklist remains the focal point.
 
 Peer cards share a common surface, border and heading treatment; colour identifies interaction/state rather than subject. Typography uses a local system sans stack (Segoe UI on Windows) for both UI and reading, without external font downloads.
+
+## Loading and latency
+
+Home starts public news and weather independently of its account-scoped database request. Public responses use a best-effort tab cache (news: five minutes, weather: ten minutes) with in-flight request deduplication. Refresh bypasses the browser cache. Task data is fetched live on every visit; only city/category preferences are cached under the authenticated account ID, updated after successful saves and cleared on logout.
+
+Page features load in parallel with the optional vocabulary capture menu. The hosted build preconnects to Supabase (and Open-Meteo on Home) and preloads common session/API modules while retaining the sign-in guard. Concurrent token renewals share one refresh request; temporary Auth server errors retain the session. The Edge Function still validates every token and member, but reads membership/profile in parallel and lets browsers reuse CORS preflight permission for one hour. Dashboard subjects, Chinese history and Listening-flush/English-history run concurrently; English totals are fetched after playback flush completes.
+
+A controlled Chrome comparison with a 1.5-second Home DB delay and 0.4-second provider delays measured public panels at roughly 2.35 seconds before, 0.75 seconds after, and 0.10 seconds on a warm tab revisit. These figures are a repeatable test scenario, not production latency guarantees. The remaining first-load costs include Auth, Supabase round trips and provider response time.

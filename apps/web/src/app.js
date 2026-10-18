@@ -42,13 +42,14 @@ if (!canOpen) {
 if (canOpen || sessionError) document.documentElement.removeAttribute('data-auth-pending');
 if (canOpen) {
     try {
-        if (page !== 'login') {
-            const { initVocabularyCapture } =
-                await import('./features/vocabulary/vocabulary-capture.js');
-            initVocabularyCapture();
-        }
         if (!pages[page]) throw new Error(`Unknown page: ${page}`);
-        await pages[page]();
+        const feature = pages[page]();
+        // The optional capture menu must not delay the page's own data requests.
+        if (page !== 'login')
+            import('./features/vocabulary/vocabulary-capture.js')
+                .then(({ initVocabularyCapture }) => initVocabularyCapture())
+                .catch((error) => console.warn('Unable to load vocabulary capture:', error));
+        await feature;
     } catch (error) {
         console.error('Unable to initialize page:', error);
         const message = document.createElement('p');

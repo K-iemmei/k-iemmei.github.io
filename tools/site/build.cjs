@@ -64,7 +64,11 @@ function buildSite({
         } else {
             html = html.replace(
                 '</head>',
-                `<style>html[data-auth-pending] body{visibility:hidden}</style><script>document.documentElement.dataset.authPending='true'</script></head>`,
+                `<link rel="preconnect" href="${new URL(url).origin}" crossorigin />
+                <link rel="modulepreload" href="src/core/database-client.js" />
+                <link rel="modulepreload" href="src/core/session-storage.js" />
+                ${name === 'home.html' ? '<link rel="preconnect" href="https://api.open-meteo.com" crossorigin />' : ''}
+                <style>html[data-auth-pending] body{visibility:hidden}</style><script>document.documentElement.dataset.authPending='true'</script></head>`,
             );
         }
         fs.writeFileSync(path.join(output, name), html);

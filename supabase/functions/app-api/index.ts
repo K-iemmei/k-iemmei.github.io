@@ -13,6 +13,7 @@ const admin = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
 });
 const cors = {
+    'Access-Control-Max-Age': '3600',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -114,18 +115,18 @@ Deno.serve(async (req) => {
             error,
         } = await admin.auth.getUser(token);
         if (error || !user) return json({ error: 'Invalid session' }, 401);
-        const member = checked(
-            await admin
+        const [memberResult, profileResult] = await Promise.all([
+            admin
                 .from('hosted_members')
                 .select('user_id')
                 .eq('user_id', user.id)
                 .maybeSingle(),
-        );
+            admin.from('users').select('id').eq('id', user.id).maybeSingle(),
+        ]);
+        const member = checked(memberResult);
         if (!member) return json({ error: 'This account has not been granted access' }, 403);
         // Local account IDs are never exported. Hosted profiles share the Auth UUID.
-        const profile = checked(
-            await admin.from('users').select('id').eq('id', user.id).maybeSingle(),
-        );
+        const profile = checked(profileResult);
         if (!profile)
             checked(
                 await admin.from('users').insert({

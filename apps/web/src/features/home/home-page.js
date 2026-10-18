@@ -1,4 +1,5 @@
-﻿import { apiRequest } from '../../core/database-client.js';
+import { readCache, writeCache, cachedLoad } from '../../core/page-cache.js';
+import { apiRequest } from '../../core/database-client.js';
 import { clearSession } from '../../core/session-storage.js';
 import { escapeHtml as h } from '../../shared/escape-html.js';
 import { initWeather } from './home-weather.js';
@@ -25,8 +26,9 @@ $('logoutButton').addEventListener('click', async () => {
         $('logoutButton').title = 'Unable to log out. Try again.';
     }
 });
+const preferenceKey = 'home-preferences:' + localStorage.getItem('userId');
 let todos = [],
-    preferences = { city: null, news_category: 'latest' },
+    preferences = readCache(preferenceKey, 86400000) || { city: null, news_category: 'latest' },
     ready = false,
     busy = false,
     savingPreferences = false;
@@ -66,15 +68,19 @@ async function loadHome() {
     busy = true;
     controls();
     try {
+        const previousCity = JSON.stringify(preferences.city || defaultCity);
+        const previousCategory = preferences.news_category;
         const data = await apiRequest('/api/home');
         todos = data.todos;
         preferences = data.preferences;
+        writeCache(preferenceKey, preferences);
         ready = true;
         $('newsCategory').value = preferences.news_category;
         $('todoMessage').textContent = '';
         renderTodos();
-        weather.show(preferences.city || defaultCity);
-        loadNews();
+        if (JSON.stringify(preferences.city || defaultCity) !== previousCity)
+            weather.show(preferences.city || defaultCity);
+        if (preferences.news_category !== previousCategory) loadNews();
     } catch (e) {
         $('todoMessage').textContent = e.message;
     } finally {
@@ -91,6 +97,7 @@ async function savePreferences(changes) {
         const next = { ...preferences, ...changes };
         await send('/api/home/preferences', 'PUT', next);
         preferences = next;
+        writeCache(preferenceKey, preferences);
     } finally {
         savingPreferences = false;
         $('newsCategory').disabled = !ready;
@@ -179,13 +186,16 @@ $('todoList').addEventListener('submit', (e) => {
 });
 $('pinnedOnly').addEventListener('change', renderTodos);
 $('todoRefresh').addEventListener('click', loadHome);
-async function loadNews() {
+async function loadNews({ force = false } = {}) {
     const request = ++newsRequest;
     $('newsRefresh').disabled = true;
     $('newsMessage').textContent = 'Loading news…';
     try {
-        const data = await apiRequest(
-            '/api/home/news?category=' + encodeURIComponent($('newsCategory').value),
+        const category = $('newsCategory').value;
+        const data = await cachedLoad(
+            'public-news:' + category,
+            () => apiRequest('/api/home/news?category=' + encodeURIComponent(category)),
+            { maxAge: 300000, force },
         );
         if (request !== newsRequest) return;
         $('newsList').innerHTML = data.items
@@ -213,7 +223,11 @@ $('newsCategory').addEventListener('change', async () => {
         $('newsMessage').textContent = e.message;
     }
 });
-$('newsRefresh').addEventListener('click', loadNews);
+$('newsRefresh').addEventListener('click', () => loadNews({ force: true }));
 controls();
+// Independent panels start immediately; neither waits for the personal database.
+$('newsCategory').value = preferences.news_category;
+weather.show(preferences.city || defaultCity);
+loadNews();
 await loadHome();
 $('newsCategory').disabled = !ready;

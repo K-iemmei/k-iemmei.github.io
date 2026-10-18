@@ -19,7 +19,15 @@ function stored() {
     }
     return cached;
 }
-async function refresh() {
+let refreshPromise = null;
+function refresh() {
+    if (!refreshPromise)
+        refreshPromise = refreshSession().finally(() => {
+            refreshPromise = null;
+        });
+    return refreshPromise;
+}
+async function refreshSession() {
     const current = stored();
     if (!current?.refresh_token) return null;
     const response = await fetch(endpoint('token?grant_type=refresh_token'), {
@@ -27,7 +35,11 @@ async function refresh() {
         headers,
         body: JSON.stringify({ refresh_token: current.refresh_token }),
     });
+    // A slower refresh must not restore an account that has just signed out or changed.
+    if (stored()?.refresh_token !== current.refresh_token) return null;
     if (!response.ok) {
+        if (response.status >= 500)
+            throw new Error('Authentication service is temporarily unavailable');
         clearCloudSession();
         return null;
     }
@@ -66,6 +78,8 @@ export async function cloudUser() {
             headers: { apikey: deployment.anonKey, Authorization: `Bearer ${token}` },
         });
     if (!response.ok) {
+        if (response.status >= 500)
+            throw new Error('Authentication service is temporarily unavailable');
         clearCloudSession();
         return null;
     }

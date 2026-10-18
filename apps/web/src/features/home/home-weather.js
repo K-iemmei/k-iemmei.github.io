@@ -1,4 +1,5 @@
-﻿import { escapeHtml as h } from '../../shared/escape-html.js';
+import { cachedLoad } from '../../core/page-cache.js';
+import { escapeHtml as h } from '../../shared/escape-html.js';
 const $ = (id) => document.getElementById(id);
 const conditions = (code) =>
     !Number.isFinite(code)
@@ -50,7 +51,7 @@ export function initWeather(saveCity) {
         request = 0,
         searchRequest = 0,
         choosing = false;
-    async function show(next) {
+    async function show(next, { force = false } = {}) {
         city = next;
         const token = ++request;
         $('weatherMessage').textContent = '';
@@ -68,7 +69,11 @@ export function initWeather(saveCity) {
                 timezone: 'auto',
                 forecast_days: '4',
             });
-            const d = await json('https://api.open-meteo.com/v1/forecast?' + params);
+            const d = await cachedLoad(
+                'weather:' + params.toString(),
+                () => json('https://api.open-meteo.com/v1/forecast?' + params),
+                { maxAge: 600000, force },
+            );
             if (token !== request) return;
             const days = forecastDays(d.daily);
             if (days.length !== 3) throw new Error('Forecast unavailable. Please retry.');
@@ -81,7 +86,7 @@ export function initWeather(saveCity) {
             }
         }
     }
-    $('weatherRefresh').addEventListener('click', () => show(city));
+    $('weatherRefresh').addEventListener('click', () => show(city, { force: true }));
     $('citySearchForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const query = $('citySearch').value.trim();
