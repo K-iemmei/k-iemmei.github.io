@@ -14,35 +14,69 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Listening Library | My Note</title>
         <link rel="stylesheet" href="styles/style.css" />
-        <link rel="stylesheet" href="styles/pages/listening.css" />
+        <link rel="stylesheet" href="styles/pages/english-library.css" />
     </head>
     <body data-page="listening-library">
-        <main class="listening-shell">
-            <header class="listening-topbar">
-                <a href="english-home.html">&larr; English</a
-                ><button id="themeToggle" type="button">Theme</button>
+        <main class="page-shell">
+            <header class="topbar">
+                <div class="brand-row">
+                    <a class="back-link" href="dashboard.html">&larr; Dashboard</a>
+                    <span class="brand-pill">English Listening</span>
+                </div>
+                <div class="library-actions">
+                    <a class="back-link" href="english-reading-library.html">Reading library</a>
+                    <button
+                        id="themeToggle"
+                        class="secondary-button"
+                        type="button"
+                        aria-label="Dark mode"
+                        role="switch"
+                        aria-checked="false"
+                        data-theme-switch
+                    >
+                        Theme
+                    </button>
+                </div>
             </header>
-            <div class="listening-heading">
-                <p class="eyebrow">ENGLISH / LISTENING</p>
-                <h1>Listening library</h1>
+            <section class="hero">
+                <h1>Listening Library</h1>
                 <p>
                     Choose one part at a time. Practise the IELTS questions or switch to dictation.
                 </p>
-            </div>
-            <div class="listening-filters">
-                <input
-                    id="listeningSearch"
-                    type="search"
-                    placeholder="Search Cambridge, test or part"
-                    aria-label="Search listening sessions"
-                /><span id="listeningCount">Loading...</span>
-            </div>
-            <div id="listeningGrid" class="listening-grid" aria-live="polite"></div>
+                <div class="stats-row">
+                    <span class="stat-pill" id="listeningCount" role="status"
+                        >Loading parts...</span
+                    >
+                    <span class="stat-pill">IELTS questions &amp; dictation</span>
+                </div>
+            </section>
+            <section class="filter-panel" aria-label="Listening part filters">
+                <label class="filter-field">
+                    <span>Search by title, test or part</span>
+                    <input
+                        id="listeningSearch"
+                        type="search"
+                        placeholder="Search Cambridge, test or part..."
+                        autocomplete="off"
+                    />
+                </label>
+                <label class="filter-field">
+                    <span>Book</span>
+                    <select id="listeningBookFilter">
+                        <option value="all">All books</option>
+                    </select>
+                </label>
+            </section>
+            <div id="listeningGrid" class="test-grid" aria-live="polite"></div>
             <nav
                 id="listeningPages"
-                class="listening-pages"
+                class="library-pagination"
                 aria-label="Listening library pages"
+                hidden
             ></nav>
+            <div id="listeningEmpty" class="empty-state" role="status">
+                No listening parts found.
+            </div>
         </main>
         <script type="module" src="src/app.js"></script>
     </body>

@@ -1,4 +1,5 @@
-﻿import { listReadingTests } from './reading/reading-repository.js';
+import { libraryPagination } from './library-pagination.js';
+import { listReadingTests } from './reading/reading-repository.js';
 import { escapeHtml as h } from '../../shared/escape-html.js';
 const grid = document.getElementById('testGrid');
 const search = document.getElementById('searchInput');
@@ -32,16 +33,14 @@ function render() {
     document.getElementById('testCountPill').textContent = `${visible.length} tests`;
     document.getElementById('emptyState').style.display = visible.length ? 'none' : 'block';
     pagination.hidden = visible.length <= pageSize;
-    const pages = [...new Set([1, currentPage - 1, currentPage, currentPage + 1, pageCount])]
-        .filter((page) => page >= 1 && page <= pageCount)
-        .sort((a, b) => a - b);
-    const pageButtons = pages
-        .map(
-            (page, index) =>
-                `${index && page - pages[index - 1] > 1 ? '<span class="page-gap" aria-hidden="true">&hellip;</span>' : ''}<button type="button" data-page-number="${page}" aria-label="Page ${page}" ${page === currentPage ? 'aria-current="page"' : ''}>${page}</button>`,
-        )
-        .join('');
-    pagination.innerHTML = `<span class="page-summary" role="status">${start + 1}&ndash;${Math.min(start + pageSize, visible.length)} of ${visible.length} tests</span><div class="page-controls"><button type="button" data-page-number="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''} aria-label="Previous page">&larr;</button>${pageButtons}<button type="button" data-page-number="${currentPage + 1}" ${currentPage === pageCount ? 'disabled' : ''} aria-label="Next page">&rarr;</button></div>`;
+    pagination.innerHTML = libraryPagination({
+        page: currentPage,
+        pageCount,
+        start,
+        pageSize,
+        total: visible.length,
+        label: 'tests',
+    });
 }
 try {
     tests = await listReadingTests();

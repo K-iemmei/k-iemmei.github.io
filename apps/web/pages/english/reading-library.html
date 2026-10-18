@@ -14,16 +14,30 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Reading Library</title>
         <link rel="stylesheet" href="styles/style.css" />
-        <link rel="stylesheet" href="styles/pages/reading-library.css" />
+        <link rel="stylesheet" href="styles/pages/english-library.css" />
     </head>
     <body data-page="reading-library">
-        <div class="page-shell">
+        <main class="page-shell">
             <header class="topbar">
                 <div class="brand-row">
                     <a class="back-link" href="dashboard.html">← Dashboard</a>
                     <span class="brand-pill">English Reading</span>
                 </div>
-                <a class="primary-button" href="admin.html">Create reading test</a>
+                <div class="library-actions">
+                    <a class="back-link" href="english-listening-library.html">Listening library</a>
+                    <button
+                        id="themeToggle"
+                        class="secondary-button"
+                        type="button"
+                        aria-label="Dark mode"
+                        role="switch"
+                        aria-checked="false"
+                        data-theme-switch
+                    >
+                        Theme
+                    </button>
+                    <a class="primary-button" href="admin.html">Create reading test</a>
+                </div>
             </header>
 
             <section class="hero">
@@ -67,7 +81,7 @@
             <div id="emptyState" class="empty-state">
                 No tests found. Use Create reading test to write your first one.
             </div>
-        </div>
+        </main>
         <script type="module" src="src/app.js"></script>
     </body>
 </html>
