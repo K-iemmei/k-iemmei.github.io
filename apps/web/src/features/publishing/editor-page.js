@@ -98,6 +98,7 @@ function changed() {
     previewTimer = setTimeout(paint, 300);
 }
 async function save({ force = false } = {}) {
+    if (!ready) throw Error('Wait for the note to finish loading before saving.');
     clearTimeout(saveTimer);
     if (saving) return saving;
     if (conflicted)
@@ -233,7 +234,8 @@ document.getElementById('noteDelete').addEventListener('click', async () => {
         setBusy(false);
     }
 });
-function insert(text) {
+function insert(text, { allowBusy = false } = {}) {
+    if (!ready || (publicationBusy && !allowBusy) || conflicted) return;
     body.setRangeText(text, body.selectionStart, body.selectionEnd, 'end');
     body.focus();
     body.dispatchEvent(new Event('input', { bubbles: true }));
@@ -303,7 +305,9 @@ imageInput.addEventListener('change', async () => {
             method: 'POST',
             body: JSON.stringify({ note_id: note.id, mime_type: file.type, data_base64: encoded }),
         });
-        insert(`\n\n![${file.name.replace(/[\[\]\\\n]/g, ' ')}](note-asset:${image.id})\n\n`);
+        insert(`\n\n![${file.name.replace(/[\[\]\\\n]/g, ' ')}](note-asset:${image.id})\n\n`, {
+            allowBusy: true,
+        });
         message('Image uploaded privately. It becomes visible with the posted version.');
     } catch (error) {
         message(error.message, 'error');
@@ -317,6 +321,10 @@ document
     .addEventListener('click', () => document.getElementById('formatHelp').showModal());
 document.addEventListener('keydown', (event) => {
     if (!(event.ctrlKey || event.metaKey)) return;
+    if (!ready || publicationBusy || conflicted) {
+        if (['s', 'b', 'i'].includes(event.key.toLowerCase())) event.preventDefault();
+        return;
+    }
     if (event.key.toLowerCase() === 's') {
         event.preventDefault();
         save({ force: true }).catch(() => {});

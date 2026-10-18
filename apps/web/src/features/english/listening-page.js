@@ -1,6 +1,7 @@
 import { apiRequest } from '../../core/database-client.js';
 import { escapeHtml as h } from '../../shared/escape-html.js';
 import { trackListeningAudio } from './listening-tracker.js';
+import { renderWorksheet } from './listening-worksheet.js';
 
 const slug = new URLSearchParams(location.search).get('session');
 const result = document.getElementById('listeningResult');
@@ -11,13 +12,6 @@ function showResult(html) {
     result.hidden = false;
     result.innerHTML = html;
     result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-function renderWorksheet(text) {
-    return h(text).replace(/\((\d{1,2})\)[\s._·…-]{3,}/g, (match, number) => {
-        const value = Number(number);
-        if (value < session.first_question || value > session.last_question) return match;
-        return `(${value}) <input class="inline-answer" data-answer="${value}" aria-label="Answer ${value}" autocomplete="off" />`;
-    });
 }
 function syncAnswer(event) {
     const input = event.target.closest('[data-answer]');
@@ -44,7 +38,10 @@ else {
             `Questions ${session.first_question}–${session.last_question} · ${session.status === 'draft' ? 'OCR draft awaiting review' : 'Ready to practise'}`;
         document.getElementById('sourceNote').textContent =
             `Transcribed from PDF page${session.source_pages.length === 1 ? '' : 's'} ${session.source_pages.join(', ')}. Check OCR wording against the source before adding answer keys.`;
-        document.getElementById('worksheetText').innerHTML = renderWorksheet(session.question_text);
+        document.getElementById('worksheetText').innerHTML = renderWorksheet(
+            session.question_text,
+            session,
+        );
         document.getElementById('answerGrid').innerHTML = Array.from(
             { length: session.last_question - session.first_question + 1 },
             (_, index) =>

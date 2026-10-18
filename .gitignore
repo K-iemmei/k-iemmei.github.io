@@ -21,3 +21,7 @@ data/imports/listening-audio/
 data/listening-audio/
 data/*.mp3
 eng.traineddata
+
+# Private historical learner payload and imported book text.
+/archive/misc/payload.json
+/database/archive/sql/english-db.sql

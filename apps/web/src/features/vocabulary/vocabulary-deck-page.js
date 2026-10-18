@@ -10,6 +10,7 @@ const flashcard = document.getElementById('studyCard');
 const reviewActions = document.getElementById('reviewActions');
 let currentCard = null;
 let loadedCards = 0;
+let cardsRequest = 0;
 const cardList = document.getElementById('cardList');
 const loadMore = document.getElementById('loadMoreCards');
 
@@ -43,26 +44,41 @@ async function loadDeck() {
 }
 
 async function loadCards(reset = true) {
-    if (reset) loadedCards = 0;
-    const cards = await apiRequest(
-        `/api/vocabulary/decks/${encodeURIComponent(deckId)}/cards?offset=${loadedCards}`,
-    );
-    const markup = cards
-        .map(
-            (card) =>
-                `<article class="word-row"><div><strong>${h(card.term)}</strong><p>${h(card.meaning)}</p></div><small>${h(card.state)}</small></article>`,
-        )
-        .join('');
-    if (reset)
-        cardList.innerHTML =
-            markup ||
-            '<div class="empty-state"><h2>No words yet</h2><p>Add your first word using the form.</p></div>';
-    else cardList.insertAdjacentHTML('beforeend', markup);
-    loadedCards += cards.length;
-    document.getElementById('cardCountLabel').textContent = `${loadedCards} loaded`;
-    loadMore.hidden = cards.length < 100;
+    const requestId = ++cardsRequest;
+    const offset = reset ? 0 : loadedCards;
+    loadMore.disabled = true;
+    try {
+        const cards = await apiRequest(
+            `/api/vocabulary/decks/${encodeURIComponent(deckId)}/cards?offset=${offset}`,
+        );
+        if (requestId !== cardsRequest) return;
+        const markup = cards
+            .map(
+                (card) =>
+                    `<article class="word-row"><div><strong>${h(card.term)}</strong><p>${h(card.meaning)}</p></div><small>${h(card.state)}</small></article>`,
+            )
+            .join('');
+        if (reset)
+            cardList.innerHTML =
+                markup ||
+                '<div class="empty-state"><h2>No words yet</h2><p>Add your first word using the form.</p></div>';
+        else cardList.insertAdjacentHTML('beforeend', markup);
+        loadedCards = offset + cards.length;
+        document.getElementById('cardCountLabel').textContent = `${loadedCards} loaded`;
+        loadMore.hidden = cards.length < 100;
+    } finally {
+        if (requestId === cardsRequest) loadMore.disabled = false;
+    }
 }
-loadMore.addEventListener('click', () => loadCards(false));
+loadMore.addEventListener('click', () => {
+    if (loadMore.disabled) return;
+    message.textContent = '';
+    message.classList.remove('error');
+    loadCards(false).catch((error) => {
+        message.textContent = error.message;
+        message.classList.add('error');
+    });
+});
 
 async function loadStudy() {
     currentCard = await apiRequest(`/api/vocabulary/study?deck_id=${encodeURIComponent(deckId)}`);
@@ -107,6 +123,9 @@ reviewActions.addEventListener('click', async (event) => {
 
 deckForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+    const button = deckForm.querySelector('[type="submit"]');
+    if (button.disabled) return;
+    button.disabled = true;
     try {
         const deck = await apiRequest('/api/vocabulary/decks', {
             method: 'POST',
@@ -116,11 +135,16 @@ deckForm.addEventListener('submit', async (event) => {
     } catch (error) {
         message.textContent = error.message;
         message.classList.add('error');
+    } finally {
+        button.disabled = false;
     }
 });
 
 cardForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+    const button = cardForm.querySelector('[type="submit"]');
+    if (button.disabled) return;
+    button.disabled = true;
     try {
         await apiRequest(`/api/vocabulary/decks/${encodeURIComponent(deckId)}/cards`, {
             method: 'POST',
@@ -133,6 +157,8 @@ cardForm.addEventListener('submit', async (event) => {
     } catch (error) {
         message.textContent = error.message;
         message.classList.add('error');
+    } finally {
+        button.disabled = false;
     }
 });
 

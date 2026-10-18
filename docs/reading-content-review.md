@@ -1,5 +1,7 @@
 # Reading content review (2026-10-11)
 
+For the subsequent full-data audit and local corrections on 2026-10-18, see [Reading and Listening content review](reading-listening-review.md). That review also restored the previously incomplete AHI sentence with an explicitly documented editorial cross-check.
+
 The local PostgreSQL database was backed up to `.local/backups/my-note-2026-10-11T14-51-22-067Z.dump` before this review. The audit covered the 132 published Cambridge single-passage tests from books 1–10 and 20. It left the three other Reading passages unchanged.
 
 The review regenerated `content_html` from the stored passage text, preserving paragraph breaks and formatting identifiable section headings, paragraph labels, introductory blurbs, source notes and bullets. It corrected clear OCR defects in 15 passages, including major reconstruction of Cambridge 2 Test 3 Passage 1 (nursing), Cambridge 3 Test 4 Passage 1 (air pollution), and Cambridge 10 Test 1 Passage 1 (stepwells). The Cambridge 10 Test 1 Passage 2 dates, chemical notation and misspelled words were also corrected. The practice stylesheet now renders those semantic blocks without forcing OCR whitespace into the layout.

@@ -1,0 +1,1 @@
+Old source/configuration preserved for reference, including user edits that predated the refactor. This directory is not used at runtime or copied into builds. Do not restore these files over the active apps/database structure.

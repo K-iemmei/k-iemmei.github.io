@@ -125,6 +125,19 @@ const sample = [
             /Note not found/,
         );
         assert.equal(await reader.$eval('#noteTitle', (el) => el.value), '');
+        // A failed load must not let Ctrl+S create an unrelated empty note.
+        let unintendedSave = false;
+        const watchSave = (request) => {
+            if (request.method() === 'POST' && request.url() === base + '/api/notes')
+                unintendedSave = true;
+        };
+        reader.on('request', watchSave);
+        await reader.keyboard.down('Control');
+        await reader.keyboard.press('s');
+        await reader.keyboard.up('Control');
+        await reader.evaluate(() => new Promise((resolve) => setTimeout(resolve, 200)));
+        reader.off('request', watchSave);
+        assert.equal(unintendedSave, false);
         fs.mkdirSync('.local/publishing-preview', { recursive: true });
         const image = await owner.evaluate(() => {
             const canvas = document.createElement('canvas');

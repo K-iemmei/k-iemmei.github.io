@@ -1,0 +1,1 @@
+Historical SQL only. Never apply this directory automatically: files contain conflicting schemas, destructive resets and obsolete auth stubs. Active migrations are in ../migrations. Imported historical content remains here for provenance.

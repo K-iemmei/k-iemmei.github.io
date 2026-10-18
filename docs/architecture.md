@@ -1,6 +1,6 @@
 # Architecture
 
-Express serves the HTML, assets and API on one local origin, default `http://localhost:8000`. PostgreSQL is the source of truth. There is no static build or GitHub Pages deployment.
+Express serves the HTML, assets and API on one local origin, default `http://localhost:8000`. PostgreSQL is the source of truth. The hosted build runs on GitHub Pages with Supabase Auth and an Edge Function API; see [Supabase deployment](supabase-deployment.md).
 
 ## Login and routing
 

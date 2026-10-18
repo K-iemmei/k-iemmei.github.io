@@ -88,7 +88,10 @@ async function run() {
                 `INSERT INTO public.listening_sessions
                 (slug,book_number,test_number,part_number,title,question_text,first_question,last_question,audio_filename,source_pages,transcript)
                 VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
-                ON CONFLICT(slug) DO UPDATE SET question_text=EXCLUDED.question_text,source_pages=EXCLUDED.source_pages,transcript=COALESCE(public.listening_sessions.transcript,EXCLUDED.transcript),updated_at=now()`,
+                ON CONFLICT(slug) DO UPDATE SET
+                question_text=COALESCE(NULLIF(btrim(public.listening_sessions.question_text),''),EXCLUDED.question_text),
+                source_pages=EXCLUDED.source_pages,
+                transcript=COALESCE(NULLIF(btrim(public.listening_sessions.transcript),''),EXCLUDED.transcript),updated_at=now()`,
                 [
                     slug,
                     entry.book,
