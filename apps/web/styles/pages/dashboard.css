@@ -135,7 +135,7 @@ body[data-page='dashboard'] .sidebar {
     font-size: 12px;
     font-weight: 600;
 }
-.sidebar-account-copy span:last-child {
+.sidebar-account-copy span + span {
     font-size: 10px;
     color: var(--text-muted);
 }

@@ -314,9 +314,7 @@ async function refreshLeaderboard() {
         const users = await loadLeaderboard(leaderboardDateInput.value);
         if (request !== leaderboardRequest) return;
         renderLeaderboard(users);
-        if (status)
-            status.textContent =
-                leaderboardDateInput.value + ' · UTC+7 · ' + users.length + ' users';
+        if (status) status.textContent = '';
     } catch (error) {
         if (request !== leaderboardRequest) return;
         console.warn('Unable to load Hall of Fame:', error);

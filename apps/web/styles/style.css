@@ -3191,6 +3191,9 @@ body[data-page='dashboard'] .pixel-leaderboard-sidebar {
     font-size: 11px;
     margin: 8px 0;
 }
+#leaderboardStatus:empty {
+    display: none;
+}
 #leaderboardList {
     max-height: 460px;
     overflow-y: auto;
