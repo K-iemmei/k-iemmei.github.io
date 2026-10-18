@@ -158,10 +158,10 @@
             <!-- Main -->
             <main class="main">
                 <div class="dashboard-layout">
-                    <section class="section learning-subjects">
+                    <section class="section learning-subjects" aria-labelledby="subjectsHeading">
                         <div class="section-header section-header-compact">
                             <div class="section-title-wrap section-title-block">
-                                <h1>Learning</h1>
+                                <h1 id="subjectsHeading">Learning</h1>
                             </div>
                         </div>
 
@@ -210,125 +210,121 @@
                             </div>
                         </div>
                     </section>
+                    <aside
+                        class="leaderboard-sidebar pixel-leaderboard-sidebar dashboard-ranking"
+                        aria-labelledby="leaderboardHeading"
+                    >
+                        <div class="leaderboard-header pixel-hall-header">
+                            <span class="dashboard-rank-icon" aria-hidden="true"
+                                ><svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.6"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="m3 7 4 4 5-7 5 7 4-4-2 13H5L3 7Z" /></svg
+                            ></span>
+                            <div class="hall-title-wrap">
+                                <h2 id="leaderboardHeading">Hall of Fame</h2>
+                            </div>
+                        </div>
+                        <div class="leaderboard-controls">
+                            <input
+                                type="date"
+                                id="leaderboardDate"
+                                aria-label="Ranking date (UTC+7)"
+                            />
+                            <button type="button" id="leaderboardRefresh">Refresh</button>
+                        </div>
+                        <p id="leaderboardStatus" role="status">Loading daily ranking...</p>
+                        <div class="leaderboard-list" id="leaderboardList">
+                            <div class="leaderboard-item pixel-rank-item">
+                                <span class="leaderboard-rank first">1</span>
+                                <span class="leaderboard-name">Loading...</span>
+                                <span class="leaderboard-streak">--</span>
+                            </div>
+                        </div>
+                    </aside>
+                    <section class="section activity-section" aria-labelledby="trackingHeading">
+                        <div class="section-header activity-header activity-header-compact">
+                            <div class="section-title-wrap section-title-block">
+                                <h2 id="trackingHeading">Tracking log</h2>
+                            </div>
 
-                    <div class="dashboard-lower">
-                        <section class="section activity-section" aria-labelledby="trackingHeading">
-                            <div class="section-header activity-header activity-header-compact">
-                                <div class="section-title-wrap section-title-block">
-                                    <h2 id="trackingHeading">Tracking log</h2>
-                                </div>
-
-                                <label
-                                    class="year-select-wrap pixel-select-wrap"
-                                    for="yearSelector"
+                            <label
+                                class="year-select-wrap pixel-select-wrap"
+                                for="yearSelector"
+                                aria-label="Select year"
+                            >
+                                <select
+                                    id="yearSelector"
+                                    class="year-select pixel-select"
                                     aria-label="Select year"
                                 >
-                                    <select
-                                        id="yearSelector"
-                                        class="year-select pixel-select"
-                                        aria-label="Select year"
-                                    >
-                                        <option value="2026" selected>2026</option>
-                                        <option value="2025">2025</option>
-                                        <option value="2024">2024</option>
-                                    </select>
-                                </label>
+                                    <option value="2026" selected>2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="heatmap-card pixel-heatmap-card">
+                            <div class="heatmap-header">
+                                <div class="heatmap-title-block">
+                                    <span class="pixel-dot-indicator english-dot"></span>
+                                    <h3>English log</h3>
+                                </div>
                             </div>
 
-                            <div class="heatmap-card pixel-heatmap-card">
-                                <div class="heatmap-header">
-                                    <div class="heatmap-title-block">
-                                        <span class="pixel-dot-indicator english-dot"></span>
-                                        <h3>English log</h3>
-                                    </div>
+                            <p id="englishTrackingSummary" role="status">
+                                Loading English activity...
+                            </p>
+                            <div
+                                class="heatmap-wrapper"
+                                tabindex="0"
+                                role="region"
+                                aria-label="Yearly learning calendar, scroll horizontally to see all months"
+                            >
+                                <div id="heatmap-english" class="heatmap pixel-heatmap"></div>
+                            </div>
+                            <details class="english-log-details">
+                                <summary>Daily Reading &amp; Listening log</summary>
+                                <div class="english-log-table-wrap">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Date (UTC+7)</th>
+                                                <th scope="col">Reading submits</th>
+                                                <th scope="col">Listening min</th>
+                                                <th scope="col">Points</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="englishTrackingRows"></tbody>
+                                    </table>
                                 </div>
+                            </details>
+                        </div>
 
-                                <p id="englishTrackingSummary" role="status">
-                                    Loading English activity...
-                                </p>
-                                <div
-                                    class="heatmap-wrapper"
-                                    tabindex="0"
-                                    role="region"
-                                    aria-label="Yearly learning calendar, scroll horizontally to see all months"
-                                >
-                                    <div id="heatmap-english" class="heatmap pixel-heatmap"></div>
+                        <div class="heatmap-card pixel-heatmap-card">
+                            <div class="heatmap-header">
+                                <div class="heatmap-title-block">
+                                    <span class="pixel-dot-indicator chinese-dot"></span>
+                                    <h3>Chinese log</h3>
                                 </div>
-                                <details class="english-log-details">
-                                    <summary>Daily Reading &amp; Listening log</summary>
-                                    <div class="english-log-table-wrap">
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Date (UTC+7)</th>
-                                                    <th scope="col">Reading submits</th>
-                                                    <th scope="col">Listening min</th>
-                                                    <th scope="col">Points</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="englishTrackingRows"></tbody>
-                                        </table>
-                                    </div>
-                                </details>
                             </div>
 
-                            <div class="heatmap-card pixel-heatmap-card">
-                                <div class="heatmap-header">
-                                    <div class="heatmap-title-block">
-                                        <span class="pixel-dot-indicator chinese-dot"></span>
-                                        <h3>Chinese log</h3>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="heatmap-wrapper"
-                                    tabindex="0"
-                                    role="region"
-                                    aria-label="Yearly learning calendar, scroll horizontally to see all months"
-                                >
-                                    <div id="heatmap-chinese" class="heatmap pixel-heatmap"></div>
-                                </div>
+                            <div
+                                class="heatmap-wrapper"
+                                tabindex="0"
+                                role="region"
+                                aria-label="Yearly learning calendar, scroll horizontally to see all months"
+                            >
+                                <div id="heatmap-chinese" class="heatmap pixel-heatmap"></div>
                             </div>
-                        </section>
-
-                        <aside
-                            class="leaderboard-sidebar pixel-leaderboard-sidebar dashboard-ranking"
-                            aria-labelledby="leaderboardHeading"
-                        >
-                            <div class="leaderboard-header pixel-hall-header">
-                                <span class="dashboard-rank-icon" aria-hidden="true"
-                                    ><svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.6"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    >
-                                        <path d="m3 7 4 4 5-7 5 7 4-4-2 13H5L3 7Z" /></svg
-                                ></span>
-                                <div class="hall-title-wrap">
-                                    <h2 id="leaderboardHeading">Hall of Fame</h2>
-                                </div>
-                            </div>
-                            <div class="leaderboard-controls">
-                                <input
-                                    type="date"
-                                    id="leaderboardDate"
-                                    aria-label="Ranking date (UTC+7)"
-                                />
-                                <button type="button" id="leaderboardRefresh">Refresh</button>
-                            </div>
-                            <p id="leaderboardStatus" role="status">Loading daily ranking...</p>
-                            <div class="leaderboard-list" id="leaderboardList">
-                                <div class="leaderboard-item pixel-rank-item">
-                                    <span class="leaderboard-rank first">1</span>
-                                    <span class="leaderboard-name">Loading...</span>
-                                    <span class="leaderboard-streak">--</span>
-                                </div>
-                            </div>
-                        </aside>
-                    </div>
+                        </div>
+                    </section>
                 </div>
             </main>
         </div>

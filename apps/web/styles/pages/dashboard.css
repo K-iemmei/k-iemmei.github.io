@@ -428,22 +428,33 @@ body:is([data-page='dashboard'], [data-page='home']) .heatmap-grid {
         transition: none;
     }
 }
-/* Dashboard: a full-width subject row, followed by aligned tracking/ranking panels. */
+/* Expandable subject area on the left; ranking stays at the upper right. */
 body[data-page='dashboard'] .dashboard-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
+    grid-template-areas: 'subjects ranking' 'tracking ranking';
+    align-items: start;
+    gap: 24px;
     width: 100%;
     max-width: 1380px;
     margin: 0 auto;
     padding: 36px 32px 48px;
 }
 body[data-page='dashboard'] .dashboard-layout .learning-subjects {
-    margin: 0 0 28px;
+    grid-area: subjects;
+    min-width: 0;
+    margin: 0;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
 }
 body[data-page='dashboard'] .dashboard-layout .learning-subjects > .section-header {
     margin: 0 0 20px;
 }
 body[data-page='dashboard'] .dashboard-layout .subject-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
     gap: 20px;
 }
 body[data-page='dashboard'] .dashboard-layout .subject-card {
@@ -470,13 +481,8 @@ body[data-page='dashboard'] .dashboard-layout .subject-card h3 {
     font-size: 16px;
     line-height: 1.5;
 }
-body[data-page='dashboard'] .dashboard-lower {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
-    align-items: start;
-    gap: 24px;
-}
 body[data-page='dashboard'] .dashboard-layout .activity-section {
+    grid-area: tracking;
     min-width: 0;
     margin: 0;
     padding: 24px;
@@ -540,6 +546,7 @@ body[data-page='dashboard'] .dashboard-layout .english-log-table-wrap {
     overflow-x: auto;
 }
 body[data-page='dashboard'] .dashboard-layout .dashboard-ranking {
+    grid-area: ranking;
     width: 100%;
     min-width: 0;
     min-height: 236px;
@@ -592,12 +599,11 @@ body[data-page='dashboard'] .dashboard-layout .leaderboard-name {
     font-size: 13px;
     line-height: 1.6;
 }
-@media (max-width: 1200px) {
+@media (max-width: 1100px) {
     body[data-page='dashboard'] .dashboard-layout {
-        padding: 32px 26px 40px;
-    }
-    body[data-page='dashboard'] .dashboard-lower {
         grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: 'subjects' 'ranking' 'tracking';
+        padding: 32px 26px 40px;
     }
     body[data-page='dashboard'] .dashboard-layout #leaderboardList {
         display: grid;
@@ -625,6 +631,7 @@ body[data-page='dashboard'] .dashboard-layout .leaderboard-name {
     body[data-page='dashboard'] .dashboard-layout .subject-card h3 {
         font-size: 14px;
     }
+    body[data-page='dashboard'] .dashboard-layout .learning-subjects,
     body[data-page='dashboard'] .dashboard-layout .activity-section,
     body[data-page='dashboard'] .dashboard-layout .dashboard-ranking {
         padding: 20px;
