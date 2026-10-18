@@ -189,6 +189,32 @@ body:is([data-page='reading-library'], [data-page='listening-library']) {
 .test-card:active {
     transform: translateY(-1px);
 }
+.reading-card-progress {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 5px;
+    height: 3px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--border);
+}
+.reading-card-progress > span {
+    display: block;
+    width: var(--reading-progress, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: var(--accent);
+}
+.reading-complete {
+    display: block;
+    width: 16px;
+    height: 16px;
+    color: #16803d;
+}
+[data-theme='dark'] .reading-complete {
+    color: #4ade80;
+}
 .test-reference {
     font-size: 11px;
     color: var(--text-secondary);

@@ -43,7 +43,11 @@ function createReadingRepository(db) {
     return {
         async list(userId, author = false) {
             const result = await db.query(
-                `SELECT id,category,title,slug,description,status,version,updated_at FROM public.reading_tests WHERE ${author ? 'created_by=$1' : "status='published' OR (created_by=$1 AND status <> 'archived')"} ORDER BY updated_at DESC`,
+                `SELECT id,category,title,slug,description,status,version,updated_at,
+                    COALESCE((SELECT MAX(100.0 * a.correct_count / a.total_count)
+                        FROM public.reading_attempts a
+                        WHERE a.test_id=reading_tests.id AND a.user_id=$1 AND a.total_count>0), 0) AS best_score_percent
+                    FROM public.reading_tests WHERE ${author ? 'created_by=$1' : "status='published' OR (created_by=$1 AND status <> 'archived')"} ORDER BY updated_at DESC`,
                 [userId],
             );
             return result.rows;

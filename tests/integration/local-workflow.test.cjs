@@ -76,9 +76,17 @@ test('login-first, manual authoring, server grading, versioning and session revo
     const result = await submit.json();
     assert.equal(Number(result.score_percent), 100);
     assert.equal(result.total_count, count);
+    const library = async () =>
+        (await (await request('/api/tests')).json()).find((test) => test.id === row.id);
+    assert.equal(Number((await library()).best_score_percent), 100);
+    await request('/api/tests/' + author.slug + '/attempts', 'POST', {
+        version: detail.version,
+        responses: {},
+    });
+    assert.equal(Number((await library()).best_score_percent), 100);
     assert.equal(
         (await (await request('/api/tests/' + author.slug + '/attempts')).json()).length,
-        1,
+        2,
     );
     const invalid = { ...author, passages: [] };
     assert.equal(
@@ -160,7 +168,7 @@ test('login-first, manual authoring, server grading, versioning and session revo
     assert.equal((await request('/api/tests/' + author.slug)).status, 200);
     assert.equal(
         (await (await request('/api/tests/' + author.slug + '/attempts')).json()).length,
-        1,
+        2,
     );
     await request('/api/auth/logout', 'POST');
     assert.equal((await request('/api/auth/session')).status, 401);

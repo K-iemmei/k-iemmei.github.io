@@ -27,7 +27,10 @@ function render() {
             );
             const reference = parts ? parts[1].replace(/\s*[-\u2013\u2014]\s*/g, ' \u00b7 ') : '';
             const title = parts ? parts[2] : test.title;
-            return `<a class="test-card" href="english.html?test=${encodeURIComponent(test.slug)}" aria-label="Open ${h(test.title)}"><span class="test-meta">${h(test.category)}</span>${reference ? `<span class="test-reference">${h(reference)}</span>` : ''}<h2>${h(title)}</h2><span class="card-arrow" aria-hidden="true">&rarr;</span></a>`;
+            const score = Number(test.best_score_percent);
+            const progress = Number.isFinite(score) ? Math.max(0, Math.min(100, score)) : 0;
+            const complete = progress === 100;
+            return `<a class="test-card reading-library-card" href="english.html?test=${encodeURIComponent(test.slug)}" aria-label="Open ${h(test.title)}${complete ? ' (completed)' : ''}"><span class="test-meta">${h(test.category)}</span>${reference ? `<span class="test-reference">${h(reference)}</span>` : ''}<h2>${h(title)}</h2><span class="card-arrow" aria-hidden="true">${complete ? '<svg class="reading-complete" viewBox="0 0 16 16" fill="none"><path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '&rarr;'}</span><span class="reading-card-progress" role="progressbar" aria-label="Highest score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}" style="--reading-progress:${progress}%"><span></span></span></a>`;
         })
         .join('');
     document.getElementById('testCountPill').textContent = `${visible.length} tests`;

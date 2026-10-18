@@ -45,7 +45,28 @@ export async function readingApi(admin, user, path, method, body) {
                 .neq('status', 'archived')
                 .order('updated_at', { ascending: false }),
         );
-        return rows.filter((row) => row.status === 'published' || row.created_by === user.id);
+        const visible = rows.filter((row) => row.status === 'published' || row.created_by === user.id);
+        const best = new Map();
+        if (visible.length) {
+            // Only fetch score counts belonging to this user, never responses or answer keys.
+            for (let offset = 0; ; offset += 1000) {
+                const attempts = checked(
+                    await admin.from('reading_attempts')
+                        .select('id,test_id,correct_count,total_count')
+                        .eq('user_id', user.id)
+                        .in('test_id', visible.map((row) => row.id))
+                        .order('id')
+                        .range(offset, offset + 999),
+                );
+                for (const attempt of attempts) {
+                    const percent = attempt.total_count > 0
+                        ? 100 * attempt.correct_count / attempt.total_count : 0;
+                    best.set(attempt.test_id, Math.max(best.get(attempt.test_id) || 0, percent));
+                }
+                if (attempts.length < 1000) break;
+            }
+        }
+        return visible.map((row) => ({ ...row, best_score_percent: best.get(row.id) || 0 }));
     }
     if (!slug) return undefined;
     if (segments[2] === 'attempts') {
