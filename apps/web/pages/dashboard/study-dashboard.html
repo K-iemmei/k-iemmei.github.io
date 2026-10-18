@@ -157,65 +157,65 @@
 
             <!-- Main -->
             <main class="main">
-                <div class="content-wrapper">
-                    <div class="content">
-                        <section class="section learning-subjects">
-                            <div class="section-header section-header-compact">
-                                <div class="section-title-wrap section-title-block">
-                                    <h1>Learning</h1>
+                <div class="dashboard-layout">
+                    <section class="section learning-subjects">
+                        <div class="section-header section-header-compact">
+                            <div class="section-title-wrap section-title-block">
+                                <h1>Learning</h1>
+                            </div>
+                        </div>
+
+                        <div class="subject-grid pixel-subject-grid">
+                            <a
+                                class="subject-card pixel-quest-card subject-card--english"
+                                href="english-home.html"
+                                ><div class="subject-top">
+                                    <span
+                                        class="subject-icon pixel-subject-icon subject-icon--english"
+                                        >E</span
+                                    >
+                                </div>
+                                <div class="quest-info">
+                                    <h3>English</h3>
+                                    <p>Reading, listening and vocabulary</p>
+                                </div></a
+                            ><a
+                                class="subject-card pixel-quest-card subject-card--chinese"
+                                href="chinese.html"
+                                ><div class="subject-top">
+                                    <span
+                                        class="subject-icon pixel-subject-icon subject-icon--chinese"
+                                        >中</span
+                                    >
+                                </div>
+                                <div class="quest-info">
+                                    <h3>Chinese</h3>
+                                    <p>Daily reading practice</p>
+                                </div></a
+                            >
+                            <div
+                                class="subject-card pixel-quest-card subject-card--data-ai-ml"
+                                aria-disabled="true"
+                            >
+                                <div class="subject-top">
+                                    <span
+                                        class="subject-icon pixel-subject-icon subject-icon--data-ai-ml"
+                                        >AI</span
+                                    >
+                                </div>
+                                <div class="quest-info">
+                                    <h3>Data / AI / ML</h3>
+                                    <p>Concepts, notes and flashcards - Coming soon</p>
                                 </div>
                             </div>
+                        </div>
+                    </section>
 
-                            <div class="subject-grid pixel-subject-grid">
-                                <a
-                                    class="subject-card pixel-quest-card subject-card--english"
-                                    href="english-home.html"
-                                    ><div class="subject-top">
-                                        <span
-                                            class="subject-icon pixel-subject-icon subject-icon--english"
-                                            >E</span
-                                        >
-                                    </div>
-                                    <div class="quest-info">
-                                        <h3>English</h3>
-                                        <p>Reading, listening and vocabulary</p>
-                                    </div></a
-                                ><a
-                                    class="subject-card pixel-quest-card subject-card--chinese"
-                                    href="chinese.html"
-                                    ><div class="subject-top">
-                                        <span
-                                            class="subject-icon pixel-subject-icon subject-icon--chinese"
-                                            >中</span
-                                        >
-                                    </div>
-                                    <div class="quest-info">
-                                        <h3>Chinese</h3>
-                                        <p>Daily reading practice</p>
-                                    </div></a
-                                >
-                                <div
-                                    class="subject-card pixel-quest-card subject-card--data-ai-ml"
-                                    aria-disabled="true"
-                                >
-                                    <div class="subject-top">
-                                        <span
-                                            class="subject-icon pixel-subject-icon subject-icon--data-ai-ml"
-                                            >AI</span
-                                        >
-                                    </div>
-                                    <div class="quest-info">
-                                        <h3>Data / AI / ML</h3>
-                                        <p>Concepts, notes and flashcards - Coming soon</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section class="section activity-section">
+                    <div class="dashboard-lower">
+                        <section class="section activity-section" aria-labelledby="trackingHeading">
                             <div class="section-header activity-header activity-header-compact">
                                 <div class="section-title-wrap section-title-block">
-                                    <h2>Tracking log</h2>
+                                    <h2 id="trackingHeading">Tracking log</h2>
                                 </div>
 
                                 <label
@@ -246,7 +246,12 @@
                                 <p id="englishTrackingSummary" role="status">
                                     Loading English activity...
                                 </p>
-                                <div class="heatmap-wrapper">
+                                <div
+                                    class="heatmap-wrapper"
+                                    tabindex="0"
+                                    role="region"
+                                    aria-label="Yearly learning calendar, scroll horizontally to see all months"
+                                >
                                     <div id="heatmap-english" class="heatmap pixel-heatmap"></div>
                                 </div>
                                 <details class="english-log-details">
@@ -275,37 +280,55 @@
                                     </div>
                                 </div>
 
-                                <div class="heatmap-wrapper">
+                                <div
+                                    class="heatmap-wrapper"
+                                    tabindex="0"
+                                    role="region"
+                                    aria-label="Yearly learning calendar, scroll horizontally to see all months"
+                                >
                                     <div id="heatmap-chinese" class="heatmap pixel-heatmap"></div>
                                 </div>
                             </div>
                         </section>
-                    </div>
 
-                    <aside class="leaderboard-sidebar pixel-leaderboard-sidebar">
-                        <div class="leaderboard-header pixel-hall-header">
-                            <span class="pixel-crown">👑</span>
-                            <div class="hall-title-wrap">
-                                <h3>HALL OF FAME</h3>
+                        <aside
+                            class="leaderboard-sidebar pixel-leaderboard-sidebar dashboard-ranking"
+                            aria-labelledby="leaderboardHeading"
+                        >
+                            <div class="leaderboard-header pixel-hall-header">
+                                <span class="dashboard-rank-icon" aria-hidden="true"
+                                    ><svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.6"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path d="m3 7 4 4 5-7 5 7 4-4-2 13H5L3 7Z" /></svg
+                                ></span>
+                                <div class="hall-title-wrap">
+                                    <h2 id="leaderboardHeading">Hall of Fame</h2>
+                                </div>
                             </div>
-                        </div>
-                        <div class="leaderboard-controls">
-                            <input
-                                type="date"
-                                id="leaderboardDate"
-                                aria-label="Ranking date (UTC+7)"
-                            />
-                            <button type="button" id="leaderboardRefresh">Refresh</button>
-                        </div>
-                        <p id="leaderboardStatus" role="status">Loading daily ranking...</p>
-                        <div class="leaderboard-list" id="leaderboardList">
-                            <div class="leaderboard-item pixel-rank-item">
-                                <span class="leaderboard-rank first">1</span>
-                                <span class="leaderboard-name">Loading...</span>
-                                <span class="leaderboard-streak">--</span>
+                            <div class="leaderboard-controls">
+                                <input
+                                    type="date"
+                                    id="leaderboardDate"
+                                    aria-label="Ranking date (UTC+7)"
+                                />
+                                <button type="button" id="leaderboardRefresh">Refresh</button>
                             </div>
-                        </div>
-                    </aside>
+                            <p id="leaderboardStatus" role="status">Loading daily ranking...</p>
+                            <div class="leaderboard-list" id="leaderboardList">
+                                <div class="leaderboard-item pixel-rank-item">
+                                    <span class="leaderboard-rank first">1</span>
+                                    <span class="leaderboard-name">Loading...</span>
+                                    <span class="leaderboard-streak">--</span>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
                 </div>
             </main>
         </div>

@@ -34,8 +34,6 @@ export function generateHeatmap(elementId, seed, records = []) {
     const grid = document.createElement('div');
     grid.classList.add('heatmap-grid');
 
-    const cellSize = 10;
-    const gap = 3;
     const shouldShowProgress = Number(seed) > 0 || (Array.isArray(records) && records.length > 0);
     let random = seed;
 
@@ -79,7 +77,7 @@ export function generateHeatmap(elementId, seed, records = []) {
     });
 
     grid.style.setProperty('--cols', totalCols);
-    labelsRow.style.width = `${totalCols * (cellSize + gap) - gap}px`;
+    labelsRow.style.width = '100%';
 
     let currentColumn = 1;
 
@@ -87,8 +85,7 @@ export function generateHeatmap(elementId, seed, records = []) {
         const monthLabel = document.createElement('span');
         monthLabel.classList.add('month-label');
         monthLabel.textContent = month.name;
-        const monthWidth = month.weeksInMonth * (cellSize + gap);
-        monthLabel.style.left = `${(currentColumn - 1) * (cellSize + gap) + monthWidth / 2}px`;
+        monthLabel.style.left = `${((currentColumn - 1 + month.weeksInMonth / 2) / totalCols) * 100}%`;
         labelsRow.appendChild(monthLabel);
 
         for (let week = 0; week < month.weeksInMonth; week++) {
