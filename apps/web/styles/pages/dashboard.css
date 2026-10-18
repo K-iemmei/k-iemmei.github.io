@@ -1,17 +1,17 @@
-body[data-page='dashboard'] {
+body:is([data-page='dashboard'], [data-page='home']) {
     --sidebar-width: 244px;
     --dashboard-tint: color-mix(in srgb, var(--accent) 9%, var(--surface));
 }
-body[data-page='dashboard'] .main {
+body:is([data-page='dashboard'], [data-page='home']) .main {
     flex: 1;
     min-width: 0;
     width: calc(100% - var(--sidebar-width));
 }
-body[data-page='dashboard'] .content {
+body:is([data-page='dashboard'], [data-page='home']) .content {
     padding: 0;
 }
 
-body[data-page='dashboard'] .sidebar {
+body:is([data-page='dashboard'], [data-page='home']) .sidebar {
     padding: 30px 18px 20px;
     background: var(--surface);
     border-color: var(--border-light);
@@ -206,7 +206,7 @@ body[data-page='dashboard'] .sidebar {
     outline-offset: 3px;
 }
 
-body[data-page='dashboard'] .content-wrapper {
+body:is([data-page='dashboard'], [data-page='home']) .content-wrapper {
     padding: 40px 36px 48px;
     gap: 28px;
 }
@@ -219,17 +219,17 @@ body[data-page='dashboard'] .content-wrapper {
     letter-spacing: 1.7px;
     text-transform: uppercase;
 }
-body[data-page='dashboard'] .learning-subjects h1 {
+body:is([data-page='dashboard'], [data-page='home']) .learning-subjects h1 {
     margin: 0;
     font-size: 30px;
     line-height: 1.2;
     font-weight: 650;
     letter-spacing: -1.1px;
 }
-body[data-page='dashboard'] .learning-subjects > .section-header {
+body:is([data-page='dashboard'], [data-page='home']) .learning-subjects > .section-header {
     margin-bottom: 24px;
 }
-body[data-page='dashboard'] .pixel-quest-card {
+body:is([data-page='dashboard'], [data-page='home']) .pixel-quest-card {
     min-height: 150px;
     aspect-ratio: auto;
     padding: 22px;
@@ -239,23 +239,23 @@ body[data-page='dashboard'] .pixel-quest-card {
     color: var(--text);
     box-shadow: 0 3px 8px rgb(0 0 0 / 2%);
 }
-body[data-page='dashboard'] .pixel-quest-card:hover {
+body:is([data-page='dashboard'], [data-page='home']) .pixel-quest-card:hover {
     transform: translateY(-3px);
     border-color: var(--accent) !important;
     box-shadow: 0 8px 20px rgb(0 0 0 / 5%);
 }
-[data-theme='dark'] body[data-page='dashboard'] .pixel-quest-card {
+[data-theme='dark'] body:is([data-page='dashboard'], [data-page='home']) .pixel-quest-card {
     background: var(--surface);
 }
-body[data-page='dashboard'] .subject-card[aria-disabled='true'] {
+body:is([data-page='dashboard'], [data-page='home']) .subject-card[aria-disabled='true'] {
     opacity: 0.65;
 }
-body[data-page='dashboard'] .subject-card[aria-disabled='true']:hover {
+body:is([data-page='dashboard'], [data-page='home']) .subject-card[aria-disabled='true']:hover {
     transform: none;
     border-color: var(--border) !important;
     box-shadow: none;
 }
-body[data-page='dashboard'] .pixel-subject-icon {
+body:is([data-page='dashboard'], [data-page='home']) .pixel-subject-icon {
     width: 42px;
     height: 42px;
     border-radius: 12px;
@@ -264,88 +264,88 @@ body[data-page='dashboard'] .pixel-subject-icon {
     background: var(--dashboard-tint);
     color: var(--accent);
 }
-body[data-page='dashboard'] .subject-card--english .pixel-subject-icon {
+body:is([data-page='dashboard'], [data-page='home']) .subject-card--english .pixel-subject-icon {
     background: color-mix(in srgb, #5b8bd8 12%, var(--surface));
     color: #5b8bd8;
 }
-body[data-page='dashboard'] .subject-card--chinese .pixel-subject-icon {
+body:is([data-page='dashboard'], [data-page='home']) .subject-card--chinese .pixel-subject-icon {
     background: color-mix(in srgb, #cc7a6e 12%, var(--surface));
     color: #cc7a6e;
 }
-body[data-page='dashboard'] .subject-card--data-ai-ml .pixel-subject-icon {
+body:is([data-page='dashboard'], [data-page='home']) .subject-card--data-ai-ml .pixel-subject-icon {
     background: color-mix(in srgb, #9174ba 12%, var(--surface));
     color: #9174ba;
 }
-body[data-page='dashboard'] .pixel-quest-card h3 {
+body:is([data-page='dashboard'], [data-page='home']) .pixel-quest-card h3 {
     margin-top: 20px;
     font-size: 15px;
     letter-spacing: -0.3px;
 }
-body[data-page='dashboard'] .pixel-heatmap-card,
-body[data-page='dashboard'] .pixel-leaderboard-sidebar {
+body:is([data-page='dashboard'], [data-page='home']) .pixel-heatmap-card,
+body:is([data-page='dashboard'], [data-page='home']) .pixel-leaderboard-sidebar {
     border-radius: 14px;
     box-shadow: 0 3px 12px rgb(0 0 0 / 2%) !important;
 }
-body[data-page='dashboard'] .pixel-leaderboard-sidebar {
+body:is([data-page='dashboard'], [data-page='home']) .pixel-leaderboard-sidebar {
     padding: 22px 18px;
 }
-body[data-page='dashboard'] .hall-subtitle {
+body:is([data-page='dashboard'], [data-page='home']) .hall-subtitle {
     color: var(--text-muted);
 }
-body[data-page='dashboard'] .pixel-rank-item {
+body:is([data-page='dashboard'], [data-page='home']) .pixel-rank-item {
     background: var(--surface-hover) !important;
     border-color: var(--border-light) !important;
 }
-body[data-page='dashboard'] .pixel-rank-item:first-child {
+body:is([data-page='dashboard'], [data-page='home']) .pixel-rank-item:first-child {
     background: color-mix(in srgb, #d7b66c 9%, var(--surface)) !important;
 }
-body[data-page='dashboard'] .leaderboard-rank.first {
+body:is([data-page='dashboard'], [data-page='home']) .leaderboard-rank.first {
     color: #b79542;
 }
-body[data-page='dashboard'] .leaderboard-streak {
+body:is([data-page='dashboard'], [data-page='home']) .leaderboard-streak {
     color: var(--accent);
     white-space: nowrap;
 }
-body[data-page='dashboard'] .leaderboard-name {
+body:is([data-page='dashboard'], [data-page='home']) .leaderboard-name {
     min-width: 0;
     overflow-wrap: anywhere;
 }
-body[data-page='dashboard'] .heatmap-wrapper {
+body:is([data-page='dashboard'], [data-page='home']) .heatmap-wrapper {
     overflow-x: auto;
     padding-bottom: 8px;
     scrollbar-width: thin;
 }
-body[data-page='dashboard'] .heatmap {
+body:is([data-page='dashboard'], [data-page='home']) .heatmap {
     width: max-content;
     min-width: 100%;
 }
-body[data-page='dashboard'] .heatmap-grid {
+body:is([data-page='dashboard'], [data-page='home']) .heatmap-grid {
     width: max-content;
     grid-template-columns: repeat(var(--cols), 10px);
 }
 
 @media (max-width: 1100px) {
-    body[data-page='dashboard'] .content-wrapper {
+    body:is([data-page='dashboard'], [data-page='home']) .content-wrapper {
         flex-direction: column;
         padding: 32px 26px;
     }
-    body[data-page='dashboard'] .content {
+    body:is([data-page='dashboard'], [data-page='home']) .content {
         width: 100%;
         padding: 0;
     }
-    body[data-page='dashboard'] .pixel-leaderboard-sidebar {
+    body:is([data-page='dashboard'], [data-page='home']) .pixel-leaderboard-sidebar {
         width: 100%;
         margin: 0;
     }
 }
 @media (max-width: 760px) {
-    body[data-page='dashboard'] .app {
+    body:is([data-page='dashboard'], [data-page='home']) .app {
         flex-direction: column;
     }
-    body[data-page='dashboard'] {
+    body:is([data-page='dashboard'], [data-page='home']) {
         --sidebar-width: 0px;
     }
-    body[data-page='dashboard'] .sidebar {
+    body:is([data-page='dashboard'], [data-page='home']) .sidebar {
         display: flex;
         position: static;
         width: 100%;
@@ -392,19 +392,19 @@ body[data-page='dashboard'] .heatmap-grid {
     .sidebar-logout {
         justify-content: center;
     }
-    body[data-page='dashboard'] .content-wrapper {
+    body:is([data-page='dashboard'], [data-page='home']) .content-wrapper {
         padding: 28px 20px;
     }
-    body[data-page='dashboard'] .main {
+    body:is([data-page='dashboard'], [data-page='home']) .main {
         width: 100%;
         margin-left: 0;
     }
-    body[data-page='dashboard'] .learning-subjects h1 {
+    body:is([data-page='dashboard'], [data-page='home']) .learning-subjects h1 {
         font-size: 27px;
     }
 }
 @media (max-width: 560px) {
-    body[data-page='dashboard'] .pixel-quest-card {
+    body:is([data-page='dashboard'], [data-page='home']) .pixel-quest-card {
         min-height: 90px;
         display: flex;
         flex-direction: row;
@@ -413,10 +413,10 @@ body[data-page='dashboard'] .heatmap-grid {
         gap: 16px;
         padding: 20px;
     }
-    body[data-page='dashboard'] .pixel-quest-card h3 {
+    body:is([data-page='dashboard'], [data-page='home']) .pixel-quest-card h3 {
         margin: 0;
     }
-    body[data-page='dashboard'] .pixel-quest-card .subject-top {
+    body:is([data-page='dashboard'], [data-page='home']) .pixel-quest-card .subject-top {
         margin: 0;
     }
 }
@@ -424,7 +424,7 @@ body[data-page='dashboard'] .heatmap-grid {
     .sidebar-action,
     .theme-switch-track,
     .theme-switch-track > span,
-    body[data-page='dashboard'] .pixel-quest-card {
+    body:is([data-page='dashboard'], [data-page='home']) .pixel-quest-card {
         transition: none;
     }
 }

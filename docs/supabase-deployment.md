@@ -24,3 +24,7 @@ For a local static preview, set the public URL and anon key in the shell, run `n
 ## Current limits
 
 There is no automatic migration of local password hashes into Supabase Auth; create a hosted Auth account separately. The Edge Function and hosted project cannot be exercised end-to-end until the project schema, member, function and files are deployed. Browser APKG import reads the package locally and posts batches of cards; it imports word/meaning/example/tags, while media attachments remain outside the database, matching the existing local importer. If an upload is interrupted, the partially created deck remains and can be removed manually.
+
+## Home hub update
+
+For an existing project, apply `database/migrations/015-home-hub.sql` and `database/migrations/016-home-gateway-permissions.sql` in a transaction before redeploying `app-api` and Pages. It only adds Home tasks/preferences and their account-scoped RPC; it does not modify study data. A fresh schema export includes this migration automatically. Home fetches headline RSS through the authenticated API and weather directly from Open-Meteo. Neither source requires a private API key for this personal site.

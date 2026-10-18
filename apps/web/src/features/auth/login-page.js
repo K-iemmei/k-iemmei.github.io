@@ -30,7 +30,7 @@ loginForm.addEventListener('submit', async (event) => {
 
         saveSession(user);
 
-        window.location.href = 'dashboard.html';
+        window.location.href = 'home.html';
     } catch (error) {
         console.error('Login error:', error);
         loginMessage.textContent =

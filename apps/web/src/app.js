@@ -5,6 +5,7 @@ import { requireSession } from './core/session-storage.js';
 const pages = {
     login: () => import('./features/auth/login-page.js'),
     dashboard: () => import('./features/dashboard/dashboard-page.js'),
+    home: () => import('./features/home/home-page.js'),
     chinese: () => import('./features/chinese/chinese-practice-page.js'),
     reading: async () => (await import('./features/english/reading/reading-page.js')).initReading(),
     'reading-library': () => import('./features/english/reading-library-page.js'),

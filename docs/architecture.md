@@ -4,7 +4,7 @@ Express serves the HTML, assets and API on one local origin, default `http://loc
 
 ## Login and routing
 
-`apps/web/routes.json` preserves the existing page URLs. `/` and `/index.html` serve login; other HTML routes authenticate before sending page content. `apps/web/src/app.js` checks the server session before initializing a protected feature. Login redirects to `dashboard.html`.
+`apps/web/routes.json` preserves the existing page URLs. `/` and `/index.html` serve login; other HTML routes authenticate before sending page content. `apps/web/src/app.js` checks the server session before initializing a protected feature. Login redirects to `home.html`, the daily overview. `dashboard.html` remains the Learning page.
 
 Passwords are verified against salted scrypt hashes in `app_private.credentials`. A random session token travels in an HttpOnly, SameSite=Strict cookie; PostgreSQL stores only its SHA-256 digest with a seven-day expiry. Logout revokes that session. Browser storage contains display profile data only and grants no access. Cookies are HTTP-compatible for loopback development; hosted use requires a separate security/deployment configuration.
 
@@ -38,3 +38,9 @@ Options are JSONB arrays of `{id,text}`. Answer keys are JSONB `{answers,match,c
 Use kebab-case descriptive filenames. Keep page events in page modules, persistence in repositories and display transformation in adapters/renderers. Add a new numbered migration rather than changing a migration already applied. Archived crawler/Supabase prototypes are historical references, not active dependencies.
 
 Imported single-passage exercises can retain book numbering with `metadata.source_number`. Linked letter-answer slots use `answer_key.distinct_group`: each distinct accepted answer earns one point within that group, regardless of slot order. Practice never receives this key; the server grades it and returns the saved review after submission. Test descriptions are shown before practice so inferred-answer provenance is visible.
+
+## Daily Home
+
+Home loads account-scoped todos and city/news preferences through `/api/home` and the shared `app_home_api` database gateway. Task changes require their saved version, preventing stale tabs from overwriting edits. New tasks are pinned; completion and pin state persist across devices. Direct browser access to these tables and RPC is revoked on Supabase.
+
+The default weather location is Hà Nội; users can search for another city. Open-Meteo supplies current weather and a three-day forecast, with GeoNames search attribution. News uses allowlisted VnExpress RSS categories, displaying linked headlines and publication dates only. The API caches headlines for five minutes; a failed refresh can show a labelled cache up to 24 hours old. Todo writes, weather and news have separate error states.

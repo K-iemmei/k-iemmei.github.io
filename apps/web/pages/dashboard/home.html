@@ -21,8 +21,9 @@
         />
         <link rel="stylesheet" href="styles/style.css" />
         <link rel="stylesheet" href="styles/pages/dashboard.css" />
+        <link rel="stylesheet" href="styles/pages/home.css" />
     </head>
-    <body data-page="dashboard">
+    <body data-page="home">
         <div class="app pixel-theme">
             <aside class="sidebar" aria-label="Main navigation">
                 <a class="brand" href="home.html"
@@ -155,90 +156,96 @@
                 </div>
             </aside>
 
-            <main class="main">
-                <div class="content-wrapper home-layout">
-                    <div class="content home-content">
-                        <section class="home-hero">
-                            <div class="welcome-card home-welcome-card">
-                                <div class="welcome-header home-header">
-                                    <div class="welcome-text">
-                                        <span class="eyebrow welcome-date" id="currentDateDisplay"
-                                            >Today</span
-                                        >
-                                        <h1 id="greetingTitle">Welcome back</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section class="home-grid">
-                            <div class="home-panel">
-                                <div class="panel-topline">
-                                    <span class="eyebrow">Quick access</span>
-                                </div>
-                                <div class="quick-grid">
-                                    <a class="quick-card" href="dashboard.html">
-                                        <span class="quick-icon">◫</span>
-                                        <div>
-                                            <strong>Learning</strong>
-                                        </div>
-                                    </a>
-                                    <a class="quick-card" href="english-home.html">
-                                        <span class="quick-icon english">E</span>
-                                        <div>
-                                            <strong>English</strong>
-                                        </div>
-                                    </a>
-                                    <a class="quick-card" href="chinese.html">
-                                        <span class="quick-icon chinese">中</span>
-                                        <div>
-                                            <strong>Chinese</strong>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="home-panel">
-                                <div class="panel-topline">
-                                    <span class="eyebrow">Focus</span>
-                                </div>
-                                <div class="focus-card">
-                                    <div class="focus-badge">Today</div>
-                                    <h3>Study plan</h3>
-                                    <ul>
-                                        <li>Complete one reading task</li>
-                                        <li>Review key vocabulary</li>
-                                        <li>Track your progress</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </section>
+            <main class="main home-main">
+                <header class="home-heading">
+                    <div>
+                        <p id="homeDate"></p>
+                        <h1 id="homeGreeting">Today</h1>
                     </div>
-
-                    <aside class="leaderboard-sidebar pixel-leaderboard-sidebar">
-                        <div class="leaderboard-header pixel-hall-header">
-                            <span class="pixel-crown">👑</span>
-                            <div class="hall-title-wrap">
-                                <h3>HALL OF FAME</h3>
+                    <nav class="home-shortcuts" aria-label="Quick access">
+                        <a href="dashboard.html">Learning &rarr;</a
+                        ><a href="notes.html">Notes &rarr;</a>
+                    </nav>
+                </header>
+                <div class="daily-grid">
+                    <section class="daily-panel weather-panel" aria-labelledby="weatherHeading">
+                        <div class="daily-panel-heading">
+                            <h2 id="weatherHeading">Weather</h2>
+                            <button id="weatherRefresh" type="button" aria-label="Refresh weather">
+                                ↻
+                            </button>
+                        </div>
+                        <form id="citySearchForm" class="inline-form">
+                            <label class="home-sr-only" for="citySearch">City</label
+                            ><input
+                                id="citySearch"
+                                type="search"
+                                placeholder="Search a city…"
+                                maxlength="100"
+                                required
+                                minlength="2"
+                                autocomplete="off"
+                            /><button type="submit">Search</button>
+                        </form>
+                        <div id="cityResults"></div>
+                        <div id="weatherContent" aria-live="polite">
+                            <p class="home-muted">Choose a city to see its weather.</p>
+                        </div>
+                        <p id="weatherMessage" class="home-message" role="status"></p>
+                        <a
+                            class="home-source"
+                            href="https://open-meteo.com/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Open-Meteo · GeoNames</a
+                        >
+                    </section>
+                    <section class="daily-panel todo-panel" aria-labelledby="todoHeading">
+                        <div class="daily-panel-heading">
+                            <h2 id="todoHeading">To-do</h2>
+                            <span id="todoCount" class="home-muted"></span>
+                        </div>
+                        <form id="todoForm" class="inline-form">
+                            <label class="home-sr-only" for="todoInput">New task</label
+                            ><input
+                                id="todoInput"
+                                maxlength="300"
+                                placeholder="Add a task…"
+                                required
+                            /><button type="submit">Add</button>
+                        </form>
+                        <div class="todo-toolbar">
+                            <label><input id="pinnedOnly" type="checkbox" /> Pinned only</label
+                            ><button id="todoRefresh" type="button">Refresh</button>
+                        </div>
+                        <p id="todoMessage" class="home-message" role="status">Loading tasks…</p>
+                        <ul id="todoList" class="todo-list" aria-label="Your tasks"></ul>
+                    </section>
+                    <section class="daily-panel news-panel" aria-labelledby="newsHeading">
+                        <div class="daily-panel-heading">
+                            <h2 id="newsHeading">News</h2>
+                            <div class="news-controls">
+                                <label class="home-sr-only" for="newsCategory">News category</label
+                                ><select id="newsCategory">
+                                    <option value="latest">Latest</option>
+                                    <option value="world">World</option>
+                                    <option value="business">Business</option>
+                                    <option value="technology">Technology</option></select
+                                ><button id="newsRefresh" type="button" aria-label="Refresh news">
+                                    ↻
+                                </button>
                             </div>
                         </div>
-                        <div class="leaderboard-controls">
-                            <input
-                                type="date"
-                                id="leaderboardDate"
-                                aria-label="Ranking date (UTC+7)"
-                            />
-                            <button type="button" id="leaderboardRefresh">Refresh</button>
-                        </div>
-                        <p id="leaderboardStatus" role="status">Loading daily ranking...</p>
-                        <div class="leaderboard-list" id="leaderboardList">
-                            <div class="leaderboard-item pixel-rank-item">
-                                <span class="leaderboard-rank first">1</span>
-                                <span class="leaderboard-name">Loading...</span>
-                                <span class="leaderboard-streak">--</span>
-                            </div>
-                        </div>
-                    </aside>
+                        <p id="newsMessage" class="home-message" role="status">Loading news…</p>
+                        <div id="newsList" class="news-list"></div>
+                        <a
+                            class="home-source"
+                            href="https://vnexpress.net/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >VnExpress</a
+                        >
+                    </section>
                 </div>
             </main>
         </div>

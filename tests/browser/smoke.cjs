@@ -59,7 +59,8 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
             page.click('#loginForm button[type="submit"]'),
         ]);
         console.log('Browser: logged in');
-        assert.match(page.url(), /dashboard.html/);
+        assert.match(page.url(), /home.html/);
+        await page.goto(base + '/dashboard.html', { waitUntil: 'networkidle0' });
         await page.setViewport({ width: 1440, height: 1000 });
         await page.waitForSelector('#sidebarUserName');
         fs.mkdirSync('.local/dashboard-preview', { recursive: true });

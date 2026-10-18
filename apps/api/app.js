@@ -6,6 +6,7 @@ const { createVocabularyRouter } = require('./modules/vocabulary/vocabulary-rout
 const { createListeningRouter } = require('./modules/listening/listening-routes');
 const { createTrackingRouter } = require('./modules/tracking/tracking-routes');
 const { createPublishingRouter } = require('./modules/publishing/publishing-routes');
+const { createHomeRouter } = require('./modules/home/home-routes');
 const { registerAuth, requireAuthentication } = require('./modules/auth/local-auth');
 function createApp({ database } = {}) {
     const app = express();
@@ -36,6 +37,7 @@ function createApp({ database } = {}) {
     app.use('/api/vocabulary', requireAuthentication(db), createVocabularyRouter(db));
     app.use('/api/listening', requireAuthentication(db), createListeningRouter(db));
     app.use('/api/tracking', requireAuthentication(db), createTrackingRouter(db));
+    app.use('/api/home', requireAuthentication(db), createHomeRouter(db));
     app.use(['/api/notes', '/api/blog'], requireAuthentication(db), createPublishingRouter(db));
     app.get('/health', (req, res) => res.json({ ok: true }));
     app.post('/api/admin/sql', async (req, res, next) => {

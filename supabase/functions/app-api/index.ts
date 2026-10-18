@@ -4,6 +4,7 @@ import { vocabularyApi } from './vocabulary.ts';
 import { listeningApi } from './listening.ts';
 import { trackingApi } from './tracking.ts';
 import { publishingApi } from './publishing.ts';
+import { homeApi } from './home.ts';
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
 const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
@@ -141,7 +142,9 @@ Deno.serve(async (req) => {
                 ? await req.json()
                 : null;
         let result;
-        if (/^\/api\/(notes|blog)(\/|$)/.test(path))
+        if (/^\/api\/home(\/|$)/.test(path))
+            result = await homeApi(admin, user, path, req.method, body, url);
+        else if (/^\/api\/(notes|blog)(\/|$)/.test(path))
             result = await publishingApi(admin, user, path, req.method, body, url);
         else if (path.startsWith('/api/tracking/'))
             result = await trackingApi(admin, user, path, req.method, body, url);
