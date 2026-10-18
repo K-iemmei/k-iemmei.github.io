@@ -337,15 +337,15 @@ body[data-page='home'] .app {
 }
 /* Keep the checklist prominent; compose new tasks underneath it. */
 .todo-panel {
-    border-top: 4px solid var(--accent);
-    background: linear-gradient(160deg, var(--surface), var(--accent-soft));
+    border-top: 3px solid var(--accent);
+    background: var(--surface);
     min-height: 360px;
     display: flex;
     flex-direction: column;
 }
 .todo-panel .daily-panel-heading h2 {
-    font-family: var(--font-reading);
-    font-size: 26px;
+    font-family: var(--font-sans);
+    font-size: 20px;
 }
 .todo-list {
     flex: 1;
@@ -372,7 +372,7 @@ body[data-page='home'] .app {
     border-top: 1px solid var(--border);
 }
 .weather-panel {
-    border-top: 4px solid var(--warm);
+    border-top: 3px solid var(--accent);
 }
 .weather-days {
     gap: 8px;
@@ -380,11 +380,11 @@ body[data-page='home'] .app {
 }
 .weather-days > div {
     padding: 16px 10px;
-    background: var(--warm-soft);
+    background: var(--surface-hover);
     gap: 12px;
 }
 .weather-days time {
-    color: var(--warm);
+    color: var(--accent);
     font-weight: 600;
     line-height: 1.6;
 }
@@ -408,19 +408,20 @@ body[data-page='home'] .app {
 .news-summary {
     margin: 10px 0 0;
     color: var(--text-secondary);
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.8;
 }
 .news-item > a {
-    font-family: var(--font-reading);
-    font-size: 20px;
-    line-height: 1.45;
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
 }
 .news-panel {
-    border-top: 4px solid var(--warm);
+    border-top: 3px solid var(--accent);
 }
 .news-panel h2 {
-    color: var(--warm);
+    color: var(--accent);
 }
 .news-item {
     padding: 20px 0;
@@ -435,4 +436,13 @@ body[data-page='home'] .app {
     .todo-main {
         gap: 8px;
     }
+}
+
+.daily-panel-heading h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+}
+.todo-panel .daily-panel-heading h2 {
+    font-weight: 600;
 }

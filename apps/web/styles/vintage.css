@@ -16,32 +16,21 @@ html:root body[data-page] .category-icon {
     background: var(--accent-fill);
     color: var(--accent-text);
 }
+/* Sibling cards share one surface and one icon treatment. */
 html:root body[data-page] .subject-card--english,
-html:root body[data-page] .english-card {
-    background: var(--accent-soft);
-    border-color: var(--border);
-}
 html:root body[data-page] .subject-card--chinese,
+html:root body[data-page] .subject-card--data-ai-ml,
+html:root body[data-page] .english-card,
 html:root body[data-page] .chinese-card {
-    background: var(--warm-soft);
-    border-color: var(--border);
-}
-html:root body[data-page] .subject-card--data-ai-ml {
-    background: var(--surface-hover);
-    border-color: var(--border);
-}
-html:root body[data-page] .subject-icon--english {
     background: var(--surface);
-    color: var(--accent);
+    border-color: var(--border);
 }
+html:root body[data-page] .subject-icon--english,
 html:root body[data-page] .subject-icon--chinese,
-html:root body[data-page] .chinese-card .pixel-subject-icon {
-    background: var(--surface);
-    color: var(--warm);
-}
-html:root body[data-page] .subject-icon--data-ai-ml {
-    background: var(--surface);
-    color: var(--text-secondary);
+html:root body[data-page] .subject-icon--data-ai-ml,
+html:root body[data-page] .pixel-subject-icon {
+    background: var(--accent-soft);
+    color: var(--accent);
 }
 html:root body[data-page] .home-welcome-card,
 html:root body[data-page] .welcome-header {
@@ -53,10 +42,6 @@ html:root body[data-page] .pixel-avatar-btn {
     background: var(--surface);
     color: var(--text);
 }
-html:root body[data-page] .english-home .category-card:nth-child(2n) .category-icon {
-    background: var(--warm-soft);
-    color: var(--warm);
-}
 html:root body[data-page] .english-home .category-card {
     box-shadow: none;
 }
@@ -66,9 +51,9 @@ html:root body[data-page] .hero {
 html:root body[data-page] .hero h1,
 html:root body[data-page] .home-heading h1,
 html:root body[data-page] .page-heading h1 {
-    font-family: var(--font-reading);
-    font-weight: 500;
-    letter-spacing: -0.025em;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: 0;
 }
 html:root body[data-page] .test-card:hover {
     border-color: var(--accent);
@@ -82,9 +67,6 @@ html:root body[data-page] .pixel-rank-item {
     background: var(--surface-hover) !important;
     border-color: var(--border) !important;
 }
-html:root body[data-page] .pixel-rank-item:first-child {
-    background: var(--warm-soft) !important;
-}
 html:root body[data-page] .sidebar .brand,
 html:root body[data-page] .nav-item,
 html:root body[data-page] .sidebar-action {
@@ -96,4 +78,22 @@ html:root body[data-page] .sidebar .nav-item.active {
 }
 html:root body[data-page] .brand {
     color: var(--text);
+}
+
+/* Use the same readable system sans across UI and long-form text. */
+html:root body[data-page] {
+    font-family: var(--font-sans);
+    letter-spacing: 0;
+    line-height: 1.65;
+}
+html:root body[data-page] :is(button, input, select, textarea) {
+    font-family: var(--font-sans);
+}
+html:root body[data-page] :is(h1, h2, h3) {
+    font-family: var(--font-sans);
+    letter-spacing: 0;
+}
+html:root body[data-page] .english-home .category-icon {
+    background: var(--accent-soft);
+    color: var(--accent);
 }

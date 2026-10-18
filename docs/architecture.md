@@ -46,3 +46,5 @@ Home loads account-scoped todos and city/news preferences through `/api/home` an
 The default weather location is Hà Nội; users can search for another city. Open-Meteo supplies a forecast for the next three days, starting tomorrow, with GeoNames search attribution. News uses allowlisted VnExpress RSS categories, displaying four linked headlines with short RSS summaries and publication dates. The API caches headlines for five minutes; a failed refresh can show a labelled cache up to 24 hours old. Todo writes, weather and news have separate error states.
 
 The shared UI uses parchment, sage and terracotta through `tokens.css` and `vintage.css`, with matching dark-mode tones. Home keeps task items above the add form so the checklist remains the focal point.
+
+Peer cards share a common surface, border and heading treatment; colour identifies interaction/state rather than subject. Typography uses a local system sans stack (Segoe UI on Windows) for both UI and reading, without external font downloads.

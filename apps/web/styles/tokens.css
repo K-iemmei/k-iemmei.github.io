@@ -27,8 +27,8 @@
     --warm: #a45f45;
     --warm-soft: #eee0d3;
     --sidebar-width: 230px;
-    --font-sans: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-reading: 'Literata', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    --font-reading: var(--font-sans);
     --font-pixel: var(--font-sans);
 }
 
