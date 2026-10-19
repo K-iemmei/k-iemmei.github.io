@@ -43,7 +43,31 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
         const base = live ? 'http://localhost:8000' : 'http://127.0.0.1:' + server.address().port;
         await page.setRequestInterception(true);
         page.on('request', (request) => {
-            if (!request.url().startsWith(base)) return request.respond({ status: 200, body: '' });
+            if (request.url().startsWith('https://api.open-meteo.com/')) {
+                return request.respond({
+                    status: 200,
+                    contentType: 'application/json',
+                    headers: { 'Access-Control-Allow-Origin': '*' },
+                    body: JSON.stringify({
+                        daily: {
+                            time: Array.from({ length: 4 }, (_, i) =>
+                                new Date(Date.now() + i * 86400000).toISOString().slice(0, 10),
+                            ),
+                            weather_code: [1, 2, 3, 1],
+                            temperature_2m_min: [22, 23, 22, 21],
+                            temperature_2m_max: [28, 29, 28, 27],
+                            precipitation_probability_max: [10, 20, 30, 10],
+                        },
+                    }),
+                });
+            }
+            if (!request.url().startsWith(base)) {
+                return request.respond({
+                    status: 200,
+                    headers: { 'Access-Control-Allow-Origin': '*' },
+                    body: '',
+                });
+            }
             if (request.url().endsWith('favicon.ico')) return request.respond({ status: 204 });
             request.continue();
         });
@@ -170,7 +194,7 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
             page.waitForNavigation({ waitUntil: 'networkidle0' }),
             page.click('a[href="admin.html"]'),
         ]);
-        await page.waitForSelector('[data-path="passages.0.content"]');
+        await page.waitForSelector('[data-rich-path="passages.0.content_html"]');
         const model = manualReading(
             live ? 'manual-reading-learning-feedback' : 'browser-manual-reading',
         );
@@ -179,9 +203,10 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
         ).questions[0].prompt = 'Useful ___ identifies mistakes.';
         async function fill(path, value) {
             await page.$eval(
-                `[data-path="${path}"]`,
+                `[data-path="${path}"], [data-plain-path="${path}"]`,
                 (element, value) => {
-                    element.value = value;
+                    if (element.hasAttribute('data-rich-path')) element.textContent = value;
+                    else element.value = value;
                     element.dispatchEvent(new Event('input', { bubbles: true }));
                     element.dispatchEvent(new Event('change', { bubbles: true }));
                 },
@@ -394,8 +419,10 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
                 .textContent.includes('Reading submissions'),
         );
         if (!live) {
-            await page.waitForFunction(() =>
-                document.getElementById('leaderboardStatus').textContent.includes('users'),
+            await page.waitForFunction(
+                () =>
+                    !document.getElementById('leaderboardList').hasAttribute('aria-busy') &&
+                    document.querySelector('#leaderboardList .leaderboard-self'),
             );
             assert.ok(await page.$('#leaderboardList .leaderboard-self'));
             assert.match(await page.$eval('#leaderboardList', (el) => el.textContent), /pts/);
@@ -420,9 +447,15 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
             'PASS: login-first, manual authoring 2 passages / 11 groups / 12 questions (10 types), real DB save/reload, practice 100%, review and logout.',
         );
     } finally {
-        if (browser) await browser.close();
-        await new Promise((resolve) => server.close(resolve));
-        await fixture.cleanup();
+        try {
+            if (browser) await browser.close();
+        } catch (error) {
+            // Chrome on Windows can briefly lock its temporary profile during cleanup.
+            if (error.code !== 'EBUSY') throw error;
+        } finally {
+            await new Promise((resolve) => server.close(resolve));
+            await fixture.cleanup();
+        }
     }
 })().catch((error) => {
     console.error(error);

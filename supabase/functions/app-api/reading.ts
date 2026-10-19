@@ -1,5 +1,6 @@
 import { gradeTest } from './grade.ts';
 import { questionTypes } from './question-types.ts';
+import { sanitizeReadingHtml, readingHtmlText } from '../../../apps/web/src/domain/reading-html.js';
 
 function checked(result) {
     if (result.error) throw new Error(result.error.message);
@@ -221,7 +222,15 @@ function validate(test) {
     if (!Array.isArray(test.passages) || !test.passages.length || test.passages.length > 20)
         throw new Error('Add 1 to 20 passages');
     let count = 0;
+    const richContent = (value, max = 20000) => {
+        if (value === undefined) return '';
+        if (typeof value !== 'string' || value.length > max || /<\/?(?:script|style|iframe|object|embed|form|input|svg|math)\b/i.test(value))
+            throw new Error('Unsafe formatted content');
+        return sanitizeReadingHtml(value);
+    };
     for (const passage of test.passages) {
+        passage.content_html = richContent(passage.content_html, 120000);
+        if (passage.content_html) passage.content = readingHtmlText(passage.content_html);
         if (
             !passage.content?.trim() ||
             passage.content.length > 100000 ||
@@ -230,17 +239,16 @@ function validate(test) {
             passage.groups.length > 40
         )
             throw new Error('Passage needs content and question groups');
-        const rich = passage.content_html || '';
-        if (rich.length > 120000 || rich.replace(/<[^>]*>/g, '').includes('<'))
-            throw new Error('Unsafe passage HTML');
-        for (const tag of rich.match(/<[^>]*>/g) || [])
-            if (
-                !/^<\/?(?:p|div|span|h2|h3|h4|strong|b|em|i|br|ul|ol|li|blockquote)(?:\s+class=(['"])[a-z0-9 _-]+\1)?\s*\/?>$/i.test(
-                    tag,
-                )
-            )
-                throw new Error('Unsafe passage HTML');
         for (const group of passage.groups) {
+            group.metadata ||= {};
+            for (const [field, plain] of [['summary_html','summary'],['instructions_html','instructions']]) {
+                if (group.metadata[field] === undefined) continue;
+                group.metadata[field] = richContent(group.metadata[field]);
+                if (group.metadata[field]) {
+                    if (plain === 'summary') group.metadata.summary = readingHtmlText(group.metadata[field]);
+                    else group.instructions = readingHtmlText(group.metadata[field]);
+                }
+            }
             if (
                 !questionTypes.some((type) => type.id === group.group_type) ||
                 !Array.isArray(group.questions) ||
@@ -249,6 +257,11 @@ function validate(test) {
             )
                 throw new Error('Invalid question group');
             for (const question of group.questions) {
+                question.metadata ||= {};
+                if (question.metadata.prompt_html !== undefined) {
+                    question.metadata.prompt_html = richContent(question.metadata.prompt_html);
+                    if (question.metadata.prompt_html) question.prompt = readingHtmlText(question.metadata.prompt_html);
+                }
                 if (
                     ++count > 400 ||
                     !question.prompt?.trim() ||

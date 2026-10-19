@@ -1,6 +1,7 @@
+import { readingMarkup, legacyTableMarkup } from '../../../domain/reading-html.js';
+import { renderRichCompletion } from './reading-rich-completion.js';
 import { utils } from './reading-formatters.js';
 import { state } from './reading-state.js';
-import { renderCompletion } from './reading-completion.js';
 import { deployment } from '../../../core/deployment-config.js';
 const h = utils.escapeHtml;
 function sourceUrl(image, slug) {
@@ -25,23 +26,35 @@ export const renderer = {
     renderQuestion(question) {
         const type = state.types.find((t) => t.id === question.question_type);
         if (type?.kind === 'text') {
-            const completion = renderCompletion(question.prompt, [question], (q) =>
-                renderer.renderInputMarkup(q, true),
+            const completion = renderRichCompletion(
+                readingMarkup(question.metadata.prompt_html, question.prompt),
+                [question],
+                (q) => renderer.renderInputMarkup(q, true),
             );
             if (completion.used.size)
-                return `<p class="sentence-completion">${completion.html}</p>`;
+                return `<div class="sentence-completion reading-rich-content">${completion.html}</div>`;
         }
-        return `<fieldset class="question-row" data-question-id="${h(question.id)}"><legend><span class="question-number">${question.number}</span> ${h(question.metadata.label || '')} ${h(question.prompt)}</legend><div class="answer-row">${renderer.renderInputMarkup(question)}</div></fieldset>`;
+        return `<fieldset class="question-row" data-question-id="${h(question.id)}"><legend><span class="question-number">${question.number}</span> ${h(question.metadata.label || '')} </legend><div class="question-prompt reading-rich-content">${readingMarkup(question.metadata.prompt_html, question.prompt)}</div><div class="answer-row">${renderer.renderInputMarkup(question)}</div></fieldset>`;
     },
     renderQuestionList(groups) {
         document.getElementById('questionList').innerHTML =
             groups
                 .map((group) => {
-                    const completion = group.metadata.summary
-                        ? renderCompletion(group.metadata.summary, group.questions, (q) =>
-                              renderer.renderInputMarkup(q, true),
-                          )
-                        : null;
+                    const completion =
+                        group.metadata.summary_html || group.metadata.summary
+                            ? renderRichCompletion(
+                                  readingMarkup(
+                                      group.metadata.summary_html ||
+                                          legacyTableMarkup(
+                                              group.metadata.summary,
+                                              group.instructions,
+                                          ),
+                                      group.metadata.summary,
+                                  ),
+                                  group.questions,
+                                  (q) => renderer.renderInputMarkup(q, true),
+                              )
+                            : null;
                     const remaining = group.questions.filter((q) => !completion?.used.has(q.id));
                     const range = group.questions.length
                         ? `${group.questions[0].number}&ndash;${group.questions.at(-1).number}`
@@ -50,7 +63,7 @@ export const renderer = {
                         group.title ||
                         state.types.find((t) => t.id === group.group_type)?.label ||
                         'Questions';
-                    return `<section class="question-group" data-type="${h(group.group_type)}"><div class="group-heading"><h3>${h(title)}</h3><span class="group-range">${range}</span></div><p class="group-instructions">${h(group.instructions)}</p>
+                    return `<section class="question-group" data-type="${h(group.group_type)}"><div class="group-heading"><h3>${h(title)}</h3><span class="group-range">${range}</span></div><div class="group-instructions reading-rich-content">${readingMarkup(group.metadata.instructions_html, group.instructions)}</div>
             ${group.options.length ? `<ul class="heading-options">${group.options.map((option) => `<li><b>${h(option.id)}</b> ${h(option.text)}</li>`).join('')}</ul>` : ''}
             ${group.metadata.paragraphs ? `<div class="group-text">${h(group.metadata.paragraphs)}</div>` : ''}
             ${(group.metadata.figures || [])
@@ -62,7 +75,7 @@ export const renderer = {
                         : `<p class="source-page-hint">Figure ${h(figure.label)} is not uploaded to Reading storage yet.</p>`;
                 })
                 .join('')}
-            ${completion ? `<div class="completion-text">${completion.html}</div>` : ''}
+            ${completion ? `<div class="completion-text reading-rich-content">${completion.html}</div>` : ''}
             ${remaining.map((question) => renderer.renderQuestion(question)).join('')}</section>`;
                 })
                 .join('') || '<p class="empty-reading">No questions available.</p>';
@@ -87,7 +100,7 @@ export const renderer = {
             .map((p) => {
                 const pages = p.groups?.flatMap((g) => g.metadata.source_pages || []) || [];
                 const slug = state.tests[state.currentIndex]?.slug;
-                const content = pages.length
+                const sourcePages = pages.length
                     ? `<p class="source-page-hint">Original passage and questions. Click a page to enlarge it; enter answers in the right pane.</p>${pages
                           .map((page) => {
                               const url = sourceUrl(page, slug);
@@ -96,7 +109,11 @@ export const renderer = {
                                   : `<p class="source-page-hint">Source page ${h(page.label)} is not uploaded to Reading storage yet.</p>`;
                           })
                           .join('')}`
-                    : `<div class="passage-text">${p.content_html || h(p.content).replace(/\\n/g, '<br>')}</div>`;
+                    : '';
+                const content =
+                    p.content_html || !pages.length
+                        ? `<div class="passage-text reading-rich-content">${readingMarkup(p.content_html, p.content)}</div>${pages.length ? `<details class="reading-original-pages"><summary>Original pages</summary>${sourcePages}</details>` : ''}`
+                        : sourcePages;
                 return `<section>${passages.length > 1 ? `<h3>${h(p.title || 'Passage ' + p.passage_order)}</h3>` : ''}${content}</section>`;
             })
             .join('');

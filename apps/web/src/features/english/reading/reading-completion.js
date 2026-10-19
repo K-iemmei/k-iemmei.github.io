@@ -1,8 +1,7 @@
 import { escapeHtml as h } from '../../../shared/escape-html.js';
 
 // Parse plain text, never authored HTML. Every question gets at most one input.
-export function renderCompletion(text, questions, renderControl) {
-    const used = new Set();
+export function renderCompletion(text, questions, renderControl, used = new Set()) {
     const marker =
         /\((\d+)\)\s*(?:_{2,}|\.{3,}|\u2026+)|\[(\d+)\]\s*(?:_{2,}|\.{3,}|\u2026+)|\{\{(\d+)\}\}|_{3,}/g;
     const safeText = (value) => h(value).replace(/\n/g, '<br>');

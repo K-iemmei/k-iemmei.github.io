@@ -26,7 +26,8 @@
         "db:export-listening": "node tools/database/export-listening-content.cjs",
         "db:upload-listening-audio": "node tools/database/upload-listening-audio.cjs",
         "format": "prettier --write \"apps/**/*.{js,json,html,css}\" \"tools/**/*.{js,cjs,mjs}\" \"tests/**/*.cjs\" \"docs/**/*.md\" \"README.md\" \"package.json\" \".github/workflows/*.yml\"",
-        "format:check": "prettier --check \"apps/**/*.{js,json,html,css}\" \"tools/**/*.{js,cjs,mjs}\" \"tests/**/*.cjs\" \"docs/**/*.md\" \"README.md\" \"package.json\" \".github/workflows/*.yml\""
+        "format:check": "prettier --check \"apps/**/*.{js,json,html,css}\" \"tools/**/*.{js,cjs,mjs}\" \"tests/**/*.cjs\" \"docs/**/*.md\" \"README.md\" \"package.json\" \".github/workflows/*.yml\"",
+        "test:browser:reading": "node tests/browser/reading-rich.cjs"
     },
     "dependencies": {
         "adm-zip": "^0.6.1",

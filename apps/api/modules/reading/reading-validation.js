@@ -1,4 +1,5 @@
 const { typeMap } = require('./question-types');
+const { sanitizeReadingHtml, readingHtmlText } = require('../../../web/src/domain/reading-html.js');
 const invalid = (message) => {
     throw Object.assign(new Error(message), { status: 400 });
 };
@@ -17,12 +18,12 @@ function text(value, label, max = 10000, required = false) {
         invalid(label + ' is required and must be at most ' + max + ' characters');
     return result;
 }
-function richContent(value, label) {
-    const html = text(value, label, 120000);
+function richContent(value, label, max = 120000) {
+    const html = text(value, label, max);
     if (!html) return '';
     if (/<\/?(script|style|iframe|object|embed|form|input|svg|math)\b/i.test(html))
         invalid(label + ' contains an unsafe HTML element');
-    return html.replace(/\son[a-z]+\s*=\s*(['"]).*?\1/gi, '').replace(/javascript\s*:/gi, '');
+    return sanitizeReadingHtml(html);
 }
 function options(value, label) {
     if (!Array.isArray(value) || value.length > 100)
@@ -62,10 +63,16 @@ function validateTest(input) {
             passage.groups.length > 40
         )
             invalid(label + ' needs 1 to 40 groups');
+        const contentHtml = richContent(passage.content_html, label + ' formatted content');
         return {
             title: text(passage.title, label + ' title', 200),
-            content: text(passage.content, label + ' content', 100000, true),
-            content_html: richContent(passage.content_html, label + ' formatted content'),
+            content: text(
+                contentHtml ? readingHtmlText(contentHtml) : passage.content,
+                label + ' content',
+                100000,
+                true,
+            ),
+            content_html: contentHtml,
             groups: passage.groups.map((group, gi) => {
                 const prefix = label + ', group ' + (gi + 1);
                 object(group, prefix);
@@ -77,6 +84,15 @@ function validateTest(input) {
                     summary: text(meta.summary, prefix + ' summary', 20000),
                     paragraphs: text(meta.paragraphs, prefix + ' paragraph labels', 20000),
                 };
+                for (const field of ['summary_html', 'instructions_html'])
+                    if (meta[field] !== undefined)
+                        metadata[field] = richContent(
+                            meta[field],
+                            prefix + ' formatted content',
+                            20000,
+                        );
+                if (metadata.summary_html)
+                    metadata.summary = readingHtmlText(metadata.summary_html);
                 if (meta.source_pages !== undefined) {
                     if (!Array.isArray(meta.source_pages) || meta.source_pages.length > 20)
                         invalid(prefix + ': at most 20 source pages');
@@ -189,9 +205,19 @@ function validateTest(input) {
                             sourceNumber > 10000)
                     )
                         invalid(qlabel + ': invalid source question number');
+                    const promptHtml = richContent(
+                        question.metadata?.prompt_html,
+                        qlabel + ' formatted prompt',
+                        20000,
+                    );
                     return {
                         question_type: qtype.id,
-                        prompt: text(question.prompt, qlabel + ' prompt', 10000, true),
+                        prompt: text(
+                            promptHtml ? readingHtmlText(promptHtml) : question.prompt,
+                            qlabel + ' prompt',
+                            10000,
+                            true,
+                        ),
                         options: ownOptions,
                         answer_key: {
                             answers,
@@ -201,6 +227,7 @@ function validateTest(input) {
                             ...(normalizedAliases.length ? { aliases: normalizedAliases } : {}),
                         },
                         metadata: {
+                            ...(promptHtml ? { prompt_html: promptHtml } : {}),
                             ...(sourceNumber === undefined ? {} : { source_number: sourceNumber }),
                             label: text(question.metadata?.label, qlabel + ' label', 100),
                             explanation: text(
@@ -251,7 +278,13 @@ function validateTest(input) {
                 return {
                     group_type: type.id,
                     title: text(group.title, prefix + ' title', 200),
-                    instructions: text(group.instructions, prefix + ' instructions', 4000),
+                    instructions: text(
+                        metadata.instructions_html
+                            ? readingHtmlText(metadata.instructions_html)
+                            : group.instructions,
+                        prefix + ' instructions',
+                        4000,
+                    ),
                     options: groupOptions,
                     metadata,
                     questions,
