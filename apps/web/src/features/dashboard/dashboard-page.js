@@ -5,6 +5,7 @@ import { clearSession } from '../../core/session-storage.js';
 import { escapeHtml } from '../../shared/escape-html.js';
 import { database } from '../../core/database-client.js';
 import { englishProgress, trackingDate } from '../../domain/english-tracking.js';
+import { trackingUpdateKey } from '../english/tracking-updates.js';
 let dashboardData = {};
 
 // =========================
@@ -147,24 +148,25 @@ function renderEnglishLog(records, year) {
             const progress = englishProgress(record);
             return {
                 reading: sum.reading + progress.reading,
+                listening: sum.listening + progress.listening,
                 minutes: sum.minutes + progress.minutes,
             };
         },
-        { reading: 0, minutes: 0 },
+        { reading: 0, listening: 0, minutes: 0 },
     );
-    host.textContent = `${year}: ${total.reading} Reading submissions · ${total.minutes.toFixed(1)} Listening minutes`;
+    host.textContent = `${year}: ${total.reading} Reading submissions · ${total.listening} Listening submissions · ${total.minutes.toFixed(1)} Listening minutes`;
     rows.innerHTML =
         selected
             .sort((a, b) => b.activity_date.localeCompare(a.activity_date))
             .map((record) => {
                 const progress = englishProgress(record);
-                return `<tr><th scope="row">${escapeHtml(record.activity_date)}</th><td>${progress.reading}</td><td>${progress.minutes.toFixed(1)}</td><td>${progress.points.toFixed(1)}</td></tr>`;
+                return `<tr><th scope="row">${escapeHtml(record.activity_date)}</th><td>${progress.reading}</td><td>${progress.listening}</td><td>${progress.minutes.toFixed(1)}</td><td>${progress.points.toFixed(1)}</td></tr>`;
             })
-            .join('') || '<tr><td colspan="4">No activity recorded for this year.</td></tr>';
+            .join('') || '<tr><td colspan="5">No activity recorded for this year.</td></tr>';
 }
 
 function updateTodayQuestTracker(englishRecords = [], chineseRecords = []) {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = trackingDate();
 
     const isDone = (records) =>
         records.some((r) => {
@@ -263,6 +265,7 @@ function renderLeaderboard(leaderboard) {
     }
     const currentUser = localStorage.getItem('userId');
     listHost.innerHTML = leaderboard
+        .slice(0, 5)
         .map((user) => {
             const rank = Number(user.rank);
             const rankClass =
@@ -276,6 +279,8 @@ function renderLeaderboard(leaderboard) {
             const detail =
                 Number(user.reading_submissions) +
                 ' Reading submits · ' +
+                Number(user.listening_submissions || 0) +
+                ' Listening submits · ' +
                 (Number(user.listening_seconds) / 60).toFixed(1) +
                 ' Listening min';
             return (
@@ -301,17 +306,15 @@ function renderLeaderboard(leaderboard) {
         .join('');
 }
 
-const leaderboardDateInput = document.getElementById('leaderboardDate');
-if (leaderboardDateInput) leaderboardDateInput.value = trackingDate();
 let leaderboardRequest = 0;
 async function refreshLeaderboard() {
     const list = document.getElementById('leaderboardList');
     const status = document.getElementById('leaderboardStatus');
-    if (!list || !leaderboardDateInput) return;
+    if (!list) return;
     const request = ++leaderboardRequest;
     list.setAttribute('aria-busy', 'true');
     try {
-        const users = await loadLeaderboard(leaderboardDateInput.value);
+        const users = await loadLeaderboard();
         if (request !== leaderboardRequest) return;
         renderLeaderboard(users);
         if (status) status.textContent = '';
@@ -324,21 +327,44 @@ async function refreshLeaderboard() {
         if (request === leaderboardRequest) list.removeAttribute('aria-busy');
     }
 }
-leaderboardDateInput?.addEventListener('change', refreshLeaderboard);
-document.getElementById('leaderboardRefresh')?.addEventListener('click', refreshLeaderboard);
+document.getElementById('leaderboardRefresh')?.addEventListener('click', refreshDashboard);
 setInterval(() => {
-    if (!document.hidden) refreshLeaderboard();
+    if (!document.hidden) refreshDashboard();
 }, 60000);
 document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) refreshLeaderboard();
+    if (!document.hidden) refreshDashboard();
+});
+window.addEventListener('focus', () => refreshDashboard());
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) refreshDashboard();
+});
+window.addEventListener('storage', (event) => {
+    if (event.key === trackingUpdateKey) refreshDashboard();
 });
 
-async function initializeDashboard() {
-    // Hall of Fame loads independently so a failed personal log cannot block the user list.
-    const leaderboard = refreshLeaderboard();
-    [dashboardData] = await Promise.all([loadDashboardData(), loadDashboardUserName()]);
-    refreshHeatmaps();
-    await leaderboard;
+let refreshing;
+let refreshAgain = false;
+function refreshDashboard() {
+    if (refreshing) {
+        refreshAgain = true;
+        return refreshing;
+    }
+    refreshing = (async () => {
+        do {
+            refreshAgain = false;
+            // Rankings and personal logs load independently; neither hides the other's errors.
+            await Promise.all([
+                refreshLeaderboard(),
+                loadDashboardData().then((data) => {
+                    dashboardData = data;
+                    refreshHeatmaps();
+                }),
+            ]);
+        } while (refreshAgain);
+    })().finally(() => {
+        refreshing = null;
+    });
+    return refreshing;
 }
 
-initializeDashboard();
+Promise.all([refreshDashboard(), loadDashboardUserName()]);

@@ -2,6 +2,7 @@ import { renderer } from './reading-renderer.js';
 import { state } from './reading-state.js';
 import { loader } from './reading-loader.js';
 import { attempts } from './reading-repository.js';
+import { notifyTrackingUpdate } from '../tracking-updates.js';
 let submitting = false;
 export const submit = {
     async submitCurrentTest() {
@@ -22,6 +23,7 @@ export const submit = {
         });
         try {
             const result = await attempts.save(test.slug, state.version, responses);
+            notifyTrackingUpdate();
             renderer.updateScoreChip(result.correct_count, result.graded_count);
             renderer.updateScoreSummary(
                 result.graded_count

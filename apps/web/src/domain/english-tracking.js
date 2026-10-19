@@ -10,10 +10,12 @@ export function trackingDate(value = new Date()) {
 export function englishProgress(record = {}) {
     const safe = (value) => (Number.isFinite(Number(value)) ? Math.max(0, Number(value)) : 0);
     const reading = safe(record.reading_submissions);
+    const listening = safe(record.listening_submissions);
     const minutes = safe(record.listening_seconds) / 60;
-    const points = reading + minutes / 10;
+    const points = reading + listening + minutes / 10;
     return {
         reading,
+        listening,
         minutes,
         points,
         level: points <= 0 ? 0 : points < 1 ? 1 : points < 2 ? 2 : points < 3 ? 3 : 4,

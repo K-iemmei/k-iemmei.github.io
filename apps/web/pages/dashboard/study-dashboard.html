@@ -231,14 +231,10 @@
                             </div>
                         </div>
                         <div class="leaderboard-controls">
-                            <input
-                                type="date"
-                                id="leaderboardDate"
-                                aria-label="Ranking date (UTC+7)"
-                            />
+                            <span>English · Top 5 · All time</span>
                             <button type="button" id="leaderboardRefresh">Refresh</button>
                         </div>
-                        <p id="leaderboardStatus" role="status">Loading daily ranking...</p>
+                        <p id="leaderboardStatus" role="status">Loading ranking...</p>
                         <div class="leaderboard-list" id="leaderboardList">
                             <div class="leaderboard-item pixel-rank-item">
                                 <span class="leaderboard-rank first">1</span>
@@ -297,6 +293,7 @@
                                             <tr>
                                                 <th scope="col">Date (UTC+7)</th>
                                                 <th scope="col">Reading submits</th>
+                                                <th scope="col">Listening submits</th>
                                                 <th scope="col">Listening min</th>
                                                 <th scope="col">Points</th>
                                             </tr>

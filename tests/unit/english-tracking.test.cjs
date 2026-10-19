@@ -7,6 +7,15 @@ test('English intensity balances submissions and listening without depending on 
     assert.equal(englishProgress().level, 0);
     assert.equal(englishProgress({ listening_seconds: 30 }).level, 1);
     assert.equal(englishProgress({ reading_submissions: 1 }).level, 2);
+    assert.equal(englishProgress({ listening_submissions: 1 }).level, 2);
+    assert.equal(
+        englishProgress({
+            reading_submissions: 1,
+            listening_submissions: 2,
+            listening_seconds: 600,
+        }).points,
+        4,
+    );
     assert.equal(englishProgress({ listening_seconds: 600 }).level, 2);
     assert.equal(englishProgress({ reading_submissions: 1, listening_seconds: 600 }).level, 3);
     assert.equal(englishProgress({ reading_submissions: 2, listening_seconds: 600 }).level, 4);
@@ -84,7 +93,7 @@ test('hosted tracking always binds the authenticated user and retries are idempo
         }),
     };
     await trackingApi(admin, { id: 'owner' }, '/api/tracking/english', 'GET');
-    assert.deepEqual(calls[0], ['english_tracking', { learner: 'owner' }]);
+    assert.deepEqual(calls[0], ['english_tracking_v2', { learner: 'owner' }]);
     await trackingApi(admin, { id: 'owner' }, '/api/tracking/listening', 'POST', {
         events: [
             {
@@ -120,7 +129,7 @@ test('hosted Hall of Fame loads cross-user daily aggregates with validated dates
         new URL('https://example.test/?date=2026-01-02'),
     );
     assert.deepEqual(result, { date: '2026-01-02', users });
-    assert.deepEqual(calls[0], ['daily_hall_of_fame', { log_date: '2026-01-02' }]);
+    assert.deepEqual(calls[0], ['english_hall_of_fame', { log_date: '2026-01-02' }]);
     assert.equal(leaderboardDate(), trackingDate());
     await assert.rejects(
         () =>
@@ -135,4 +144,16 @@ test('hosted Hall of Fame loads cross-user daily aggregates with validated dates
         { status: 400 },
     );
     assert.equal(calls.length, 1);
+    assert.deepEqual(
+        await trackingApi(
+            admin,
+            { id: 'owner' },
+            '/api/tracking/leaderboard',
+            'GET',
+            null,
+            new URL('https://example.test/'),
+        ),
+        { date: null, users },
+    );
+    assert.deepEqual(calls[1], ['english_hall_of_fame', { log_date: null }]);
 });

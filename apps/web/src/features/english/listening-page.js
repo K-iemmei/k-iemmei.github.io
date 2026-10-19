@@ -2,6 +2,7 @@ import { apiRequest } from '../../core/database-client.js';
 import { escapeHtml as h } from '../../shared/escape-html.js';
 import { trackListeningAudio } from './listening-tracker.js';
 import { renderWorksheet } from './listening-worksheet.js';
+import { notifyTrackingUpdate } from './tracking-updates.js';
 
 const slug = new URLSearchParams(location.search).get('session');
 const result = document.getElementById('listeningResult');
@@ -87,6 +88,7 @@ document.getElementById('examForm').addEventListener('submit', async (event) => 
             method: 'POST',
             body: JSON.stringify({ mode: 'exam', responses }),
         });
+        notifyTrackingUpdate();
         showResult(
             `<h2>${saved.graded ? `${saved.correct} / ${saved.graded} correct · ${saved.score}%` : 'Answers saved'}</h2><p>${saved.graded ? 'Check your answers below.' : 'Answer key is being reviewed; this attempt is saved without a score.'}</p><div class="review-grid">${saved.review.map((item) => `<div><strong>${item.number}</strong><span>${h(item.answer || '—')}</span><span>${item.correct === null ? 'Awaiting key' : item.correct ? 'Correct' : `Expected: ${h(item.expected.join(' / '))}`}</span></div>`).join('')}</div>`,
         );
@@ -113,6 +115,7 @@ document.getElementById('dictationForm').addEventListener('submit', async (event
                 text: document.getElementById('dictationText').value,
             }),
         });
+        notifyTrackingUpdate();
         showResult(
             `<h2>${saved.score === null ? 'Dictation saved' : `${saved.score}% approximate word match`}</h2><p>${saved.transcript ? 'Compare your writing with the OCR audioscript below. The score is approximate until the text is proofread.' : 'Audioscript is not available yet. Your dictation has been saved for later review.'}</p>${saved.transcript ? `<div class="transcript-review">${h(saved.transcript)}</div>` : ''}`,
         );

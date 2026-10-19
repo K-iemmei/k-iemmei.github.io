@@ -84,6 +84,7 @@ test('English log aggregates submitted Reading and idempotent playback by Bangko
     for (const row of daily.users) {
         assert.deepEqual(Object.keys(row).sort(), [
             'listening_seconds',
+            'listening_submissions',
             'name',
             'points',
             'rank',
@@ -95,7 +96,7 @@ test('English log aggregates submitted Reading and idempotent playback by Bangko
         await fetch(base + '/api/tracking/leaderboard?date=2026-01-01', { headers })
     ).json();
     assert.equal(Number(previous.users.find((row) => row.user_id === fixture.userId).points), 1);
-    assert.equal(Number(previous.users.find((row) => row.user_id === other).rank), 2);
+    assert.equal(Number(previous.users.find((row) => row.user_id === other).rank), 3);
     assert.equal(Number(previous.users.find((row) => row.user_id === inactive).rank), 2);
     assert.equal(
         (await fetch(base + '/api/tracking/leaderboard?date=2026-02-30', { headers })).status,
@@ -125,5 +126,50 @@ test('English log aggregates submitted Reading and idempotent playback by Bangko
             })
         ).status,
         400,
+    );
+    const session = (
+        await fixture.pool.query(`INSERT INTO listening_sessions
+        (slug,book_number,test_number,part_number,title,first_question,last_question,audio_filename)
+        VALUES ('cambridge-1-test-1-part-1',1,1,1,'Tracking listening',1,10,'0-cam1-test-1-part-1.mp3') RETURNING id`)
+    ).rows[0].id;
+    await fixture.pool.query(
+        `INSERT INTO listening_attempts(session_id,user_id,mode,completed_at)
+        VALUES ($1,$2,'exam','2026-01-01T17:01:00Z'),($1,$2,'dictation','2026-01-01T17:02:00Z')`,
+        [session, fixture.userId],
+    );
+    const updated = await (await fetch(base + '/api/tracking/english', { headers })).json();
+    assert.equal(Number(updated[1].listening_submissions), 2);
+    assert.equal(Number(updated[0].listening_submissions), 0);
+    const updatedDaily = await (
+        await fetch(base + '/api/tracking/leaderboard?date=2026-01-02', { headers })
+    ).json();
+    assert.equal(Number(updatedDaily.users[0].points), 4.25);
+    assert.equal(Number(updatedDaily.users[0].listening_submissions), 2);
+    for (let index = 1; index <= 6; index++) {
+        const top = (
+            await fixture.pool.query('INSERT INTO users(name) VALUES ($1) RETURNING id', [
+                'Top ' + index,
+            ])
+        ).rows[0].id;
+        await fixture.pool.query(
+            `INSERT INTO reading_attempts(user_id,test_id,test_version,test_title,responses,review,correct_count,total_count,graded_count,completed_at)
+            SELECT $1,$2,1,'Tracking test','{}','[]',0,10,10,'2026-01-03T00:00:00Z' FROM generate_series(1,$3::integer)`,
+            [top, reading, 10 + index],
+        );
+    }
+    const overall = await (await fetch(base + '/api/tracking/leaderboard', { headers })).json();
+    assert.equal(overall.date, null);
+    assert.equal(overall.users.length, 5);
+    assert.deepEqual(
+        overall.users.map((row) => row.name),
+        ['Top 6', 'Top 5', 'Top 4', 'Top 3', 'Top 2'],
+    );
+    assert.deepEqual(
+        overall.users.map((row) => Number(row.points)),
+        [16, 15, 14, 13, 12],
+    );
+    assert.deepEqual(
+        overall.users.map((row) => Number(row.rank)),
+        [1, 2, 3, 4, 5],
     );
 });

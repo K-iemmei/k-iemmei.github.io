@@ -137,7 +137,11 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
             );
             console.log('Listening: exam graded');
             await page.click('[data-mode="dictation"]');
+            await page.waitForSelector('#dictationText', { visible: true });
             await page.type('#dictationText', 'The blue train arrives today.');
+            await page.$eval('#dictationForm button[type="submit"]', (button) =>
+                button.scrollIntoView({ behavior: 'instant', block: 'center' }),
+            );
             await page.click('#dictationForm button[type="submit"]');
             await page.waitForFunction(() =>
                 document.getElementById('listeningResult').textContent.includes('100%'),
@@ -325,6 +329,7 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
                     options.find((option) => option.textContent === 'Other Reading for Edit').value,
             );
             await page.select('#testSelect', otherOption);
+            await page.waitForNetworkIdle({ idleTime: 300 });
             await page.waitForFunction(
                 () => document.getElementById('examTitle').textContent === 'Other Reading for Edit',
             );
@@ -396,11 +401,32 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
             'feedback',
         );
         await page.setViewport({ width: 1440, height: 1000 });
+        const trackingPage = await browser.newPage();
+        await trackingPage.goto(base + '/dashboard.html', { waitUntil: 'networkidle0' });
+        await trackingPage.waitForSelector('#englishTrackingRows tr');
+        await page.bringToFront();
         await page.click('#submitAnswers');
         await page.waitForFunction(() =>
             document.getElementById('scoreSummary').textContent.includes('Saved'),
         );
         assert.match(await page.$eval('#scoreSummary', (el) => el.textContent), /100%/);
+        await page.waitForFunction(() => !document.getElementById('submitAnswers').disabled);
+        if (!live) {
+            await trackingPage.waitForFunction(() =>
+                document
+                    .getElementById('englishTrackingSummary')
+                    .textContent.includes('1 Reading submissions'),
+            );
+            assert.match(
+                await trackingPage.$eval('#englishTrackingSummary', (el) => el.textContent),
+                /2 Listening submissions/,
+            );
+            assert.match(
+                await trackingPage.$eval('#heatmap-english .level-4', (el) => el.title),
+                /Listening: 2 submissions/,
+            );
+        }
+        await trackingPage.close();
         const saved = (
             await fixture.pool.query('SELECT * FROM reading_attempts WHERE test_id=$1', [
                 created.id,
@@ -432,7 +458,7 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
             );
             assert.equal(await page.$$eval('#englishTrackingRows tr', (rows) => rows.length), 1);
             assert.match(
-                await page.$eval('#heatmap-english .level-2', (el) => el.title),
+                await page.$eval('#heatmap-english .level-4', (el) => el.title),
                 /Reading: 1 submissions/,
             );
         }

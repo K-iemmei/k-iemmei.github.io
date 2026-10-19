@@ -112,7 +112,7 @@ export function generateHeatmap(elementId, seed, records = []) {
 
                 if (!dailyProgress || dailyProgress.total <= 0) {
                     cell.classList.add('heat-empty');
-                    cell.title = `${date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} · ${english ? 'Reading: 0 submissions · Listening: 0 min' : '0/0 exercises'}`;
+                    cell.title = `${date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} · ${english ? 'Reading: 0 submissions · Listening: 0 submissions, 0 min' : '0/0 exercises'}`;
                     grid.appendChild(cell);
                     continue;
                 }
@@ -145,7 +145,7 @@ export function generateHeatmap(elementId, seed, records = []) {
                 cell.title = `${formattedDate} · ${dailyProgress.completed}/${dailyProgress.total} exercises`;
                 if (english) {
                     const progress = englishByDate.get(dateKey);
-                    cell.title = `${formattedDate} · Reading: ${progress.reading} submissions · Listening: ${progress.minutes.toFixed(1)} min · ${progress.points.toFixed(1)} points`;
+                    cell.title = `${formattedDate} · Reading: ${progress.reading} submissions · Listening: ${progress.listening} submissions, ${progress.minutes.toFixed(1)} min · ${progress.points.toFixed(1)} points`;
                 }
                 grid.appendChild(cell);
             }

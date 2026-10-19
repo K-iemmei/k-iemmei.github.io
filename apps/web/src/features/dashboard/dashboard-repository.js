@@ -67,6 +67,9 @@ export async function loadDashboardData() {
 }
 
 export async function loadLeaderboard(date) {
-    const result = await apiRequest('/api/tracking/leaderboard?date=' + encodeURIComponent(date));
+    await flushListeningActivity().catch(() => {});
+    const result = await apiRequest(
+        '/api/tracking/leaderboard' + (date ? '?date=' + encodeURIComponent(date) : ''),
+    );
     return result.users;
 }

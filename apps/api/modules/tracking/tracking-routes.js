@@ -4,8 +4,8 @@ function createTrackingRouter(db) {
     router.get('/leaderboard', async (req, res, next) => {
         try {
             const { leaderboardDate } = await import('../../../web/src/domain/english-tracking.js');
-            const date = leaderboardDate(req.query.date);
-            const result = await db.query('SELECT * FROM public.daily_hall_of_fame($1)', [date]);
+            const date = req.query.date === undefined ? null : leaderboardDate(req.query.date);
+            const result = await db.query('SELECT * FROM public.english_hall_of_fame($1)', [date]);
             res.json({ date, users: result.rows });
         } catch (error) {
             next(error);
@@ -14,7 +14,7 @@ function createTrackingRouter(db) {
     router.get('/english', async (req, res, next) => {
         try {
             res.json(
-                (await db.query('SELECT * FROM public.english_tracking($1)', [req.userId])).rows,
+                (await db.query('SELECT * FROM public.english_tracking_v2($1)', [req.userId])).rows,
             );
         } catch (error) {
             next(error);
