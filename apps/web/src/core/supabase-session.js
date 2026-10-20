@@ -1,21 +1,35 @@
 import { deployment } from './deployment-config.js';
 
-const storageKey = 'my_note_supabase_session';
+export const cloudSessionKey = 'my_note_supabase_session';
+const storageKey = cloudSessionKey;
 let cached = null;
+let cachedRaw;
+let verifiedUserId = null;
+const accountChanged = () =>
+    Object.assign(
+        new Error('Account changed in another tab. Reload this page before continuing.'),
+        { code: 'ACCOUNT_CHANGED' },
+    );
 const endpoint = (path) => `${deployment.url}/auth/v1/${path}`;
 const headers = { apikey: deployment.anonKey, 'Content-Type': 'application/json' };
 
 function remember(session) {
+    const raw = JSON.stringify(session);
+    localStorage.setItem(storageKey, raw);
     cached = session;
-    localStorage.setItem(storageKey, JSON.stringify(session));
+    cachedRaw = raw;
     return session;
 }
 function stored() {
-    if (cached) return cached;
     try {
-        cached = JSON.parse(localStorage.getItem(storageKey) || 'null');
+        const raw = localStorage.getItem(storageKey);
+        if (raw !== cachedRaw) {
+            cached = JSON.parse(raw || 'null');
+            cachedRaw = raw;
+        }
     } catch {
         cached = null;
+        cachedRaw = undefined;
     }
     return cached;
 }
@@ -43,7 +57,9 @@ async function refreshSession() {
         clearCloudSession();
         return null;
     }
-    return remember(await response.json());
+    const session = await response.json();
+    if (stored()?.refresh_token !== current.refresh_token) return null;
+    return remember(session);
 }
 export async function cloudLogin(email, password) {
     const response = await fetch(endpoint('token?grant_type=password'), {
@@ -54,6 +70,7 @@ export async function cloudLogin(email, password) {
     if (response.status === 400) return null;
     if (!response.ok) throw new Error('Could not connect to Supabase Auth');
     const session = remember(await response.json());
+    verifiedUserId = session.user.id;
     return {
         id: session.user.id,
         name: session.user.user_metadata?.name || email.split('@')[0],
@@ -63,20 +80,25 @@ export async function cloudLogin(email, password) {
 export async function cloudToken() {
     let session = stored();
     if (!session) return null;
+    if (verifiedUserId && session.user?.id !== verifiedUserId) throw accountChanged();
     if (session.expires_at && Date.now() / 1000 > session.expires_at - 60)
         session = await refresh();
+    if (verifiedUserId && session && session.user?.id !== verifiedUserId) throw accountChanged();
     return session?.access_token || null;
 }
 export async function cloudUser() {
     let token = await cloudToken();
     if (!token) return null;
+    const requestedUserId = stored()?.user?.id;
     let response = await fetch(endpoint('user'), {
         headers: { apikey: deployment.anonKey, Authorization: `Bearer ${token}` },
     });
+    if (!stored() || stored().user?.id !== requestedUserId) throw accountChanged();
     if (response.status === 401 && (token = (await refresh())?.access_token))
         response = await fetch(endpoint('user'), {
             headers: { apikey: deployment.anonKey, Authorization: `Bearer ${token}` },
         });
+    if (!stored() || stored().user?.id !== requestedUserId) throw accountChanged();
     if (!response.ok) {
         if (response.status >= 500)
             throw new Error('Authentication service is temporarily unavailable');
@@ -84,6 +106,13 @@ export async function cloudUser() {
         return null;
     }
     const user = await response.json();
+    if (
+        !stored() ||
+        stored().user?.id !== requestedUserId ||
+        (requestedUserId && requestedUserId !== user.id)
+    )
+        throw accountChanged();
+    verifiedUserId = user.id;
     return {
         id: user.id,
         name: user.user_metadata?.name || user.email?.split('@')[0] || 'Learner',
@@ -92,6 +121,8 @@ export async function cloudUser() {
 }
 export function clearCloudSession() {
     cached = null;
+    cachedRaw = null;
+    verifiedUserId = null;
     localStorage.removeItem(storageKey);
 }
 export async function cloudLogout() {

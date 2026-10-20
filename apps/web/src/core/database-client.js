@@ -4,7 +4,13 @@ import { cloudLogin, cloudToken } from './supabase-session.js';
 // Local Express and hosted Supabase Edge Function share the existing API contract.
 export async function apiRequest(path, options = {}) {
     const hosted = deployment.mode === 'supabase';
-    const token = hosted ? await cloudToken() : null;
+    let token;
+    try {
+        token = hosted ? await cloudToken() : null;
+    } catch (error) {
+        if (error.code === 'ACCOUNT_CHANGED') window.location.reload();
+        throw error;
+    }
     if (hosted && !token) {
         window.location.replace('index.html');
         throw new Error('Please sign in');

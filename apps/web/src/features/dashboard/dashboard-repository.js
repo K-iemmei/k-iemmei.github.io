@@ -34,7 +34,12 @@ export async function loadDashboardData() {
         // Flush any playback saved before leaving Listening, then fetch authoritative totals.
         let englishTrackingError = false;
         const [subjects, englishActivities, chineseActivities] = await Promise.all([
-            database.get('subjects', { select: 'id, slug, name, color, description' }),
+            database
+                .get('subjects', { select: 'id, slug, name, color, description' })
+                .catch((error) => {
+                    console.warn('Unable to load subjects:', error);
+                    return [];
+                }),
             flushListeningActivity()
                 .catch(() => {})
                 .then(() => apiRequest('/api/tracking/english'))

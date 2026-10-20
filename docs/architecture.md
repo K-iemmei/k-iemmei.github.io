@@ -8,6 +8,10 @@ Express serves the HTML, assets and API on one local origin, default `http://loc
 
 Passwords are verified against salted scrypt hashes in `app_private.credentials`. A random session token travels in an HttpOnly, SameSite=Strict cookie; PostgreSQL stores only its SHA-256 digest with a seven-day expiry. Logout revokes that session. Browser storage contains display profile data only and grants no access. Cookies are HTTP-compatible for loopback development; hosted use requires a separate security/deployment configuration.
 
+Hosted pages re-read the shared Auth session before requests and pin the page to the user verified at startup. Changing accounts or signing out in another tab reloads protected pages; a request detects an account change even before the storage event is handled. Refreshing a token for the same account preserves the page. Delayed Auth responses cannot restore an old session or clear a new account. `node tests/browser/account-switch.cjs` covers Dashboard isolation across hosted account changes with mocked Auth/API responses.
+
+Hosted profile IDs always match Auth user IDs. Imported profiles bearing the development-only name `Local Developer` are relabelled using the same Auth user's display name or email prefix; attempt ownership is never changed. Apply `supabase/hosted-profile-identity-migration.sql` for existing profiles. New imports use the Auth identity for the display name. English heatmap loading remains independent of failures in the subject catalog.
+
 The server binds to loopback by default. Authenticated API middleware protects Reading and data routes. The generic data API excludes Reading tables so answer keys cannot bypass the practice endpoint. Same-origin mutation checks apply. The optional SQL console is disabled unless `ADMIN_TOKEN` is configured and remains at `sql-console.html`; `admin.html` is the Reading authoring UI.
 
 ## Reading model

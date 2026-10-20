@@ -118,3 +118,52 @@ test('parallel cloud requests refresh an expired token only once; transient auth
     await assert.rejects(api.cloudUser(), /temporarily unavailable/);
     assert.notEqual(localStorage.getItem('my_note_supabase_session'), null);
 });
+
+test('a subject catalog failure cannot erase a successful English heatmap response', async (t) => {
+    const warnings = [];
+    t.mock.method(console, 'warn', (message) => warnings.push(message));
+    const oldStorage = global.localStorage,
+        oldFixture = global.__dashboardFixture;
+    global.localStorage = storage();
+    localStorage.setItem('userId', 'learner');
+    const rows = [
+        {
+            activity_date: '2026-10-21',
+            reading_submissions: 1,
+            listening_submissions: 0,
+            listening_seconds: 0,
+        },
+    ];
+    global.__dashboardFixture = {
+        database: {
+            get: async (table) => {
+                if (table === 'subjects') throw Error('Catalog unavailable');
+                return [];
+            },
+        },
+        apiRequest: async () => rows,
+        flushListeningActivity: async () => {},
+    };
+    t.after(() => {
+        global.localStorage = oldStorage;
+        global.__dashboardFixture = oldFixture;
+    });
+    const source = fs
+        .readFileSync('apps/web/src/features/dashboard/dashboard-repository.js', 'utf8')
+        .replace(
+            "import { database, apiRequest } from '../../core/database-client.js';",
+            'const {database,apiRequest}=globalThis.__dashboardFixture;',
+        )
+        .replace(
+            "import { flushListeningActivity } from '../english/listening-tracker.js';",
+            'const {flushListeningActivity}=globalThis.__dashboardFixture;',
+        );
+    const { loadDashboardData } = await import(
+        'data:text/javascript;base64,' + Buffer.from(source).toString('base64')
+    );
+    const result = await loadDashboardData();
+    assert.deepEqual(result.activities, rows);
+    assert.equal(result.englishTrackingError, false);
+    assert.deepEqual(result.subjects, []);
+    assert.deepEqual(warnings, ['Unable to load subjects:']);
+});

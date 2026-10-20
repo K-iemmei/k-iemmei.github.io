@@ -1,5 +1,7 @@
 import { initTheme } from './core/theme-controller.js';
 import { requireSession } from './core/session-storage.js';
+import { cloudSessionKey } from './core/supabase-session.js';
+import { deployment } from './core/deployment-config.js';
 
 // Each page loads only its own feature. Module dependencies replace script ordering.
 const pages = {
@@ -31,6 +33,7 @@ if (!canOpen) {
     try {
         canOpen = await requireSession();
     } catch (error) {
+        if (error.code === 'ACCOUNT_CHANGED') window.location.reload();
         sessionError = true;
         console.error('Unable to verify session:', error);
         const message = document.createElement('p');
@@ -41,6 +44,19 @@ if (!canOpen) {
 }
 if (canOpen || sessionError) document.documentElement.removeAttribute('data-auth-pending');
 if (canOpen) {
+    if (deployment.mode === 'supabase' && page !== 'login') {
+        const pageUserId = localStorage.getItem('userId');
+        window.addEventListener('storage', (event) => {
+            if (event.key !== cloudSessionKey && event.key !== null) return;
+            let nextUserId;
+            try {
+                nextUserId = JSON.parse(localStorage.getItem(cloudSessionKey) || 'null')?.user?.id;
+            } catch {
+                nextUserId = null;
+            }
+            if (nextUserId !== pageUserId) window.location.reload();
+        });
+    }
     try {
         if (!pages[page]) throw new Error(`Unknown page: ${page}`);
         const feature = pages[page]();

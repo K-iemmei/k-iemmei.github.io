@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
                 .select('user_id')
                 .eq('user_id', user.id)
                 .maybeSingle(),
-            admin.from('users').select('id').eq('id', user.id).maybeSingle(),
+            admin.from('users').select('id,name').eq('id', user.id).maybeSingle(),
         ]);
         const member = checked(memberResult);
         if (!member) return json({ error: 'This account has not been granted access' }, 403);
@@ -136,6 +136,10 @@ Deno.serve(async (req) => {
                     username: null,
                 }),
             );
+        else if (profile.name === 'Local Developer')
+            checked(await admin.from('users').update({
+                name: user.user_metadata?.name || user.email?.split('@')[0] || 'Learner',
+            }).eq('id', user.id).eq('name', 'Local Developer'));
         const body =
             ['POST', 'PUT', 'PATCH'].includes(req.method) &&
             !path.includes('/source-pages/') &&

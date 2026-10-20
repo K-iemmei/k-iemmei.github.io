@@ -663,12 +663,12 @@ body[data-page='dashboard'] .dashboard-layout .heatmap-grid {
     width: 100%;
     min-width: 0;
     grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
-    grid-template-rows: repeat(7, auto);
+    grid-template-rows: repeat(7, 10px);
 }
 body[data-page='dashboard'] .dashboard-layout .heat-cell {
     width: 100%;
-    height: auto;
-    aspect-ratio: 1;
+    height: 10px;
+    aspect-ratio: auto;
 }
 body[data-page='dashboard'] .dashboard-layout .pixel-heatmap-card {
     border-radius: 0 !important;

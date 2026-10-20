@@ -26,7 +26,10 @@ const ordered = [
     await client.connect();
     try {
         await client.query('BEGIN');
-        const auth = await client.query('SELECT id,email FROM auth.users WHERE id=$1', [hosted]);
+        const auth = await client.query(
+            'SELECT id,email,raw_user_meta_data FROM auth.users WHERE id=$1',
+            [hosted],
+        );
         if (!auth.rowCount) throw Error('Hosted Auth user does not exist');
         await client.query(
             'INSERT INTO public.hosted_members(user_id) VALUES($1) ON CONFLICT DO NOTHING',
@@ -34,7 +37,13 @@ const ordered = [
         );
         await client.query(
             'INSERT INTO public.users(id,email,name) VALUES($1,$2,$3) ON CONFLICT(id) DO NOTHING',
-            [hosted, auth.rows[0].email, data.local_user.name || 'Learner'],
+            [
+                hosted,
+                auth.rows[0].email,
+                auth.rows[0].raw_user_meta_data?.name ||
+                    auth.rows[0].email?.split('@')[0] ||
+                    'Learner',
+            ],
         );
         await client.query(
             'UPDATE public.reading_tests SET created_by=$1 WHERE created_by IS NULL',
