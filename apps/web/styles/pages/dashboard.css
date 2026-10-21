@@ -575,15 +575,6 @@ body[data-page='dashboard'] .dashboard-layout .pixel-hall-header {
     width: 22px;
     height: 22px;
 }
-body[data-page='dashboard'] .dashboard-layout .leaderboard-controls {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin: 0 0 18px;
-}
-body[data-page='dashboard'] .dashboard-layout .leaderboard-controls input {
-    width: 100%;
-}
 body[data-page='dashboard'] .dashboard-layout #leaderboardList {
     max-height: 420px;
     padding: 2px;

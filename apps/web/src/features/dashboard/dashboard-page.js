@@ -321,13 +321,12 @@ async function refreshLeaderboard() {
     } catch (error) {
         if (request !== leaderboardRequest) return;
         console.warn('Unable to load Hall of Fame:', error);
-        list.textContent = 'Unable to load users. Use Refresh to retry.';
+        list.textContent = 'Unable to load ranking. Retrying automatically.';
         if (status) status.textContent = 'Hall of Fame unavailable';
     } finally {
         if (request === leaderboardRequest) list.removeAttribute('aria-busy');
     }
 }
-document.getElementById('leaderboardRefresh')?.addEventListener('click', refreshDashboard);
 setInterval(() => {
     if (!document.hidden) refreshDashboard();
 }, 60000);
