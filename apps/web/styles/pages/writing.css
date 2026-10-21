@@ -71,6 +71,26 @@ body[data-page='blog'] .writing-shell {
 body[data-page='blog'] .writing-list-toolbar {
     margin-bottom: 26px;
 }
+body[data-page='blog'] .writing-filter {
+    position: relative;
+}
+body[data-page='blog'] #blogSearchField {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 36px;
+}
+body[data-page='blog'] .writing-filter::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--text-secondary);
+    border-bottom: 1.5px solid var(--text-secondary);
+    transform: translateY(-75%) rotate(45deg);
+    pointer-events: none;
+}
 body[data-page='blog'] .writing-grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
