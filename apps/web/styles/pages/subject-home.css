@@ -17,6 +17,9 @@ body[data-page='english-home'] {
     padding: 28px 24px 56px;
 }
 .english-topbar {
+    width: 100%;
+    max-width: 1000px;
+    margin-inline: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -35,7 +38,20 @@ body[data-page='english-home'] {
     text-decoration: none;
 }
 .back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 14px;
+    line-height: 1;
     justify-self: start;
+}
+.back-link svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
 }
 .icon-button {
     justify-self: end;
