@@ -5,6 +5,7 @@ import { listeningApi } from './listening.ts';
 import { trackingApi } from './tracking.ts';
 import { publishingApi } from './publishing.ts';
 import { homeApi } from './home.ts';
+import { readApiBody } from './request-body.ts';
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
 const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
@@ -140,12 +141,7 @@ Deno.serve(async (req) => {
             checked(await admin.from('users').update({
                 name: user.user_metadata?.name || user.email?.split('@')[0] || 'Learner',
             }).eq('id', user.id).eq('name', 'Local Developer'));
-        const body =
-            ['POST', 'PUT', 'PATCH'].includes(req.method) &&
-            !path.includes('/source-pages/') &&
-            path !== '/api/vocabulary/import-apkg'
-                ? await req.json()
-                : null;
+        const body = await readApiBody(req, path);
         let result;
         if (/^\/api\/home(\/|$)/.test(path))
             result = await homeApi(admin, user, path, req.method, body, url);
