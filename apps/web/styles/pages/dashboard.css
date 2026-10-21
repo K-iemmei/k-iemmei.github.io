@@ -576,8 +576,8 @@ body[data-page='dashboard'] .dashboard-layout .pixel-hall-header {
     height: 22px;
 }
 body[data-page='dashboard'] .dashboard-layout .leaderboard-controls {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    display: flex;
+    justify-content: flex-end;
     gap: 8px;
     margin: 0 0 18px;
 }
@@ -612,9 +612,6 @@ body[data-page='dashboard'] .dashboard-layout .leaderboard-name {
     }
     body[data-page='dashboard'] .dashboard-layout .dashboard-ranking {
         min-height: 0;
-    }
-    body[data-page='dashboard'] .dashboard-layout .leaderboard-controls {
-        max-width: 300px;
     }
 }
 @media (max-width: 760px) {
