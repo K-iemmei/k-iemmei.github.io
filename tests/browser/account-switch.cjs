@@ -103,9 +103,9 @@ const session = (name) => ({
         await page.goto(base + '/dashboard.html', { waitUntil: 'networkidle0' });
         console.log('Accounts: A dashboard loaded');
         await page.waitForFunction(() =>
-            document
-                .getElementById('englishTrackingSummary')
-                .textContent.includes('1 Reading submissions'),
+            [...document.querySelectorAll('#heatmap-english .heat-cell')].some((cell) =>
+                cell.title.includes('Reading: 1 submissions'),
+            ),
         );
         await page.evaluate(() => {
             window.accountPageSentinel = true;
@@ -127,15 +127,15 @@ const session = (name) => ({
         await Promise.all([page.waitForNavigation({ waitUntil: 'networkidle0' }), switchTo('B')]);
         console.log('Accounts: B dashboard reloaded');
         await page.waitForFunction(() =>
-            document
-                .getElementById('englishTrackingSummary')
-                .textContent.includes('2 Listening submissions'),
+            [...document.querySelectorAll('#heatmap-english .heat-cell')].some((cell) =>
+                cell.title.includes('Listening: 2 submissions'),
+            ),
         );
         console.log('Accounts: B tracking loaded');
         assert.equal(await page.$eval('#sidebarUserName', (el) => el.textContent), 'Learner B');
         assert.match(
-            await page.$eval('#englishTrackingSummary', (el) => el.textContent),
-            /0 Reading submissions/,
+            await page.$eval('#heatmap-english .level-3', (el) => el.title),
+            /Reading: 0 submissions/,
         );
         await page.bringToFront();
         console.log('Accounts: checking heatmap layout');

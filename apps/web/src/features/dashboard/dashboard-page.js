@@ -4,7 +4,7 @@ import { loadDashboardData, loadLeaderboard } from './dashboard-repository.js';
 import { clearSession } from '../../core/session-storage.js';
 import { escapeHtml } from '../../shared/escape-html.js';
 import { database } from '../../core/database-client.js';
-import { englishProgress, trackingDate } from '../../domain/english-tracking.js';
+import { trackingDate } from '../../domain/english-tracking.js';
 import { trackingUpdateKey } from '../english/tracking-updates.js';
 let dashboardData = {};
 
@@ -127,42 +127,16 @@ function refreshHeatmaps() {
     if (chiBadge) chiBadge.textContent = `${chineseDays} ACTIVE DAYS`;
 
     generateHeatmap('heatmap-english', 0, englishRecords);
-    renderEnglishLog(englishRecords, year);
+    const error = document.getElementById('englishTrackingError');
+    if (error) {
+        error.hidden = !dashboardData.englishTrackingError;
+        error.textContent = dashboardData.englishTrackingError
+            ? 'Unable to load activity. Retrying automatically.'
+            : '';
+    }
     generateHeatmap('heatmap-chinese', 0, chineseRecords);
     updateActivitySummary([...englishRecords, ...chineseRecords]);
     updateTodayQuestTracker(englishRecords, chineseRecords);
-}
-
-function renderEnglishLog(records, year) {
-    const host = document.getElementById('englishTrackingSummary');
-    const rows = document.getElementById('englishTrackingRows');
-    if (!host || !rows) return;
-    if (dashboardData.englishTrackingError) {
-        host.textContent = 'Unable to load English log. Reload to retry.';
-        rows.replaceChildren();
-        return;
-    }
-    const selected = records.filter((record) => record.activity_date.startsWith(`${year}-`));
-    const total = selected.reduce(
-        (sum, record) => {
-            const progress = englishProgress(record);
-            return {
-                reading: sum.reading + progress.reading,
-                listening: sum.listening + progress.listening,
-                minutes: sum.minutes + progress.minutes,
-            };
-        },
-        { reading: 0, listening: 0, minutes: 0 },
-    );
-    host.textContent = `${year}: ${total.reading} Reading submissions · ${total.listening} Listening submissions · ${total.minutes.toFixed(1)} Listening minutes`;
-    rows.innerHTML =
-        selected
-            .sort((a, b) => b.activity_date.localeCompare(a.activity_date))
-            .map((record) => {
-                const progress = englishProgress(record);
-                return `<tr><th scope="row">${escapeHtml(record.activity_date)}</th><td>${progress.reading}</td><td>${progress.listening}</td><td>${progress.minutes.toFixed(1)}</td><td>${progress.points.toFixed(1)}</td></tr>`;
-            })
-            .join('') || '<tr><td colspan="5">No activity recorded for this year.</td></tr>';
 }
 
 function updateTodayQuestTracker(englishRecords = [], chineseRecords = []) {

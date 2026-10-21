@@ -403,7 +403,7 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
         await page.setViewport({ width: 1440, height: 1000 });
         const trackingPage = await browser.newPage();
         await trackingPage.goto(base + '/dashboard.html', { waitUntil: 'networkidle0' });
-        await trackingPage.waitForSelector('#englishTrackingRows tr');
+        await trackingPage.waitForSelector('#heatmap-english .heat-cell');
         await page.bringToFront();
         await page.click('#submitAnswers');
         await page.waitForFunction(() =>
@@ -413,13 +413,13 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
         await page.waitForFunction(() => !document.getElementById('submitAnswers').disabled);
         if (!live) {
             await trackingPage.waitForFunction(() =>
-                document
-                    .getElementById('englishTrackingSummary')
-                    .textContent.includes('1 Reading submissions'),
+                [...document.querySelectorAll('#heatmap-english .heat-cell')].some((cell) =>
+                    cell.title.includes('Reading: 1 submissions'),
+                ),
             );
             assert.match(
-                await trackingPage.$eval('#englishTrackingSummary', (el) => el.textContent),
-                /2 Listening submissions/,
+                await trackingPage.$eval('#heatmap-english .level-4', (el) => el.title),
+                /Listening: 2 submissions/,
             );
             assert.match(
                 await trackingPage.$eval('#heatmap-english .level-4', (el) => el.title),
@@ -439,11 +439,7 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
         await page.click('.history-review-button');
         await page.waitForFunction(() => document.getElementById('answerReviewDialog').open);
         await page.goto(base + '/dashboard.html', { waitUntil: 'networkidle0' });
-        await page.waitForFunction(() =>
-            document
-                .getElementById('englishTrackingSummary')
-                .textContent.includes('Reading submissions'),
-        );
+        await page.waitForSelector('#heatmap-english .heat-cell');
         if (!live) {
             await page.waitForFunction(
                 () =>
@@ -453,10 +449,11 @@ const { manualReading } = require('../helpers/reading-fixture.cjs');
             assert.ok(await page.$('#leaderboardList .leaderboard-self'));
             assert.match(await page.$eval('#leaderboardList', (el) => el.textContent), /pts/);
             assert.match(
-                await page.$eval('#englishTrackingSummary', (el) => el.textContent),
-                /1 Reading submissions/,
+                await page.$eval('#heatmap-english .level-4', (el) => el.title),
+                /Reading: 1 submissions/,
             );
-            assert.equal(await page.$$eval('#englishTrackingRows tr', (rows) => rows.length), 1);
+            assert.equal(await page.$('#englishTrackingSummary'), null);
+            assert.equal(await page.$('.english-log-details'), null);
             assert.match(
                 await page.$eval('#heatmap-english .level-4', (el) => el.title),
                 /Reading: 1 submissions/,

@@ -534,17 +534,6 @@ body[data-page='dashboard'] .dashboard-layout .heatmap-wrapper:focus-visible {
     outline-offset: 3px;
     border-radius: 4px;
 }
-body[data-page='dashboard'] .dashboard-layout #englishTrackingSummary {
-    margin: 0 0 12px;
-    line-height: 1.7;
-}
-body[data-page='dashboard'] .dashboard-layout .english-log-details {
-    margin-top: 12px;
-}
-body[data-page='dashboard'] .dashboard-layout .english-log-table-wrap {
-    max-width: 100%;
-    overflow-x: auto;
-}
 body[data-page='dashboard'] .dashboard-layout .dashboard-ranking {
     grid-area: ranking;
     width: 100%;

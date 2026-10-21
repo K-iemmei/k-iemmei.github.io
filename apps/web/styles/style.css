@@ -3129,37 +3129,6 @@ body[data-page='dashboard'] .pixel-leaderboard-sidebar {
     }
 }
 
-/* English activity totals and daily log */
-#englishTrackingSummary {
-    margin: 10px 0;
-    color: var(--text-secondary);
-    font-size: 13px;
-}
-.english-log-details {
-    margin-top: 16px;
-    font-size: 13px;
-}
-.english-log-details summary {
-    cursor: pointer;
-    color: var(--text-secondary);
-}
-.english-log-table-wrap {
-    overflow: auto;
-    max-height: 320px;
-    margin-top: 12px;
-}
-.english-log-details table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-.english-log-details th,
-.english-log-details td {
-    padding: 8px;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-}
-
 /* Daily Hall of Fame */
 .leaderboard-controls {
     display: flex;
