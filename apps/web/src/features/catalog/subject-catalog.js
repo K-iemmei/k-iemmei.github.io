@@ -13,7 +13,7 @@ export const subjects = [
         name: 'English',
         icon: 'E',
         href: 'english-home.html',
-        description: 'Reading, listening and vocabulary',
+        description: 'Reading, listening, grammar & vocabulary',
         activities: [
             {
                 type: 'reading',

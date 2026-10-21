@@ -1,4 +1,41 @@
-﻿/* Parchment, sage and terracotta form the shared three-colour palette. */
+/* Fixed SVG geometry keeps theme controls aligned independently of font metrics. */
+#themeToggle:not([data-theme-switch]) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    padding: 0;
+    flex-shrink: 0;
+    line-height: 1;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+#themeToggle svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    flex: 0 0 20px;
+    pointer-events: none;
+}
+#themeToggle[data-theme-switch] .sidebar-action-icon {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+}
+#themeToggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+/* Parchment, sage and terracotta form the shared three-colour palette. */
 html:root body[data-page] .pixel-theme {
     background: var(--bg);
 }
@@ -96,4 +133,173 @@ html:root body[data-page] :is(h1, h2, h3) {
 html:root body[data-page] .english-home .category-icon {
     background: var(--accent-soft);
     color: var(--accent);
+}
+
+/* Quiet paper cards, botanical line icons and a small terracotta accent. */
+html:root body[data-page='dashboard'] .dashboard-layout .subject-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+    gap: 16px;
+}
+html:root body[data-page='dashboard'] .dashboard-layout .subject-card,
+html:root body[data-page='english-home'] .category-card {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--surface);
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--border) 35%, transparent);
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+}
+html:root body[data-page='dashboard'] .dashboard-layout .subject-card::before,
+html:root body[data-page='english-home'] .category-card::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 170px;
+    height: 170px;
+    right: -80px;
+    top: -85px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--accent) 13%, transparent);
+    box-shadow:
+        0 0 0 16px color-mix(in srgb, var(--accent) 3%, transparent),
+        0 0 0 32px color-mix(in srgb, var(--accent) 2%, transparent);
+    pointer-events: none;
+}
+html:root body[data-page='dashboard'] .dashboard-layout .subject-card {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 22px;
+    min-height: 192px;
+    padding: 22px;
+}
+html:root body[data-page='dashboard'] .dashboard-layout .subject-top,
+.category-card-top {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+}
+html:root body[data-page] .subject-card .pixel-subject-icon,
+html:root body[data-page='english-home'] .category-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    margin: 0;
+    border-radius: 14px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.subject-icon svg,
+.category-icon svg {
+    display: block;
+    width: 25px;
+    height: 25px;
+}
+.card-arrow {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: var(--warm);
+    background: color-mix(in srgb, var(--warm-soft) 55%, var(--surface));
+    transition:
+        transform 180ms ease,
+        background-color 180ms ease;
+}
+.card-arrow svg {
+    display: block;
+    width: 15px;
+    height: 15px;
+}
+html:root body[data-page='dashboard'] .dashboard-layout .subject-card h3 {
+    margin: 0 0 6px;
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+html:root body[data-page='dashboard'] .dashboard-layout .subject-card .quest-info p {
+    display: block;
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.65;
+}
+html:root body[data-page='english-home'] .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+html:root body[data-page='english-home'] .category-card {
+    min-height: 222px;
+    padding: 28px;
+}
+.category-card-top {
+    margin-bottom: 30px;
+}
+html:root body[data-page='english-home'] .category-card h2 {
+    margin: 0 0 8px;
+    font-size: 23px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+html:root body[data-page='english-home'] .category-card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+html:root body[data-page='dashboard'] .dashboard-layout a.subject-card:hover,
+html:root body[data-page='english-home'] a.category-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 25px color-mix(in srgb, var(--accent) 9%, transparent);
+}
+a.subject-card:hover .card-arrow,
+a.category-card:hover .card-arrow {
+    transform: translate(2px, -2px);
+    background: var(--warm-soft);
+}
+a.subject-card:focus-visible,
+a.category-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+html:root body[data-page='dashboard'] .dashboard-layout .subject-card[aria-disabled='true'] {
+    opacity: 0.72;
+    box-shadow: none;
+}
+@media (max-width: 600px) {
+    html:root body[data-page='english-home'] .category-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    html:root body[data-page='english-home'] .category-card {
+        min-height: 180px;
+        padding: 22px;
+    }
+    .category-card-top {
+        margin-bottom: 22px;
+    }
+    html:root body[data-page='dashboard'] .dashboard-layout .subject-card {
+        min-height: 176px;
+        padding: 20px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    html:root body[data-page] .subject-card,
+    html:root body[data-page] .category-card,
+    .card-arrow {
+        transition: none;
+    }
+    html:root body[data-page] a.subject-card:hover,
+    html:root body[data-page] a.category-card:hover {
+        transform: none;
+    }
 }

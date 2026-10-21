@@ -17,7 +17,8 @@ test('dashboard serves current subject cards before JavaScript runs', async () =
         const card = cards.eq(index);
         assert(card.hasClass(`subject-card--${subject.id}`));
         assert.equal(card.find('h3').text(), subject.name);
-        assert.equal(card.find('.subject-icon').text(), subject.icon);
+        assert.equal(card.find('.subject-icon svg').length, 1);
+        assert.equal(card.find('.subject-icon svg').attr('viewBox'), '0 0 24 24');
         assert.equal(card.attr('href'), subject.href);
         assert.equal(
             card.find('p').text(),
