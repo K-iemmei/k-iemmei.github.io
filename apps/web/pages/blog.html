@@ -150,23 +150,10 @@
             </aside>
             <main class="main writing-main" id="writingMain">
                 <div class="writing-shell">
-                    <header class="writing-topbar">
-                        <div class="writing-breadcrumb">
-                            <a href="home.html">Home</a><span>/</span><span>Blog</span>
-                        </div>
-                        <a class="writing-primary" href="note.html"
-                            ><span aria-hidden="true">+</span> New note</a
-                        >
-                    </header>
-                    <section class="writing-hero">
-                        <div>
-                            <h1>Ideas worth sharing.</h1>
-                        </div>
-                        <div class="writing-hero-mark" aria-hidden="true">B.</div>
-                    </section>
+                    <header class="blog-heading"><h1>Blog</h1></header>
                     <div class="writing-list-toolbar">
                         <label class="writing-search"
-                            ><span class="writing-sr-only">Search Blog</span
+                            ><span class="writing-sr-only">Search published posts</span
                             ><svg
                                 viewBox="0 0 24 24"
                                 fill="none"
@@ -179,24 +166,22 @@
                             ><input
                                 id="writingSearch"
                                 type="search"
-                                placeholder="Search posts, authors or tags..."
-                                maxlength="100" /></label
-                        ><button id="writingRefresh" class="writing-secondary" type="button">
-                            Refresh
-                        </button>
-                    </div>
-                    <div class="writing-list-heading">
-                        <h2>From the community</h2>
-                        <p id="writingResultCount" role="status"></p>
+                                placeholder="Search posts…"
+                                maxlength="100"
+                        /></label>
+                        <label class="writing-filter"
+                            ><span class="writing-sr-only">Search by</span
+                            ><select id="blogSearchField">
+                                <option value="all">All fields</option>
+                                <option value="title">Title</option>
+                                <option value="tag">Tag</option>
+                                <option value="author">Author</option>
+                            </select></label
+                        >
                     </div>
                     <div id="writingGrid" class="writing-grid" aria-label="Blog"></div>
-                    <section id="writingEmpty" class="writing-empty" hidden>
-                        <span aria-hidden="true">B.</span>
-                        <h2>A new chapter starts here.</h2>
-                        <p>Published notes appear here for all signed-in users.</p>
-                        <a href="note.html" class="writing-primary">Write the first post</a>
-                    </section>
-                    <nav class="writing-pagination" aria-label="Blog pages">
+                    <p id="writingEmpty" class="writing-empty" hidden>No published posts found.</p>
+                    <nav class="writing-pagination" aria-label="Blog pages" hidden>
                         <button
                             id="writingPrevious"
                             class="writing-secondary"
@@ -217,16 +202,6 @@
                 </div>
             </main>
         </div>
-        <dialog id="writingConfirm" class="writing-dialog">
-            <form method="dialog">
-                <h2>Confirm action</h2>
-                <p></p>
-                <div class="writing-dialog-actions">
-                    <button class="writing-secondary" value="cancel">Cancel</button
-                    ><button class="writing-danger" value="confirm">Confirm</button>
-                </div>
-            </form>
-        </dialog>
         <script type="module" src="src/app.js"></script>
     </body>
 </html>

@@ -181,12 +181,51 @@ const sample = [
         await owner.waitForSelector('#postArticle .rich-visual svg', { timeout: 30000 });
         assert.match(owner.url(), /post.html\?id=/);
         await reader.goto(base + '/blog.html', { waitUntil: 'networkidle0' });
-        await reader.waitForSelector('.writing-card');
+        await reader.waitForSelector('.blog-list-item');
+        await reader.bringToFront();
+        assert.equal(await reader.$('#writingRefresh'), null);
+        assert.equal(await reader.$('.writing-hero'), null);
+        assert.equal(await reader.$('#writingMain a[href="note.html"]'), null);
+        assert.equal(await reader.$eval('.writing-pagination', (el) => el.hidden), true);
+        await reader.select('#blogSearchField', 'tag');
+        await reader.$eval('#writingSearch', (el) => {
+            el.value = 'code';
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        await reader.waitForFunction(
+            () =>
+                location.search.includes('field=tag') &&
+                location.search.includes('q=code') &&
+                !document.getElementById('writingGrid').hasAttribute('aria-busy'),
+        );
+        assert.equal(await reader.$$eval('.blog-list-item', (els) => els.length), 1);
+        await reader.select('#blogSearchField', 'title');
+        await reader.waitForFunction(() => !document.getElementById('writingEmpty').hidden);
+        assert.equal(await reader.$$eval('.blog-list-item', (els) => els.length), 0);
+        await reader.$eval('#writingSearch', (el) => {
+            el.value = 'Learning';
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        await reader.waitForSelector('.blog-list-item');
         await reader.screenshot({
             path: '.local/publishing-preview/blog-light.png',
             fullPage: true,
         });
-        await reader.click('.writing-card');
+        await reader.setViewport({ width: 390, height: 844 });
+        if (!(await reader.evaluate(() => document.documentElement.dataset.theme === 'dark')))
+            await reader.click('#themeToggle');
+        assert.equal(
+            await reader.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+            true,
+        );
+        await reader.screenshot({
+            path: '.local/publishing-preview/blog-mobile-dark.png',
+            fullPage: true,
+        });
+        await reader.setViewport({ width: 1440, height: 1000 });
+        if (await reader.evaluate(() => document.documentElement.dataset.theme === 'dark'))
+            await reader.click('#themeToggle');
+        await reader.click('.blog-list-item');
         await reader.waitForSelector('#postArticle .rich-visual svg', { timeout: 30000 });
         assert.equal(await reader.$eval('#postEdit', (el) => el.hidden), true);
         assert.equal(await reader.$$eval('#postArticle .rich-error', (els) => els.length), 0);
@@ -268,9 +307,17 @@ const sample = [
             'PASS: private Notes, autosave, protected images, Markdown/LaTeX/code/chart/diagram rendering, shared Blog, private edits, unpublish, XSS protection, dark mode and mobile.',
         );
     } finally {
-        if (browser) await browser.close();
-        if (server) await new Promise((resolve) => server.close(resolve));
-        await fixture.cleanup();
+        try {
+            if (browser) await browser.close();
+        } catch (error) {
+            if (error.code !== 'EBUSY') throw error;
+        } finally {
+            if (server) {
+                server.closeAllConnections();
+                await new Promise((resolve) => server.close(resolve));
+            }
+            await fixture.cleanup();
+        }
     }
 })().catch((error) => {
     console.error(error);

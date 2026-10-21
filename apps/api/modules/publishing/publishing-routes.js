@@ -9,10 +9,21 @@ function createPublishingRouter(db) {
             const request = publishingRequest(url.pathname, req.method, req.body, url);
             if (!request) return next();
             try {
-                const result = await db.query(
-                    'SELECT public.app_notes_api($1,$2,$3,$4::jsonb) AS result',
-                    [req.userId, request.action, request.id, JSON.stringify(request.payload)],
-                );
+                const result =
+                    request.action === 'blog-list'
+                        ? await db.query('SELECT public.app_blog_list($1,$2::jsonb) AS result', [
+                              req.userId,
+                              JSON.stringify(request.payload),
+                          ])
+                        : await db.query(
+                              'SELECT public.app_notes_api($1,$2,$3,$4::jsonb) AS result',
+                              [
+                                  req.userId,
+                                  request.action,
+                                  request.id,
+                                  JSON.stringify(request.payload),
+                              ],
+                          );
                 res.status(req.method === 'POST' ? 201 : 200).json(result.rows[0].result);
             } catch (error) {
                 throw publishingError(error);

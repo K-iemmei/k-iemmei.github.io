@@ -83,7 +83,13 @@ export function publishingRequest(path, method, body, url) {
         if (method !== 'GET' || parts.length > 3) return undefined;
         action = parts[2] ? 'blog-get' : 'blog-list';
         if (parts[2]) id = uuid(parts[2]);
-        else payload = list();
+        else {
+            payload = list();
+            const field = url.searchParams.get('field') || 'all';
+            if (!['all', 'title', 'tag', 'author'].includes(field))
+                fail('Invalid blog search field');
+            payload.field = field;
+        }
     } else if (parts[2] === 'assets') {
         if (method === 'GET' && parts.length === 4) {
             action = 'asset-get';

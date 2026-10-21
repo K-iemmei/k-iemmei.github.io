@@ -9,7 +9,10 @@ export async function publishingApi(
 ) {
     const request = publishingRequest(path, method, body, url);
     if (!request) return undefined;
-    const result = await admin.rpc('app_notes_api', {
+    const result = request.action === 'blog-list' ? await admin.rpc('app_blog_list', {
+        p_user: user.id,
+        p_payload: request.payload,
+    }) : await admin.rpc('app_notes_api', {
         p_user: user.id,
         p_action: request.action,
         p_id: request.id,

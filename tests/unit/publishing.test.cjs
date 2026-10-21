@@ -136,3 +136,39 @@ test('Hosted Notes gateway always passes authenticated user and maps database co
         { status: 409 },
     );
 });
+
+test('Blog search fields are validated and hosted listing remains bound to the authenticated reader', async () => {
+    const { publishingRequest } = await import('../../apps/web/src/domain/publishing.js');
+    const { publishingApi } = await import('../../supabase/functions/app-api/publishing.ts');
+    assert.throws(
+        () =>
+            publishingRequest(
+                '/api/blog',
+                'GET',
+                null,
+                new URL('https://example.test/?field=owner'),
+            ),
+        { status: 400 },
+    );
+    for (const field of ['all', 'title', 'tag', 'author']) {
+        const calls = [];
+        const result = await publishingApi(
+            {
+                rpc: async (...args) => {
+                    calls.push(args);
+                    return { data: { items: [], has_more: false }, error: null };
+                },
+            },
+            { id: 'reader' },
+            '/api/blog',
+            'GET',
+            null,
+            new URL('https://example.test/?field=' + field + '&q=English&page=2&user_id=other'),
+        );
+        assert.deepEqual(calls[0], [
+            'app_blog_list',
+            { p_user: 'reader', p_payload: { q: 'English', page: 2, status: 'all', field } },
+        ]);
+        assert.deepEqual(result.items, []);
+    }
+});
