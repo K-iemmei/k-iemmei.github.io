@@ -150,71 +150,22 @@
             </aside>
             <main class="main writing-main" id="writingMain">
                 <div class="writing-shell">
-                    <header class="writing-topbar">
-                        <div class="writing-breadcrumb">
-                            <a href="home.html">Home</a><span>/</span><span>Notes</span>
-                        </div>
-                        <a class="writing-primary" href="note.html"
-                            ><span aria-hidden="true">+</span> New note</a
-                        >
-                    </header>
-                    <section class="writing-hero">
-                        <div>
-                            <h1>A little space to think.</h1>
-                        </div>
-                        <div class="writing-hero-mark" aria-hidden="true">N.</div>
-                    </section>
-                    <div class="writing-list-toolbar">
+                    <div class="notes-toolbar">
                         <label class="writing-search"
-                            ><span class="writing-sr-only">Search Notes</span
-                            ><svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                                aria-hidden="true"
-                            >
-                                <circle cx="10" cy="10" r="6" />
-                                <path d="m15 15 6 6" /></svg
+                            ><span class="writing-sr-only">Search notes</span
                             ><input
                                 id="writingSearch"
                                 type="search"
-                                placeholder="Search your private notes..."
-                                maxlength="100" /></label
-                        ><label class="writing-filter"
-                            ><span class="writing-sr-only">Note visibility filter</span
-                            ><select id="writingFilter">
-                                <option value="all">All notes</option>
-                                <option value="private">Private drafts</option>
-                                <option value="posted">Posted</option>
-                            </select></label
-                        ><button id="writingRefresh" class="writing-secondary" type="button">
-                            Refresh
+                                placeholder="Search notes..."
+                                maxlength="100"
+                        /></label>
+                        <button id="noteCreate" class="writing-primary" type="button">
+                            + New note
                         </button>
                     </div>
-                    <div class="writing-list-heading">
-                        <h2>Your notes</h2>
-                        <p id="writingResultCount" role="status"></p>
-                    </div>
-                    <div id="writingGrid" class="writing-grid" aria-label="Notes"></div>
-                    <section id="writingEmpty" class="writing-empty" hidden>
-                        <span aria-hidden="true">N.</span>
-                        <h2>Start with a thought.</h2>
-                        <p>Your notes stay private until you choose Post to Blog.</p>
-                        <a href="note.html" class="writing-primary">Create a note</a>
-                    </section>
-                    <nav class="writing-pagination" aria-label="Notes pages">
-                        <button
-                            id="writingPrevious"
-                            class="writing-secondary"
-                            type="button"
-                            disabled
-                        >
-                            &larr; Previous</button
-                        ><button id="writingNext" class="writing-secondary" type="button" disabled>
-                            Next &rarr;
-                        </button>
-                    </nav>
+                    <h1 class="writing-sr-only">Notes</h1>
+                    <div id="notesTree" class="notes-tree" aria-label="Notes"></div>
+                    <p id="writingEmpty" class="notes-empty" hidden>No notes found.</p>
                     <p
                         id="writingMessage"
                         class="writing-message"
@@ -224,13 +175,14 @@
                 </div>
             </main>
         </div>
-        <dialog id="writingConfirm" class="writing-dialog">
-            <form method="dialog">
-                <h2>Confirm action</h2>
-                <p></p>
+        <dialog id="noteMoveDialog" class="writing-dialog">
+            <form id="noteMoveForm">
+                <label for="noteParent">Move to</label>
+                <select id="noteParent"></select>
                 <div class="writing-dialog-actions">
-                    <button class="writing-secondary" value="cancel">Cancel</button
-                    ><button class="writing-danger" value="confirm">Confirm</button>
+                    <button id="noteMoveCancel" class="writing-secondary" type="button">
+                        Cancel</button
+                    ><button class="writing-primary" type="submit">Move</button>
                 </div>
             </form>
         </dialog>

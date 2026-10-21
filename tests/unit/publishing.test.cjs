@@ -172,3 +172,40 @@ test('Blog search fields are validated and hosted listing remains bound to the a
         assert.deepEqual(result.items, []);
     }
 });
+
+test('Tree endpoints validate parents and revisions without accepting a supplied owner', async () => {
+    const { publishingRequest } = await import('../../apps/web/src/domain/publishing.js');
+    const url = new URL('https://example.test');
+    const parsed = publishingRequest(
+        '/api/notes/tree',
+        'POST',
+        { title: 'Child', body: '', tags: [], parent_id: id, user_id: 'other' },
+        url,
+    );
+    assert.deepEqual(parsed, {
+        action: 'tree-create',
+        id: null,
+        payload: { title: 'Child', body: '', tags: [], parent_id: id },
+    });
+    assert.equal(publishingRequest('/api/notes/tree', 'GET', null, url).action, 'tree-list');
+    assert.equal(
+        publishingRequest(
+            '/api/notes/' + id + '/move',
+            'POST',
+            { parent_id: null, version: 2 },
+            url,
+        ).action,
+        'tree-move',
+    );
+    assert.throws(() =>
+        publishingRequest(
+            '/api/notes/tree',
+            'POST',
+            { title: '', body: '', tags: [], parent_id: 'bad' },
+            url,
+        ),
+    );
+    assert.throws(() =>
+        publishingRequest('/api/notes/' + id + '/move', 'POST', { version: 0 }, url),
+    );
+});

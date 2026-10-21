@@ -12,7 +12,7 @@ export async function publishingApi(
     const result = request.action === 'blog-list' ? await admin.rpc('app_blog_list', {
         p_user: user.id,
         p_payload: request.payload,
-    }) : await admin.rpc('app_notes_api', {
+    }) : await admin.rpc(request.action.startsWith('tree-') ? 'app_note_tree' : 'app_notes_api', {
         p_user: user.id,
         p_action: request.action,
         p_id: request.id,

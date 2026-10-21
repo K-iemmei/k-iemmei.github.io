@@ -90,6 +90,15 @@ export function publishingRequest(path, method, body, url) {
                 fail('Invalid blog search field');
             payload.field = field;
         }
+    } else if (parts[2] === 'tree' && parts.length === 3) {
+        if (method === 'GET') action = 'tree-list';
+        else if (method === 'POST') {
+            action = 'tree-create';
+            payload = {
+                ...cleanNote(body),
+                parent_id: body.parent_id == null ? null : uuid(body.parent_id),
+            };
+        } else return undefined;
     } else if (parts[2] === 'assets') {
         if (method === 'GET' && parts.length === 4) {
             action = 'asset-get';
@@ -109,7 +118,13 @@ export function publishingRequest(path, method, body, url) {
         } else return undefined;
     } else {
         id = uuid(parts[2]);
-        if (parts.length === 3 && method === 'GET') action = 'get';
+        if (parts.length === 4 && parts[3] === 'move' && method === 'POST') {
+            action = 'tree-move';
+            payload = {
+                parent_id: body?.parent_id == null ? null : uuid(body.parent_id),
+                version: version(body?.version),
+            };
+        } else if (parts.length === 3 && method === 'GET') action = 'get';
         else if (parts.length === 3 && method === 'PUT') {
             action = 'save';
             payload = { ...cleanNote(body), version: version(body.version) };

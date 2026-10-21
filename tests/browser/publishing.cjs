@@ -83,8 +83,8 @@ const sample = [
             reader = await account('blog-reader', 'reader-password');
         await owner.goto(base + '/notes.html', { waitUntil: 'networkidle0' });
         await owner.waitForFunction(() => !document.getElementById('writingEmpty').hidden);
-        await owner.click('a.writing-primary[href="note.html"]');
-        await owner.waitForFunction(() => !document.getElementById('noteTitle').disabled);
+        await owner.click('#noteCreate');
+        await owner.waitForSelector('#noteTitle:not(:disabled)');
         await owner.$eval('#noteTitle', (el) => {
             el.value = 'Learning, one note at a time';
             el.dispatchEvent(new Event('input', { bubbles: true }));
@@ -117,8 +117,46 @@ const sample = [
         assert.equal(await owner.$$eval('#notePreview .rich-error', (els) => els.length), 0);
         assert.ok(await owner.$('#notePreview .hljs-keyword'));
         assert.match(await owner.$eval('#notePreview pre', (el) => el.textContent), /\$not_math\$/);
+        await owner.goto(base + '/notes.html', { waitUntil: 'networkidle0' });
+        await owner.waitForSelector(`[data-id="${id}"]`);
+        await owner.click(`[data-id="${id}"] [data-action="add"]`);
+        await owner.waitForSelector('#noteTitle:not(:disabled)');
+        const childId = new URL(owner.url()).searchParams.get('id');
+        assert(childId && childId !== id);
+        await owner.$eval('#noteTitle', (el) => {
+            el.value = 'Nested idea';
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        await owner.waitForFunction(
+            () => document.getElementById('noteSaveStatus').textContent === 'Saved',
+        );
+        await owner.goto(base + '/notes.html', { waitUntil: 'networkidle0' });
+        await owner.waitForSelector(`[data-id="${childId}"]`, { visible: true });
+        await owner.click(`[data-id="${id}"] [data-action="toggle"]`);
+        await owner.waitForSelector(`[data-id="${childId}"]`, { hidden: true });
+        await owner.type('#writingSearch', 'Nested idea');
+        await owner.waitForSelector(`[data-id="${childId}"]`, { visible: true });
+        await owner.click(`[data-id="${childId}"] [data-action="move"]`);
+        await owner.select('#noteParent', '');
+        await owner.click('#noteMoveForm button[type="submit"]');
+        await owner.waitForFunction(
+            (child) => document.querySelector('#notesTree > ul > li > [data-id="' + child + '"]'),
+            {},
+            childId,
+        );
+        await owner.setViewport({ width: 390, height: 844 });
+        assert(await owner.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+        await owner.setViewport({ width: 1440, height: 1000 });
+        await owner.evaluate(async (child) => {
+            const note = await (await fetch('/api/notes/' + child)).json();
+            const response = await fetch('/api/notes/' + child + '?version=' + note.version, {
+                method: 'DELETE',
+            });
+            if (!response.ok) throw Error('Could not clean up child fixture');
+        }, childId);
+        await owner.goto(base + '/note.html?id=' + id, { waitUntil: 'networkidle0' });
         await reader.goto(base + '/notes.html', { waitUntil: 'networkidle0' });
-        assert.equal(await reader.$$eval('.writing-card', (els) => els.length), 0);
+        assert.equal(await reader.$$eval('.note-tree-row', (els) => els.length), 0);
         await reader.goto(base + '/note.html?id=' + id, { waitUntil: 'networkidle0' });
         assert.match(
             await reader.$eval('#writingMessage', (el) => el.textContent),
@@ -306,6 +344,9 @@ const sample = [
         console.log(
             'PASS: private Notes, autosave, protected images, Markdown/LaTeX/code/chart/diagram rendering, shared Blog, private edits, unpublish, XSS protection, dark mode and mobile.',
         );
+    } catch (error) {
+        console.error('Publishing browser check failed:', error);
+        throw error;
     } finally {
         try {
             if (browser) await browser.close();

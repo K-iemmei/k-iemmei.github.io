@@ -72,3 +72,10 @@ Practice renders safe table structure before inserting answer controls into text
 Blog shows published snapshots in descending publication date, with a stable ID tie-breaker. The interface contains a reading list and debounced search by all fields, title, tag or author; pagination appears only when needed. Search state is retained in the URL and changing a search resets its page. Private Notes keep their existing authoring and status controls.
 
 Both API runtimes route Blog listing to `app_blog_list`, passing the authenticated reader and validated search fields. Apply `database/migrations/018-blog-search.sql` and `supabase/hosted-blog-search-migration.sql` before deploying the API. The RPC reads only `blog_posts`, never unposted edits from private Notes, and direct browser execution is revoked. Other Notes and post-detail actions still use `app_notes_api`. Integration tests cover search scopes, literal wildcard characters, publication ordering, pagination and private draft isolation.
+
+Notes use a compact nested list backed by `personal_notes.parent_id` (migration 019).
+The authenticated `app_note_tree` gateway lists owner metadata, creates a note in a branch,
+and moves an existing note with version checks. Moves reject self/descendant parents and
+other owners; owner-row locking serializes tree writes. Deleting a parent promotes its
+children to the top level instead of deleting their content. Publication remains per note.
+Apply `supabase/hosted-note-tree-migration.sql` after migration 019 for service-role-only RPC access.

@@ -16,7 +16,7 @@ function createPublishingRouter(db) {
                               JSON.stringify(request.payload),
                           ])
                         : await db.query(
-                              'SELECT public.app_notes_api($1,$2,$3,$4::jsonb) AS result',
+                              `SELECT public.${request.action.startsWith('tree-') ? 'app_note_tree' : 'app_notes_api'}($1,$2,$3,$4::jsonb) AS result`,
                               [
                                   req.userId,
                                   request.action,
