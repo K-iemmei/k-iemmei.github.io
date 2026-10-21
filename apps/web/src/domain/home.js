@@ -1,4 +1,15 @@
-﻿const categories = new Set(['latest', 'world', 'business', 'technology']);
+﻿const categories = new Set([
+    'latest',
+    'world',
+    'business',
+    'technology',
+    'football',
+    'sports',
+    'science',
+    'health',
+    'lifestyle',
+    'entertainment',
+]);
 export function homeRequest(path, method, body) {
     if (path === '/api/home' && method === 'GET') return { action: 'load', payload: {} };
     if (path === '/api/home/preferences' && method === 'PUT') {

@@ -419,6 +419,7 @@ body[data-page='home'] .app {
     line-height: 1.8;
 }
 .news-item > a {
+    display: block;
     font-family: var(--font-sans);
     font-size: 18px;
     font-weight: 600;
@@ -480,5 +481,83 @@ body[data-page='home'] .app {
     }
     .daily-panel {
         padding: 18px;
+    }
+}
+
+.news-topic {
+    display: inline-block;
+    margin-bottom: 7px;
+    margin-right: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+}
+.news-item time {
+    display: inline-block;
+}
+.football-panel {
+    grid-column: 1/-1;
+    border-top: 3px solid var(--accent);
+}
+.football-panel h2 {
+    color: var(--accent);
+}
+.football-table-wrap {
+    overflow-x: auto;
+}
+.football-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.football-table th,
+.football-table td {
+    padding: 12px 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-light);
+    white-space: nowrap;
+}
+.football-table th:nth-child(2) {
+    text-align: left;
+    width: 100%;
+    white-space: normal;
+    min-width: 110px;
+}
+.football-table tbody th {
+    font-weight: 500;
+}
+.football-table thead th {
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 500;
+}
+.football-table abbr {
+    text-decoration: none;
+}
+.football-table .football-points {
+    font-weight: 700;
+    color: var(--accent);
+}
+.football-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+}
+.football-footer .home-source {
+    margin: 0 0 0 auto;
+}
+@media (max-width: 540px) {
+    .football-table .football-detail {
+        display: none;
+    }
+    .football-table th,
+    .football-table td {
+        padding: 10px 6px;
+    }
+    .football-panel .daily-panel-heading label,
+    #footballLeague {
+        width: 100%;
     }
 }

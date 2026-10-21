@@ -3,6 +3,14 @@ function createHomeRouter(db) {
     const router = Router();
     router.use(async (req, res, next) => {
         try {
+            if (req.path === '/football' && req.method === 'GET') {
+                const { loadStandings } = await import('../../../web/src/domain/home-football.js');
+                return res.json(
+                    await loadStandings(
+                        new URL(req.originalUrl, 'http://localhost').searchParams.get('league'),
+                    ),
+                );
+            }
             if (req.path === '/news' && req.method === 'GET') {
                 const { loadNews } = await import('../../../web/src/domain/home-news.js');
                 return res.json(

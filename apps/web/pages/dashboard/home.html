@@ -218,10 +218,16 @@
                             <div class="news-controls">
                                 <label class="home-sr-only" for="newsCategory">News category</label
                                 ><select id="newsCategory">
-                                    <option value="latest">Latest</option>
+                                    <option value="latest">Highlights</option>
+                                    <option value="football">Football</option>
+                                    <option value="sports">Sports</option>
                                     <option value="world">World</option>
                                     <option value="business">Business</option>
-                                    <option value="technology">Technology</option></select
+                                    <option value="technology">Technology</option>
+                                    <option value="science">Science</option>
+                                    <option value="health">Health</option>
+                                    <option value="lifestyle">Lifestyle</option>
+                                    <option value="entertainment">Entertainment</option></select
                                 ><button id="newsRefresh" type="button" aria-label="Refresh news">
                                     ↻
                                 </button>
@@ -236,6 +242,64 @@
                             rel="noopener noreferrer"
                             >VnExpress</a
                         >
+                    </section>
+                    <section class="daily-panel football-panel" aria-labelledby="footballHeading">
+                        <div class="daily-panel-heading">
+                            <h2 id="footballHeading">Football standings</h2>
+                            <label
+                                ><span class="home-sr-only">League</span
+                                ><select id="footballLeague" aria-label="League"></select
+                            ></label>
+                        </div>
+                        <p id="footballMessage" class="home-message" role="status">
+                            Loading standings...
+                        </p>
+                        <div class="football-table-wrap" id="footballTable" hidden>
+                            <table class="football-table">
+                                <caption class="home-sr-only">
+                                    League standings
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Club</th>
+                                        <th scope="col"><abbr title="Played">P</abbr></th>
+                                        <th scope="col" class="football-detail">
+                                            <abbr title="Won">W</abbr>
+                                        </th>
+                                        <th scope="col" class="football-detail">
+                                            <abbr title="Drawn">D</abbr>
+                                        </th>
+                                        <th scope="col" class="football-detail">
+                                            <abbr title="Lost">L</abbr>
+                                        </th>
+                                        <th scope="col"><abbr title="Goal difference">GD</abbr></th>
+                                        <th scope="col"><abbr title="Points">Pts</abbr></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="footballRows"></tbody>
+                            </table>
+                        </div>
+                        <div class="football-footer">
+                            <button
+                                id="footballExpand"
+                                type="button"
+                                aria-expanded="false"
+                                aria-controls="footballRows"
+                                hidden
+                            >
+                                Full table</button
+                            ><button id="footballRetry" type="button" hidden>Retry</button
+                            ><a
+                                id="footballSource"
+                                class="home-source"
+                                href="https://www.espn.com/soccer/standings/_/league/eng.1"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                hidden
+                                >ESPN</a
+                            >
+                        </div>
                     </section>
                 </div>
             </main>

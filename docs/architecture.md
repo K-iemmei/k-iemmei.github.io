@@ -79,3 +79,16 @@ and moves an existing note with version checks. Moves reject self/descendant par
 other owners; owner-row locking serializes tree writes. Deleting a parent promotes its
 children to the top level instead of deleting their content. Publication remains per note.
 Apply `supabase/hosted-note-tree-migration.sql` after migration 019 for service-role-only RPC access.
+
+Home Highlights mixes up to ten deduplicated RSS stories across topics, reserving three
+football slots when available. Football stories are filtered from the active VnExpress
+Sports RSS (the dedicated football RSS currently returns an empty channel). Topic views
+show up to eight stories with publisher summaries. Feeds cache for five minutes and can
+serve a clearly marked prior update for up to one day if the publisher is unavailable.
+
+`GET /api/home/football?league=eng.1` uses the authenticated API in both runtimes to fetch
+ESPN standings for an allowlisted league: Premier League, La Liga, Serie A, Bundesliga,
+Ligue 1 or Champions League. It preserves source ranks and season labels, rejects incomplete
+or ambiguous group data, caches for ten minutes and coalesces concurrent requests.
+The UI shows top five with a full-table toggle; league switching ignores late responses.
+Both panels load independently of personal Home data. Migration 020 expands saved news topics.

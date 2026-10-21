@@ -3,6 +3,7 @@ import { apiRequest } from '../../core/database-client.js';
 import { clearSession } from '../../core/session-storage.js';
 import { escapeHtml as h } from '../../shared/escape-html.js';
 import { initWeather } from './home-weather.js';
+import { initFootball } from './home-football.js';
 
 const defaultCity = { name: 'Hà Nội, Việt Nam', latitude: 21.0285, longitude: 105.8542 };
 const $ = (id) => document.getElementById(id);
@@ -193,7 +194,7 @@ async function loadNews({ force = false } = {}) {
     try {
         const category = $('newsCategory').value;
         const data = await cachedLoad(
-            'public-news:' + category,
+            'public-news:v2:' + category,
             () => apiRequest('/api/home/news?category=' + encodeURIComponent(category)),
             { maxAge: 300000, force },
         );
@@ -201,7 +202,7 @@ async function loadNews({ force = false } = {}) {
         $('newsList').innerHTML = data.items
             .map(
                 (item) =>
-                    `<article class="news-item"><time datetime="${h(item.published_at)}">${h(new Date(item.published_at).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }))}</time><a href="${h(item.url)}" target="_blank" rel="noopener noreferrer">${h(item.title)}<span aria-hidden="true"> ↗</span></a>${item.summary ? `<p class="news-summary">${h(item.summary)}</p>` : ''}</article>`,
+                    `<article class="news-item">${item.category_label ? `<span class="news-topic">${h(item.category_label)}</span>` : ''}<time datetime="${h(item.published_at)}">${h(new Date(item.published_at).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }))}</time><a href="${h(item.url)}" target="_blank" rel="noopener noreferrer">${h(item.title)}<span aria-hidden="true"> ↗</span></a>${item.summary ? `<p class="news-summary">${h(item.summary)}</p>` : ''}</article>`,
             )
             .join('');
         $('newsMessage').textContent = data.stale
@@ -229,5 +230,6 @@ controls();
 $('newsCategory').value = preferences.news_category;
 weather.show(preferences.city || defaultCity);
 loadNews();
+initFootball();
 await loadHome();
 $('newsCategory').disabled = !ready;

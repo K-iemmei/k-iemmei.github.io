@@ -70,6 +70,13 @@ test('Home tasks and settings persist per account; edits, pins and completion re
     assert.equal(loaded.todos[0].title, 'Read and review');
     assert.deepEqual(loaded.preferences, prefs);
     assert.equal(
+        (await req('/preferences', 'PUT', { ...prefs, news_category: 'football' })).status,
+        200,
+    );
+    assert.equal((await (await req('')).json()).preferences.news_category, 'football');
+    assert.equal((await req('/football?league=invalid')).status, 400);
+    assert.equal((await fetch(base + '/api/home/football')).status, 401);
+    assert.equal(
         (await req('/preferences', 'PUT', { ...prefs, city: { ...prefs.city, latitude: 999 } }))
             .status,
         400,
