@@ -28,3 +28,13 @@ There is no automatic migration of local password hashes into Supabase Auth; cre
 ## Home hub update
 
 For an existing project, apply `database/migrations/015-home-hub.sql` and `database/migrations/016-home-gateway-permissions.sql` in a transaction before redeploying `app-api` and Pages. It only adds Home tasks/preferences and their account-scoped RPC; it does not modify study data. A fresh schema export includes this migration automatically. Home fetches headline RSS through the authenticated API and weather directly from Open-Meteo. Neither source requires a private API key for this personal site.
+
+## Add another hosted account
+
+Creating an Auth user alone does not grant application access. An administrator must
+explicitly add that user's Auth UUID to `public.hosted_members`. Do not import another
+user's personal data to provision an empty account. After approval, `app-api` creates a
+profile with that same Auth UUID on first use. Concurrent initial panel requests use an
+insert that ignores a duplicate UUID, preserving an existing profile. Account creation
+does not automatically approve every Auth user; weather and cached public news can still
+appear while protected API features return 403 for an unapproved account.

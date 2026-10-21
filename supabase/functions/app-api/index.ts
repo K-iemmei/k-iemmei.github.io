@@ -6,6 +6,7 @@ import { trackingApi } from './tracking.ts';
 import { publishingApi } from './publishing.ts';
 import { homeApi } from './home.ts';
 import { readApiBody } from './request-body.ts';
+import { ensureHostedProfile } from './hosted-profile.ts';
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
 const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
@@ -116,31 +117,8 @@ Deno.serve(async (req) => {
             error,
         } = await admin.auth.getUser(token);
         if (error || !user) return json({ error: 'Invalid session' }, 401);
-        const [memberResult, profileResult] = await Promise.all([
-            admin
-                .from('hosted_members')
-                .select('user_id')
-                .eq('user_id', user.id)
-                .maybeSingle(),
-            admin.from('users').select('id,name').eq('id', user.id).maybeSingle(),
-        ]);
-        const member = checked(memberResult);
-        if (!member) return json({ error: 'This account has not been granted access' }, 403);
-        // Local account IDs are never exported. Hosted profiles share the Auth UUID.
-        const profile = checked(profileResult);
-        if (!profile)
-            checked(
-                await admin.from('users').insert({
-                    id: user.id,
-                    email: user.email,
-                    name: user.user_metadata?.name || user.email?.split('@')[0] || 'Learner',
-                    username: null,
-                }),
-            );
-        else if (profile.name === 'Local Developer')
-            checked(await admin.from('users').update({
-                name: user.user_metadata?.name || user.email?.split('@')[0] || 'Learner',
-            }).eq('id', user.id).eq('name', 'Local Developer'));
+        if (!(await ensureHostedProfile(admin, user)))
+            return json({ error: 'This account has not been granted access' }, 403);
         const body = await readApiBody(req, path);
         let result;
         if (/^\/api\/home(\/|$)/.test(path))
