@@ -1,3 +1,4 @@
+import { priorityRequest } from '../../../apps/web/src/domain/priority-vocabulary.js';
 function checked(result) {
     if (result.error) throw new Error(result.error.message);
     return result.data;
@@ -23,6 +24,12 @@ const clean = (value, max, required = false) => {
     return text;
 };
 export async function vocabularyApi(admin, user, path, method, body, url) {
+    const priority=priorityRequest('/api/'+path,method,body);
+    if(priority) {
+        const result=await admin.rpc('app_priority_vocabulary',{p_user:user.id,p_action:priority.action,p_id:priority.id,p_payload:priority.payload});
+        if(result.error)throw Object.assign(new Error(result.error.message),{status:result.error.code==='40001'?409:result.error.code==='P0002'?404:400});
+        return result.data;
+    }
     const segments = path.split('/').filter(Boolean);
     if (segments[0] !== 'vocabulary') return undefined;
     const action = segments[1];

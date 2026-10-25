@@ -1,3 +1,4 @@
+import { initPriorityVocabulary } from './priority-vocabulary-page.js';
 import { apiRequest } from '../../core/database-client.js';
 import { deployment } from '../../core/deployment-config.js';
 import { parseApkgInBrowser } from './apkg-browser.js';
@@ -149,10 +150,25 @@ fileInput.addEventListener('change', async () => {
     }
 });
 
-await Promise.all([
-    loadDecks(),
-    loadActivity().catch((error) => {
-        message.textContent = error.message;
-        message.classList.add('error');
-    }),
-]);
+let ankiLoaded = false;
+async function selectTab(anki) {
+    document.getElementById('priorityPanel').hidden = anki;
+    document.getElementById('ankiPanel').hidden = !anki;
+    document.getElementById('priorityTab').setAttribute('aria-pressed', String(!anki));
+    document.getElementById('ankiTab').setAttribute('aria-pressed', String(anki));
+    document.querySelector('.intro-actions').hidden = !anki;
+    if (anki && !ankiLoaded) {
+        ankiLoaded = true;
+        await Promise.all([
+            loadDecks(),
+            loadActivity().catch((error) => {
+                message.textContent = error.message;
+                message.classList.add('error');
+            }),
+        ]);
+    }
+}
+document.getElementById('priorityTab').addEventListener('click', () => selectTab(false));
+document.getElementById('ankiTab').addEventListener('click', () => selectTab(true));
+await selectTab(false);
+await initPriorityVocabulary();

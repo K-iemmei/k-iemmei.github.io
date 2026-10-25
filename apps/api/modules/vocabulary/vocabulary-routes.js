@@ -10,6 +10,27 @@ const text = (value, max, required = false) => {
 };
 function createVocabularyRouter(db) {
     const router = Router();
+    router.use(async (req, res, next) => {
+        try {
+            const { priorityRequest } =
+                await import('../../../web/src/domain/priority-vocabulary.js');
+            const request = priorityRequest(
+                new URL(req.originalUrl, 'http://localhost').pathname,
+                req.method,
+                req.body,
+            );
+            if (!request) return next();
+            const result = await db.query(
+                'SELECT public.app_priority_vocabulary($1,$2,$3,$4::jsonb) AS result',
+                [req.userId, request.action, request.id, JSON.stringify(request.payload)],
+            );
+            res.json(result.rows[0].result);
+        } catch (error) {
+            if (error.code === '40001') error.status = 409;
+            else if (error.code === '22023') error.status = 400;
+            next(error);
+        }
+    });
     const todayCountSql = `SELECT count(DISTINCT card_id)::int AS count FROM vocabulary_reviews
         WHERE user_id=$1 AND (reviewed_at AT TIME ZONE $2)::date=(now() AT TIME ZONE $2)::date`;
     async function studySettings(userId, query = db) {

@@ -12,7 +12,7 @@
             }
         </script>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Vocabulary decks | Daily Note</title>
+        <title>Vocabulary | Daily Note</title>
         <script>
             try {
                 if (localStorage.getItem('theme') === 'dark')
@@ -40,9 +40,9 @@
             <main>
                 <section class="page-intro">
                     <div>
-                        <h1>Vocabulary decks</h1>
+                        <h1>Vocabulary</h1>
                     </div>
-                    <div class="intro-actions">
+                    <div class="intro-actions" hidden>
                         <a class="primary-button" href="vocabulary-deck.html"
                             ><span aria-hidden="true">+</span> Create deck</a
                         >
@@ -51,44 +51,131 @@
                     </div>
                 </section>
                 <p id="pageMessage" class="page-message" role="status" aria-live="polite"></p>
-                <section class="activity-panel" aria-labelledby="activityHeading">
-                    <div class="activity-heading">
-                        <div>
-                            <h2 id="activityHeading">Learning activity</h2>
-                            <p id="activitySummary">Loading progress…</p>
+                <nav class="vocab-tabs" aria-label="Chọn danh sách từ vựng">
+                    <button
+                        id="priorityTab"
+                        type="button"
+                        aria-pressed="true"
+                        aria-controls="priorityPanel"
+                    >
+                        Từ vựng ưu tiên
+                    </button>
+                    <button
+                        id="ankiTab"
+                        type="button"
+                        aria-pressed="false"
+                        aria-controls="ankiPanel"
+                    >
+                        Flashcards / Anki
+                    </button>
+                </nav>
+                <section id="priorityPanel" aria-label="Từ vựng ưu tiên">
+                    <div class="priority-toolbar">
+                        <label class="priority-search"
+                            ><span class="sr-only">Tìm từ</span
+                            ><input
+                                id="prioritySearch"
+                                type="search"
+                                placeholder="Tìm từ…"
+                                autocomplete="off"
+                        /></label>
+                        <label
+                            ><span class="sr-only">Số lần học</span
+                            ><select id="priorityRounds">
+                                <option value="">Tất cả lượt học</option>
+                                <option value="0">Chưa học</option>
+                                <option value="1">Đã học 1 lần</option>
+                                <option value="2">Đã học 2 lần</option>
+                                <option value="3">Đã học 3 lần</option>
+                                <option value="4">Đã học 4 lần</option>
+                                <option value="5">Đủ 5 lần</option>
+                            </select></label
+                        >
+                        <label
+                            ><span class="sr-only">Chữ cái</span
+                            ><select id="priorityLetter"></select
+                        ></label>
+                        <label
+                            ><span class="sr-only">Trình độ</span
+                            ><select id="priorityLevel">
+                                <option value="">Mọi trình độ</option>
+                                <option>B1</option>
+                                <option>B2</option>
+                                <option>C1</option>
+                            </select></label
+                        >
+                    </div>
+                    <nav
+                        id="priorityLetters"
+                        class="priority-letters"
+                        aria-label="Chọn chữ cái"
+                    ></nav>
+                    <div class="priority-list-heading">
+                        <p id="priorityCount" role="status"></p>
+                        <p>Tích sau mỗi lần ôn · Bấm tích cuối để bỏ</p>
+                    </div>
+                    <p
+                        id="priorityMessage"
+                        class="page-message"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
+                    <button id="priorityReload" class="outline-button" type="button" hidden>
+                        Thử tải lại
+                    </button>
+                    <div id="priorityWords" aria-busy="true"></div>
+                    <button id="priorityMore" class="outline-button" type="button" hidden>
+                        Xem thêm từ
+                    </button>
+                    <details class="priority-sources">
+                        <summary>Nguồn nội dung</summary>
+                        <p>
+                            Danh sách học: vocab_list.txt của bạn. Nghĩa và ví dụ được chọn lọc từ
+                            từ điển mở, kèm nội dung bổ sung.
+                        </p>
+                        <p id="priorityAttribution"></p>
+                    </details>
+                </section>
+                <div id="ankiPanel" hidden>
+                    <section class="activity-panel" aria-labelledby="activityHeading">
+                        <div class="activity-heading">
+                            <div>
+                                <h2 id="activityHeading">Learning activity</h2>
+                                <p id="activitySummary">Loading progress…</p>
+                            </div>
+                            <label class="limit-control"
+                                >Cards per day
+                                <select
+                                    id="dailyLimit"
+                                    aria-label="Maximum distinct cards to study per day"
+                                >
+                                    <option value="null">Unlimited</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </label>
                         </div>
-                        <label class="limit-control"
-                            >Cards per day
-                            <select
-                                id="dailyLimit"
-                                aria-label="Maximum distinct cards to study per day"
-                            >
-                                <option value="null">Unlimited</option>
-                                <option value="10">10</option>
-                                <option value="20">20</option>
-                                <option value="30">30</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                        </label>
-                    </div>
-                    <div
-                        id="activityChart"
-                        class="activity-chart"
-                        role="img"
-                        aria-label="Cards studied each day during the last 30 days"
-                    ></div>
-                    <div class="chart-labels"><span>30 days ago</span><span>Today</span></div>
-                </section>
-                <section aria-labelledby="deckHeading">
-                    <div class="section-heading">
-                        <h2 id="deckHeading">All decks</h2>
-                        <span id="deckCount"></span>
-                    </div>
-                    <div id="deckList" class="deck-grid" aria-live="polite">
-                        <p class="loading-note">Loading decks…</p>
-                    </div>
-                </section>
+                        <div
+                            id="activityChart"
+                            class="activity-chart"
+                            role="img"
+                            aria-label="Cards studied each day during the last 30 days"
+                        ></div>
+                        <div class="chart-labels"><span>30 days ago</span><span>Today</span></div>
+                    </section>
+                    <section aria-labelledby="deckHeading">
+                        <div class="section-heading">
+                            <h2 id="deckHeading">All decks</h2>
+                            <span id="deckCount"></span>
+                        </div>
+                        <div id="deckList" class="deck-grid" aria-live="polite">
+                            <p class="loading-note">Loading decks…</p>
+                        </div>
+                    </section>
+                </div>
             </main>
         </div>
         <script type="module" src="src/app.js"></script>

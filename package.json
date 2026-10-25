@@ -10,6 +10,7 @@
         "test:integration": "node --test tests/integration/*.test.cjs",
         "test:browser": "node tests/browser/smoke.cjs",
         "test:browser:grammar": "node tests/browser/grammar.cjs",
+        "test:browser:vocabulary": "node tests/browser/priority-vocabulary.cjs",
         "test:browser:publishing": "node tests/browser/publishing.cjs",
         "build:pages": "node tools/site/build.cjs",
         "preview:pages": "node tools/site/preview.cjs",
