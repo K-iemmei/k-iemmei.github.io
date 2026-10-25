@@ -14,6 +14,7 @@ test('book roadmap contains 145 ordered verified units, separate ready content, 
         ),
     );
     assert.equal(book.units.length, 145);
+    assert.equal(Object.keys(bookLessons).length, 145);
     assert.equal(book.verification.unitTheoryPagesVerified, 145);
     assert.equal(book.units[0].title, 'Present continuous (I am doing)');
     assert.match(book.units[144].title, /away\/back/);
@@ -36,6 +37,7 @@ test('book roadmap contains 145 ordered verified units, separate ready content, 
         }
         for (const q of lesson.questions) {
             assert(q.prompt && q.explanation && q.hint);
+            assert(!/[{}]|\[[^\]]+~/.test(q.prompt + q.answers.join(' ')), q.id);
             assert(q.answers.every((a) => typeof a === 'string' && a.trim()));
             if (q.type === 'choice') {
                 assert.equal(new Set(q.options).size, q.options.length);
@@ -47,8 +49,20 @@ test('book roadmap contains 145 ordered verified units, separate ready content, 
         normaliseGrammarAnswer("She isn't working!"),
         normaliseGrammarAnswer('She is not working.'),
     );
+    const possessive = bookLessons[81].questions[0];
+    assert.equal(possessive.answers[0], "Linh's");
+    const punctuation = bookLessons[95].questions.find((q) => q.type === 'error');
+    assert(
+        gradeGrammar(bookLessons[95], 'review', { [punctuation.id]: punctuation.answers[0] })[0]
+            .correct,
+    );
+    assert(
+        !gradeGrammar(bookLessons[95], 'review', {
+            [punctuation.id]: punctuation.answers[0].replaceAll(',', ''),
+        })[0].correct,
+    );
     assert.throws(
-        () => grammarRequest('/api/grammar/giu-007/attempts', 'POST', {}),
+        () => grammarRequest('/api/grammar/giu-146/attempts', 'POST', {}),
         /no interactive/,
     );
     assert.throws(

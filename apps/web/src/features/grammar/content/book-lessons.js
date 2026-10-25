@@ -1,5 +1,11 @@
 // Original Vietnamese teaching notes and original practice, aligned to book units.
 // No book exercises or answer keys are reproduced here.
+import { units as time } from './extended-time.js';
+import { units as verbs } from './extended-verbs.js';
+import { units as nouns } from './extended-nouns.js';
+import { units as modifiers } from './extended-modifiers.js';
+import { units as prepositions } from './extended-prepositions.js';
+import { units as phrasal } from './extended-phrasal.js';
 const q = (type, prompt, answers, explanation, options) => ({
     type,
     prompt,
@@ -8,6 +14,12 @@ const q = (type, prompt, answers, explanation, options) => ({
     options,
 });
 export const bookLessons = {
+    ...time,
+    ...verbs,
+    ...nouns,
+    ...modifiers,
+    ...prepositions,
+    ...phrasal,
     1: {
         objective: 'Mô tả việc đang diễn ra, dự án tạm thời và sự thay đổi bằng am/is/are + V-ing.',
         rules: [
@@ -1313,7 +1325,7 @@ for (const [number, lesson] of Object.entries(bookLessons)) {
         ...question,
         id: `${lesson.id}-q${index + 1}`,
         mode: index < 8 ? 'quick' : index < 14 ? 'deep' : 'assessment',
-        hint: lesson.rules[index % lesson.rules.length][2],
+        hint: question.hint || lesson.rules[index % lesson.rules.length][2],
     }));
     // This comparison has two standard spellings, not two different correct choices.
     if (Number(number) === 3) lesson.questions[2].answers = ['is practising', 'is practicing'];

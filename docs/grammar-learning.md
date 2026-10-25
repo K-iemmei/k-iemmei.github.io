@@ -16,19 +16,23 @@ invented or converted into text exercises. Original page-level extraction stays 
 
 ## What is available
 
-The complete 145-unit roadmap follows the book's order. The first release provides
-interactive Units 1–6 (Present and past): 36 original bilingual examples plus 36 variants,
-114 original scored questions (8 quick + 6 deep + 5 assessment per unit) and 18 writing/
-conversation scenarios. Original teaching notes explain meaning, context, common
-confusions, and exceptions. The book supplies the sequence/reference; teaching notes,
-examples and exercises are application-authored additions, visibly labelled in the UI.
-No scanned pages, copied book exercises or answer keys are included in Pages assets.
+All 145 units are interactive and retain the verified book order and page references.
+The complete course has 870 bilingual examples with 870 related variants, 2,755 controlled
+practice/test questions, and 435 writing/conversation scenarios. Each unit has 8 quick,
+6 deep and 5 assessment questions, with 3 application tasks and explicit self-review criteria.
 
-Units 7–145 are visible **reference-only** entries, with exact page references; they do
-not expose empty quizzes or claim completion. The previous 72 original lessons remain
-available under supplementary material and old lesson URLs. Their browser progress is
-left intact and is not equated with completion of new book units. CEFR labels from that
-old course are not presented as publisher-assigned difficulty levels for the new units.
+Units 7–145 use six separately authored bilingual patterns per topic. The authoring modules
+cover all book groups, including names/articles, non-defining clauses, verb/preposition
+combinations and each phrasal-verb group. Context substitutions vary people, documents,
+cities and devices without changing agreement. Questions vary the response task (gap,
+controlled correction, ordering and discrimination), not just the question ID. The builder
+expands these authored patterns; this is deterministic content, not live AI generation.
+Each pattern includes its own explanation and explicit contrast. Models, translations,
+contrasts, and teaching notes are application-authored additions, not copied book exercises.
+
+No unit is left reference-only. The previous 72 lessons remain supplementary and old
+browser progress is retained rather than converted into completion of the new course.
+No PDF, extracted page text or book answer keys are included in Pages assets.
 
 ## Learning contract
 
@@ -57,17 +61,20 @@ of an existing attempt ID does not advance its schedule twice. The review filter
 units with mistakes/due items; review mode drills those questions. Dashboard English
 points/Reading/Listening tracking remain separate; Grammar does not invent point credit.
 
-## Adding the next batch
+## Maintaining content
 
-Add original unit content in `content/book-lessons.js` using stable giu-NNN/question IDs.
+Update original unit content in `content/book-lessons.js` using stable giu-NNN/question IDs.
 Update readiness in the canonical curriculum JSON and its matching generated JS module;
-keep book number/title/page references unchanged. Add a migration widening the interactive
-unit allowlist in `grammar_unit_progress` and `app_grammar_api`, then extend content and
-API tests. The UI and grading engine do not need a redesign. Include direct contrasts,
+keep book number/title/page references unchanged. Migration 022 expands the existing allowlist to exactly giu-001 through giu-145 without
+rewriting user data. Extend content and API tests when modifying a unit. The UI and grading engine do not need a redesign. Include direct contrasts,
 meaningful contexts, accepted alternatives, and actual explanations; do not duplicate
 questions merely to increase counts.
 
 For hosted deployment apply migration 021, then `supabase/hosted-grammar-migration.sql`,
 and deploy `app-api` and Pages. Run unit/integration Grammar checks and
 `npm run test:browser:grammar`. Browser coverage includes account persistence, saved
-writing after clearing device drafts, reference-only units, both themes and 320–1440px.
+writing after clearing device drafts, interactive Unit 145, both themes and 320–1440px.
+
+For an existing six-unit deployment, apply migration 022 and redeploy app-api and Pages.
+Comma placement is graded explicitly in Units 95–96; case, whitespace and terminal
+punctuation remain tolerant. Zero-article gaps accept an em dash, hyphen, none or no article.

@@ -1,5 +1,5 @@
 import { bookLessons } from '../features/grammar/content/book-lessons.js';
-export function normaliseGrammarAnswer(value = '') {
+export function normaliseGrammarAnswer(value = '', punctuationSensitive = false) {
     return value
         .normalize('NFKC')
         .toLowerCase()
@@ -12,7 +12,7 @@ export function normaliseGrammarAnswer(value = '') {
         .replace(/\b([a-z]+)'re\b/g, '$1 are')
         .replace(/\b([a-z]+)'ve\b/g, '$1 have')
         .replace(/\b(he|she|it)'s\b/g, '$1 is')
-        .replace(/[.,!?;:]/g, '')
+        .replace(punctuationSensitive ? /[.!?;:]/g : /[.,!?;:]/g, '')
         .replace(/\s+/g, ' ')
         .trim();
 }
@@ -30,7 +30,9 @@ export function gradeGrammar(lesson, mode, answers) {
         id: q.id,
         answer: answers[q.id] || '',
         correct: q.answers.some(
-            (a) => normaliseGrammarAnswer(a) === normaliseGrammarAnswer(answers[q.id] || ''),
+            (a) =>
+                normaliseGrammarAnswer(a, q.punctuationSensitive) ===
+                normaliseGrammarAnswer(answers[q.id] || '', q.punctuationSensitive),
         ),
         accepted: q.answers,
         explanation: q.explanation,

@@ -175,8 +175,8 @@
                 "printedPage": 14,
                 "pdfPage": 26
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -189,9 +189,9 @@
                 "printedPage": 16,
                 "pdfPage": 28
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-007"]
         },
         {
             "id": "giu-009",
@@ -203,9 +203,9 @@
                 "printedPage": 18,
                 "pdfPage": 30
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-008"]
         },
         {
             "id": "giu-010",
@@ -217,9 +217,9 @@
                 "printedPage": 20,
                 "pdfPage": 32
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-009"]
         },
         {
             "id": "giu-011",
@@ -231,9 +231,9 @@
                 "printedPage": 22,
                 "pdfPage": 34
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-010"]
         },
         {
             "id": "giu-012",
@@ -245,9 +245,9 @@
                 "printedPage": 24,
                 "pdfPage": 36
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-011"]
         },
         {
             "id": "giu-013",
@@ -259,9 +259,9 @@
                 "printedPage": 26,
                 "pdfPage": 38
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-012"]
         },
         {
             "id": "giu-014",
@@ -273,9 +273,9 @@
                 "printedPage": 28,
                 "pdfPage": 40
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-013"]
         },
         {
             "id": "giu-015",
@@ -287,9 +287,9 @@
                 "printedPage": 30,
                 "pdfPage": 42
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-014"]
         },
         {
             "id": "giu-016",
@@ -301,9 +301,9 @@
                 "printedPage": 32,
                 "pdfPage": 44
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-015"]
         },
         {
             "id": "giu-017",
@@ -315,9 +315,9 @@
                 "printedPage": 34,
                 "pdfPage": 46
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-016"]
         },
         {
             "id": "giu-018",
@@ -329,9 +329,9 @@
                 "printedPage": 36,
                 "pdfPage": 48
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-017"]
         },
         {
             "id": "giu-019",
@@ -343,8 +343,8 @@
                 "printedPage": 38,
                 "pdfPage": 50
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -357,9 +357,9 @@
                 "printedPage": 40,
                 "pdfPage": 52
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-019"]
         },
         {
             "id": "giu-021",
@@ -371,9 +371,9 @@
                 "printedPage": 42,
                 "pdfPage": 54
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-020"]
         },
         {
             "id": "giu-022",
@@ -385,9 +385,9 @@
                 "printedPage": 44,
                 "pdfPage": 56
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-021"]
         },
         {
             "id": "giu-023",
@@ -399,9 +399,9 @@
                 "printedPage": 46,
                 "pdfPage": 58
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-022"]
         },
         {
             "id": "giu-024",
@@ -413,9 +413,9 @@
                 "printedPage": 48,
                 "pdfPage": 60
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-023"]
         },
         {
             "id": "giu-025",
@@ -427,9 +427,9 @@
                 "printedPage": 50,
                 "pdfPage": 62
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-024"]
         },
         {
             "id": "giu-026",
@@ -441,8 +441,8 @@
                 "printedPage": 52,
                 "pdfPage": 64
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -455,9 +455,9 @@
                 "printedPage": 54,
                 "pdfPage": 66
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-026"]
         },
         {
             "id": "giu-028",
@@ -469,9 +469,9 @@
                 "printedPage": 56,
                 "pdfPage": 68
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-027"]
         },
         {
             "id": "giu-029",
@@ -483,9 +483,9 @@
                 "printedPage": 58,
                 "pdfPage": 70
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-028"]
         },
         {
             "id": "giu-030",
@@ -497,9 +497,9 @@
                 "printedPage": 60,
                 "pdfPage": 72
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-029"]
         },
         {
             "id": "giu-031",
@@ -511,9 +511,9 @@
                 "printedPage": 62,
                 "pdfPage": 74
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-030"]
         },
         {
             "id": "giu-032",
@@ -525,9 +525,9 @@
                 "printedPage": 64,
                 "pdfPage": 76
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-031"]
         },
         {
             "id": "giu-033",
@@ -539,9 +539,9 @@
                 "printedPage": 66,
                 "pdfPage": 78
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-032"]
         },
         {
             "id": "giu-034",
@@ -553,9 +553,9 @@
                 "printedPage": 68,
                 "pdfPage": 80
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-033"]
         },
         {
             "id": "giu-035",
@@ -567,9 +567,9 @@
                 "printedPage": 70,
                 "pdfPage": 82
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-034"]
         },
         {
             "id": "giu-036",
@@ -581,9 +581,9 @@
                 "printedPage": 72,
                 "pdfPage": 84
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-035"]
         },
         {
             "id": "giu-037",
@@ -595,9 +595,9 @@
                 "printedPage": 74,
                 "pdfPage": 86
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-036"]
         },
         {
             "id": "giu-038",
@@ -609,8 +609,8 @@
                 "printedPage": 76,
                 "pdfPage": 88
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -623,9 +623,9 @@
                 "printedPage": 78,
                 "pdfPage": 90
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-038"]
         },
         {
             "id": "giu-040",
@@ -637,9 +637,9 @@
                 "printedPage": 80,
                 "pdfPage": 92
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-039"]
         },
         {
             "id": "giu-041",
@@ -651,9 +651,9 @@
                 "printedPage": 82,
                 "pdfPage": 94
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-040"]
         },
         {
             "id": "giu-042",
@@ -665,8 +665,8 @@
                 "printedPage": 84,
                 "pdfPage": 96
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -679,9 +679,9 @@
                 "printedPage": 86,
                 "pdfPage": 98
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-042"]
         },
         {
             "id": "giu-044",
@@ -693,9 +693,9 @@
                 "printedPage": 88,
                 "pdfPage": 100
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-043"]
         },
         {
             "id": "giu-045",
@@ -707,9 +707,9 @@
                 "printedPage": 90,
                 "pdfPage": 102
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-044"]
         },
         {
             "id": "giu-046",
@@ -721,9 +721,9 @@
                 "printedPage": 92,
                 "pdfPage": 104
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-045"]
         },
         {
             "id": "giu-047",
@@ -735,8 +735,8 @@
                 "printedPage": 94,
                 "pdfPage": 106
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -749,9 +749,9 @@
                 "printedPage": 96,
                 "pdfPage": 108
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-047"]
         },
         {
             "id": "giu-049",
@@ -763,8 +763,8 @@
                 "printedPage": 98,
                 "pdfPage": 110
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -777,9 +777,9 @@
                 "printedPage": 100,
                 "pdfPage": 112
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-049"]
         },
         {
             "id": "giu-051",
@@ -791,9 +791,9 @@
                 "printedPage": 102,
                 "pdfPage": 114
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-050"]
         },
         {
             "id": "giu-052",
@@ -805,9 +805,9 @@
                 "printedPage": 104,
                 "pdfPage": 116
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-051"]
         },
         {
             "id": "giu-053",
@@ -819,8 +819,8 @@
                 "printedPage": 106,
                 "pdfPage": 118
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -833,9 +833,9 @@
                 "printedPage": 108,
                 "pdfPage": 120
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-053"]
         },
         {
             "id": "giu-055",
@@ -847,9 +847,9 @@
                 "printedPage": 110,
                 "pdfPage": 122
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-054"]
         },
         {
             "id": "giu-056",
@@ -861,9 +861,9 @@
                 "printedPage": 112,
                 "pdfPage": 124
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-055"]
         },
         {
             "id": "giu-057",
@@ -875,9 +875,9 @@
                 "printedPage": 114,
                 "pdfPage": 126
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-056"]
         },
         {
             "id": "giu-058",
@@ -889,9 +889,9 @@
                 "printedPage": 116,
                 "pdfPage": 128
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-057"]
         },
         {
             "id": "giu-059",
@@ -903,9 +903,9 @@
                 "printedPage": 118,
                 "pdfPage": 130
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-058"]
         },
         {
             "id": "giu-060",
@@ -917,9 +917,9 @@
                 "printedPage": 120,
                 "pdfPage": 132
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-059"]
         },
         {
             "id": "giu-061",
@@ -931,9 +931,9 @@
                 "printedPage": 122,
                 "pdfPage": 134
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-060"]
         },
         {
             "id": "giu-062",
@@ -945,9 +945,9 @@
                 "printedPage": 124,
                 "pdfPage": 136
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-061"]
         },
         {
             "id": "giu-063",
@@ -959,9 +959,9 @@
                 "printedPage": 126,
                 "pdfPage": 138
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-062"]
         },
         {
             "id": "giu-064",
@@ -973,9 +973,9 @@
                 "printedPage": 128,
                 "pdfPage": 140
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-063"]
         },
         {
             "id": "giu-065",
@@ -987,9 +987,9 @@
                 "printedPage": 130,
                 "pdfPage": 142
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-064"]
         },
         {
             "id": "giu-066",
@@ -1001,9 +1001,9 @@
                 "printedPage": 132,
                 "pdfPage": 144
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-065"]
         },
         {
             "id": "giu-067",
@@ -1015,9 +1015,9 @@
                 "printedPage": 134,
                 "pdfPage": 146
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-066"]
         },
         {
             "id": "giu-068",
@@ -1029,9 +1029,9 @@
                 "printedPage": 136,
                 "pdfPage": 148
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-067"]
         },
         {
             "id": "giu-069",
@@ -1043,8 +1043,8 @@
                 "printedPage": 138,
                 "pdfPage": 150
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -1057,9 +1057,9 @@
                 "printedPage": 140,
                 "pdfPage": 152
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-069"]
         },
         {
             "id": "giu-071",
@@ -1071,9 +1071,9 @@
                 "printedPage": 142,
                 "pdfPage": 154
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-070"]
         },
         {
             "id": "giu-072",
@@ -1085,9 +1085,9 @@
                 "printedPage": 144,
                 "pdfPage": 156
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-071"]
         },
         {
             "id": "giu-073",
@@ -1099,9 +1099,9 @@
                 "printedPage": 146,
                 "pdfPage": 158
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-072"]
         },
         {
             "id": "giu-074",
@@ -1113,9 +1113,9 @@
                 "printedPage": 148,
                 "pdfPage": 160
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-073"]
         },
         {
             "id": "giu-075",
@@ -1127,9 +1127,9 @@
                 "printedPage": 150,
                 "pdfPage": 162
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-074"]
         },
         {
             "id": "giu-076",
@@ -1141,9 +1141,9 @@
                 "printedPage": 152,
                 "pdfPage": 164
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-075"]
         },
         {
             "id": "giu-077",
@@ -1155,9 +1155,9 @@
                 "printedPage": 154,
                 "pdfPage": 166
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-076"]
         },
         {
             "id": "giu-078",
@@ -1169,9 +1169,9 @@
                 "printedPage": 156,
                 "pdfPage": 168
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-077"]
         },
         {
             "id": "giu-079",
@@ -1183,9 +1183,9 @@
                 "printedPage": 158,
                 "pdfPage": 170
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-078"]
         },
         {
             "id": "giu-080",
@@ -1197,9 +1197,9 @@
                 "printedPage": 160,
                 "pdfPage": 172
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-079"]
         },
         {
             "id": "giu-081",
@@ -1211,9 +1211,9 @@
                 "printedPage": 162,
                 "pdfPage": 174
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-080"]
         },
         {
             "id": "giu-082",
@@ -1225,8 +1225,8 @@
                 "printedPage": 164,
                 "pdfPage": 176
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -1239,9 +1239,9 @@
                 "printedPage": 166,
                 "pdfPage": 178
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-082"]
         },
         {
             "id": "giu-084",
@@ -1253,9 +1253,9 @@
                 "printedPage": 168,
                 "pdfPage": 180
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-083"]
         },
         {
             "id": "giu-085",
@@ -1267,9 +1267,9 @@
                 "printedPage": 170,
                 "pdfPage": 182
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-084"]
         },
         {
             "id": "giu-086",
@@ -1281,9 +1281,9 @@
                 "printedPage": 172,
                 "pdfPage": 184
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-085"]
         },
         {
             "id": "giu-087",
@@ -1295,9 +1295,9 @@
                 "printedPage": 174,
                 "pdfPage": 186
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-086"]
         },
         {
             "id": "giu-088",
@@ -1309,9 +1309,9 @@
                 "printedPage": 176,
                 "pdfPage": 188
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-087"]
         },
         {
             "id": "giu-089",
@@ -1323,9 +1323,9 @@
                 "printedPage": 178,
                 "pdfPage": 190
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-088"]
         },
         {
             "id": "giu-090",
@@ -1337,9 +1337,9 @@
                 "printedPage": 180,
                 "pdfPage": 192
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-089"]
         },
         {
             "id": "giu-091",
@@ -1351,9 +1351,9 @@
                 "printedPage": 182,
                 "pdfPage": 194
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-090"]
         },
         {
             "id": "giu-092",
@@ -1365,8 +1365,8 @@
                 "printedPage": 184,
                 "pdfPage": 196
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -1379,9 +1379,9 @@
                 "printedPage": 186,
                 "pdfPage": 198
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-092"]
         },
         {
             "id": "giu-094",
@@ -1393,9 +1393,9 @@
                 "printedPage": 188,
                 "pdfPage": 200
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-093"]
         },
         {
             "id": "giu-095",
@@ -1407,9 +1407,9 @@
                 "printedPage": 190,
                 "pdfPage": 202
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-094"]
         },
         {
             "id": "giu-096",
@@ -1421,9 +1421,9 @@
                 "printedPage": 192,
                 "pdfPage": 204
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-095"]
         },
         {
             "id": "giu-097",
@@ -1435,9 +1435,9 @@
                 "printedPage": 194,
                 "pdfPage": 206
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-096"]
         },
         {
             "id": "giu-098",
@@ -1449,8 +1449,8 @@
                 "printedPage": 196,
                 "pdfPage": 208
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -1463,9 +1463,9 @@
                 "printedPage": 198,
                 "pdfPage": 210
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-098"]
         },
         {
             "id": "giu-100",
@@ -1477,9 +1477,9 @@
                 "printedPage": 200,
                 "pdfPage": 212
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-099"]
         },
         {
             "id": "giu-101",
@@ -1491,9 +1491,9 @@
                 "printedPage": 202,
                 "pdfPage": 214
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-100"]
         },
         {
             "id": "giu-102",
@@ -1505,9 +1505,9 @@
                 "printedPage": 204,
                 "pdfPage": 216
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-101"]
         },
         {
             "id": "giu-103",
@@ -1519,9 +1519,9 @@
                 "printedPage": 206,
                 "pdfPage": 218
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-102"]
         },
         {
             "id": "giu-104",
@@ -1533,9 +1533,9 @@
                 "printedPage": 208,
                 "pdfPage": 220
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-103"]
         },
         {
             "id": "giu-105",
@@ -1547,9 +1547,9 @@
                 "printedPage": 210,
                 "pdfPage": 222
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-104"]
         },
         {
             "id": "giu-106",
@@ -1561,9 +1561,9 @@
                 "printedPage": 212,
                 "pdfPage": 224
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-105"]
         },
         {
             "id": "giu-107",
@@ -1575,9 +1575,9 @@
                 "printedPage": 214,
                 "pdfPage": 226
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-106"]
         },
         {
             "id": "giu-108",
@@ -1589,9 +1589,9 @@
                 "printedPage": 216,
                 "pdfPage": 228
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-107"]
         },
         {
             "id": "giu-109",
@@ -1603,9 +1603,9 @@
                 "printedPage": 218,
                 "pdfPage": 230
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-108"]
         },
         {
             "id": "giu-110",
@@ -1617,9 +1617,9 @@
                 "printedPage": 220,
                 "pdfPage": 232
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-109"]
         },
         {
             "id": "giu-111",
@@ -1631,9 +1631,9 @@
                 "printedPage": 222,
                 "pdfPage": 234
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-110"]
         },
         {
             "id": "giu-112",
@@ -1645,9 +1645,9 @@
                 "printedPage": 224,
                 "pdfPage": 236
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-111"]
         },
         {
             "id": "giu-113",
@@ -1659,8 +1659,8 @@
                 "printedPage": 226,
                 "pdfPage": 238
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -1673,9 +1673,9 @@
                 "printedPage": 228,
                 "pdfPage": 240
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-113"]
         },
         {
             "id": "giu-115",
@@ -1687,9 +1687,9 @@
                 "printedPage": 230,
                 "pdfPage": 242
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-114"]
         },
         {
             "id": "giu-116",
@@ -1701,9 +1701,9 @@
                 "printedPage": 232,
                 "pdfPage": 244
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-115"]
         },
         {
             "id": "giu-117",
@@ -1715,9 +1715,9 @@
                 "printedPage": 234,
                 "pdfPage": 246
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-116"]
         },
         {
             "id": "giu-118",
@@ -1729,9 +1729,9 @@
                 "printedPage": 236,
                 "pdfPage": 248
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-117"]
         },
         {
             "id": "giu-119",
@@ -1743,9 +1743,9 @@
                 "printedPage": 238,
                 "pdfPage": 250
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-118"]
         },
         {
             "id": "giu-120",
@@ -1757,9 +1757,9 @@
                 "printedPage": 240,
                 "pdfPage": 252
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-119"]
         },
         {
             "id": "giu-121",
@@ -1771,8 +1771,8 @@
                 "printedPage": 242,
                 "pdfPage": 254
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -1785,9 +1785,9 @@
                 "printedPage": 244,
                 "pdfPage": 256
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-121"]
         },
         {
             "id": "giu-123",
@@ -1799,9 +1799,9 @@
                 "printedPage": 246,
                 "pdfPage": 258
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-122"]
         },
         {
             "id": "giu-124",
@@ -1813,9 +1813,9 @@
                 "printedPage": 248,
                 "pdfPage": 260
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-123"]
         },
         {
             "id": "giu-125",
@@ -1827,9 +1827,9 @@
                 "printedPage": 250,
                 "pdfPage": 262
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-124"]
         },
         {
             "id": "giu-126",
@@ -1841,9 +1841,9 @@
                 "printedPage": 252,
                 "pdfPage": 264
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-125"]
         },
         {
             "id": "giu-127",
@@ -1855,9 +1855,9 @@
                 "printedPage": 254,
                 "pdfPage": 266
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-126"]
         },
         {
             "id": "giu-128",
@@ -1869,9 +1869,9 @@
                 "printedPage": 256,
                 "pdfPage": 268
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-127"]
         },
         {
             "id": "giu-129",
@@ -1883,9 +1883,9 @@
                 "printedPage": 258,
                 "pdfPage": 270
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-128"]
         },
         {
             "id": "giu-130",
@@ -1897,9 +1897,9 @@
                 "printedPage": 260,
                 "pdfPage": 272
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-129"]
         },
         {
             "id": "giu-131",
@@ -1911,9 +1911,9 @@
                 "printedPage": 262,
                 "pdfPage": 274
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-130"]
         },
         {
             "id": "giu-132",
@@ -1925,9 +1925,9 @@
                 "printedPage": 264,
                 "pdfPage": 276
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-131"]
         },
         {
             "id": "giu-133",
@@ -1939,9 +1939,9 @@
                 "printedPage": 266,
                 "pdfPage": 278
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-132"]
         },
         {
             "id": "giu-134",
@@ -1953,9 +1953,9 @@
                 "printedPage": 268,
                 "pdfPage": 280
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-133"]
         },
         {
             "id": "giu-135",
@@ -1967,9 +1967,9 @@
                 "printedPage": 270,
                 "pdfPage": 282
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-134"]
         },
         {
             "id": "giu-136",
@@ -1981,9 +1981,9 @@
                 "printedPage": 272,
                 "pdfPage": 284
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-135"]
         },
         {
             "id": "giu-137",
@@ -1995,8 +1995,8 @@
                 "printedPage": 274,
                 "pdfPage": 286
             },
-            "status": "reference",
-            "estimatedMinutes": null,
+            "status": "ready",
+            "estimatedMinutes": 25,
             "prerequisites": []
         },
         {
@@ -2009,9 +2009,9 @@
                 "printedPage": 276,
                 "pdfPage": 288
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-137"]
         },
         {
             "id": "giu-139",
@@ -2023,9 +2023,9 @@
                 "printedPage": 278,
                 "pdfPage": 290
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-138"]
         },
         {
             "id": "giu-140",
@@ -2037,9 +2037,9 @@
                 "printedPage": 280,
                 "pdfPage": 292
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-139"]
         },
         {
             "id": "giu-141",
@@ -2051,9 +2051,9 @@
                 "printedPage": 282,
                 "pdfPage": 294
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-140"]
         },
         {
             "id": "giu-142",
@@ -2065,9 +2065,9 @@
                 "printedPage": 284,
                 "pdfPage": 296
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-141"]
         },
         {
             "id": "giu-143",
@@ -2079,9 +2079,9 @@
                 "printedPage": 286,
                 "pdfPage": 298
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-142"]
         },
         {
             "id": "giu-144",
@@ -2093,9 +2093,9 @@
                 "printedPage": 288,
                 "pdfPage": 300
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-143"]
         },
         {
             "id": "giu-145",
@@ -2107,9 +2107,9 @@
                 "printedPage": 290,
                 "pdfPage": 302
             },
-            "status": "reference",
-            "estimatedMinutes": null,
-            "prerequisites": []
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-144"]
         }
     ]
 }

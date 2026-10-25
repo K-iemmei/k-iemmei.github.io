@@ -33,7 +33,7 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         assert.equal(await page.$$eval('.grammar-lesson-row', (els) => els.length), 145);
         assert.equal(await page.$$eval('.grammar-unit-card', (els) => els.length), 16);
         await page.select('#grammarStatus', 'ready');
-        assert.equal(await page.$$eval('.grammar-lesson-row', (els) => els.length), 6);
+        assert.equal(await page.$$eval('.grammar-lesson-row', (els) => els.length), 145);
         await page.select('#grammarStatus', 'all');
         await page.type('#grammarSearch', 'away/back');
         assert.equal(await page.$$eval('.grammar-lesson-row', (els) => els.length), 1);
@@ -98,10 +98,10 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         await page.goto(base + '/english-grammar.html?lesson=giu-145', {
             waitUntil: 'networkidle0',
         });
-        assert.equal(await page.$('#grammarQuiz'), null);
+        assert(await page.$('#grammarQuiz'));
         assert.match(
             await page.$eval('#grammarReader', (el) => el.textContent),
-            /chưa được biên soạn/,
+            /Ứng dụng & hội thoại/,
         );
         await page.goto(base + '/english-grammar.html?lesson=giu-001', {
             waitUntil: 'networkidle0',
@@ -125,7 +125,7 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         }
         assert.deepEqual(errors, []);
         console.log(
-            'PASS: verified book roadmap, practice, assessment completion, account drafts after reload, reference-only units and mobile/themes.',
+            'PASS: verified book roadmap, practice, assessment completion, account drafts after reload, interactive Unit 145 and mobile/themes.',
         );
     } catch (e) {
         console.error('Grammar browser failure:', e);

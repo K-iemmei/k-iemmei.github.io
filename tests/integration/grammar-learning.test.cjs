@@ -73,9 +73,28 @@ test('Grammar grades on server, persists completion and writing per user, schedu
         .rows[0].result;
     assert.deepEqual(isolated.progress, []);
     assert.deepEqual(isolated.reviews, []);
-    assert.equal((await call('/giu-007', 'PUT', { read: true })).status, 400);
+    assert.equal((await call('/giu-146', 'PUT', { read: true })).status, 400);
     assert.equal(
         (await call('/giu-001', 'PUT', { drafts: { 'giu-002-s1': 'forged' } })).status,
         400,
     );
+    for (const number of [7, 37, 68, 81, 95, 103, 120, 136, 145]) {
+        const unit = bookLessons[number];
+        const attempt = await call(`/${unit.id}/attempts`, 'POST', {
+            mode: 'assessment',
+            request_id: require('node:crypto').randomUUID(),
+            answers: Object.fromEntries(
+                unit.questions
+                    .filter((q) => q.mode === 'assessment')
+                    .map((q) => [q.id, q.answers[0]]),
+            ),
+        });
+        assert.equal(attempt.status, 200, unit.id);
+        assert.equal(attempt.data.progress.best_score, 100, unit.id);
+        const saved = await call(`/${unit.id}`, 'PUT', {
+            read: true,
+            drafts: { [unit.scenarios[0].id]: 'My practice paragraph' },
+        });
+        assert(saved.data.progress.completed_at, unit.id);
+    }
 });
