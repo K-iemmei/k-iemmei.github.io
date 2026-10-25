@@ -37,6 +37,10 @@ test('Pages build includes authenticated Grammar route, course data and pale-blu
     assert.match(html, /data-auth-pending/);
     for (const file of [
         'src/features/grammar/grammar-page.js',
+        'src/features/grammar/book-page.js',
+        'src/features/grammar/content/book-curriculum.js',
+        'src/features/grammar/content/book-lessons.js',
+        'src/domain/grammar.js',
         'src/features/grammar/content/advanced.js',
         'src/features/grammar/content/foundations.js',
         'styles/pages/grammar.css',
@@ -48,6 +52,7 @@ test('Pages build includes authenticated Grammar route, course data and pale-blu
         'vendor/rich/rendering.css',
     ])
         assert(fs.existsSync(path.join(workspace, 'dist', file)), file);
+    assert(!fs.existsSync(path.join(workspace, 'dist/data/imports/EngInUse.pdf')));
     for (const name of ['notes', 'note', 'blog', 'post']) {
         assert.match(
             fs.readFileSync(path.join(workspace, 'dist', name + '.html'), 'utf8'),

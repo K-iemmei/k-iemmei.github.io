@@ -976,3 +976,122 @@ summary:focus-visible {
         transition: none !important;
     }
 }
+
+/* Book-aligned study and practice reuse the existing Grammar palette. */
+.grammar-article {
+    max-width: 980px;
+    margin-inline: auto;
+    min-width: 0;
+}
+.grammar-source-note {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+.grammar-exercise {
+    margin: 24px 0;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    min-width: 0;
+}
+.grammar-exercise legend {
+    max-width: 100%;
+    padding: 0 6px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+.grammar-exercise input:not([type='radio']),
+.grammar-scenario textarea {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 12px 0;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+.grammar-scenario {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+}
+.grammar-scenario textarea {
+    resize: vertical;
+    line-height: 1.7;
+}
+.grammar-scenario details {
+    margin-top: 16px;
+}
+.grammar-scenario p,
+.grammar-scenario li {
+    line-height: 1.8;
+}
+.grammar-scenario [role='status'] {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+}
+.grammar-reading-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 18px 0;
+    line-height: 1.6;
+}
+.grammar-reading-check input {
+    margin-top: 6px;
+}
+.grammar-toolbar select,
+#grammarMode {
+    max-width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+.grammar-supplement-link {
+    display: inline-block;
+    margin: 8px 16px 8px 0;
+}
+.grammar-example mark {
+    color: var(--text);
+    background: var(--accent-fill);
+    border-radius: 3px;
+    padding: 1px 3px;
+}
+.grammar-article > h1 {
+    font-size: clamp(24px, 4vw, 36px);
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+.grammar-rule {
+    grid-template-columns: 1fr;
+}
+.grammar-exercise small {
+    display: block;
+    color: var(--text-muted);
+}
+.grammar-exercise details {
+    margin: 12px 0;
+}
+.grammar-article button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+@media (max-width: 600px) {
+    .grammar-exercise {
+        padding: 14px 10px;
+    }
+    .grammar-toolbar {
+        flex-wrap: wrap;
+    }
+    .grammar-toolbar > label {
+        width: 100%;
+    }
+}

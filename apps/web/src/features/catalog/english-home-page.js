@@ -1,6 +1,7 @@
 import { getSubject, activityTypes } from './subject-catalog.js';
 import { escapeHtml } from '../../shared/escape-html.js';
 import { appIcon } from '../../shared/icons.js';
+import { apiRequest } from '../../core/database-client.js';
 const skillIcons = {
     reading: 'book',
     listening: 'headphones',
@@ -10,7 +11,7 @@ const skillIcons = {
 const skillDescriptions = {
     reading: 'Passages & practice tests',
     listening: 'IELTS audio & dictation',
-    grammar: 'From sentence basics to advanced',
+    grammar: 'English Grammar in Use · 145 units',
     vocabulary: 'Words & spaced repetition',
 };
 
@@ -29,4 +30,14 @@ if (host) {
         })
         .join('');
     document.body.classList.remove('page-loading');
+    apiRequest('/api/grammar')
+        .then((data) => {
+            const card = host.querySelector('a[href="english-grammar.html"] p');
+            const completed = data.progress.filter((unit) => unit.completed_at).length;
+            const due = data.reviews.filter(
+                (item) => Date.parse(item.due_at) <= Date.now() || item.streak === 0,
+            ).length;
+            if (card) card.textContent = `${completed}/145 units · ${due} câu cần ôn`;
+        })
+        .catch(() => {});
 }

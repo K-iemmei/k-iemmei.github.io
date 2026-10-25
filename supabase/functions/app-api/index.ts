@@ -7,6 +7,7 @@ import { publishingApi } from './publishing.ts';
 import { homeApi } from './home.ts';
 import { readApiBody } from './request-body.ts';
 import { ensureHostedProfile } from './hosted-profile.ts';
+import { grammarApi } from './grammar.ts';
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
 const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
@@ -121,7 +122,9 @@ Deno.serve(async (req) => {
             return json({ error: 'This account has not been granted access' }, 403);
         const body = await readApiBody(req, path);
         let result;
-        if (/^\/api\/home(\/|$)/.test(path))
+        if (/^\/api\/grammar(\/|$)/.test(path))
+            result = await grammarApi(admin,user,path,req.method,body);
+        else if (/^\/api\/home(\/|$)/.test(path))
             result = await homeApi(admin, user, path, req.method, body, url);
         else if (/^\/api\/(notes|blog)(\/|$)/.test(path))
             result = await publishingApi(admin, user, path, req.method, body, url);

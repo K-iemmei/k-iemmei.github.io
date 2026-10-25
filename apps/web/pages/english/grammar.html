@@ -35,97 +35,68 @@
                     ><span class="grammar-switch" aria-hidden="true"><span></span></span>
                 </button>
             </header>
-            <main id="grammarMain" tabindex="-1">
-                <section id="grammarLibrary" aria-labelledby="grammarHeading">
+            <main id="grammarMain">
+                <section id="grammarLibrary">
                     <div class="grammar-hero">
                         <div>
-                            <h1 id="grammarHeading" tabindex="-1">Grammar, made clear.</h1>
-                            <div class="grammar-facts">
-                                <span id="grammarLessonCount">72 lessons</span
-                                ><span>12 topic groups</span><span>Basic → Advanced</span>
-                            </div>
+                            <h1 id="grammarHeading" tabindex="-1">English Grammar in Use</h1>
+                            <p>Raymond Murphy · Fifth Edition · 145 units</p>
+                            <p class="grammar-progress-scope">
+                                6 unit tương tác đã sẵn sàng. Các unit khác có tham chiếu sách; nội
+                                dung luyện tập được bổ sung theo đợt.
+                            </p>
                         </div>
                         <div class="grammar-progress-card">
                             <div class="grammar-progress-heading">
-                                <span>Your progress</span
-                                ><span id="grammarProgressCount">0 / 72</span>
+                                <span>Tiến độ</span><span id="grammarProgressCount">0 / 145</span>
                             </div>
                             <progress
                                 id="grammarProgress"
                                 value="0"
-                                max="72"
-                                aria-label="Lessons marked completed on this browser"
-                            ></progress>
-                            <a
-                                id="grammarContinue"
-                                class="grammar-primary"
-                                href="english-grammar.html?lesson=word-classes"
-                                data-lesson="word-classes"
-                                >Start learning <span aria-hidden="true">→</span></a
+                                max="145"
+                                aria-label="Tiến độ theo tài khoản"
+                            ></progress
+                            ><a id="grammarContinue" class="grammar-primary" href="?lesson=giu-001"
+                                >Bắt đầu học</a
                             >
-                            <span class="grammar-progress-scope"
-                                >Trình độ là gợi ý lộ trình. Tiến độ lưu trên trình duyệt này.</span
-                            >
+                            <p id="grammarReviewCount"></p>
                         </div>
                     </div>
                     <div class="grammar-toolbar">
                         <label class="grammar-search"
-                            ><svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                                aria-hidden="true"
-                            >
-                                <circle cx="10.5" cy="10.5" r="6.5" />
-                                <path d="m16 16 5 5" /></svg
-                            ><span class="grammar-sr-only">Search grammar topics</span
+                            ><span class="grammar-sr-only">Tìm unit</span
                             ><input
                                 id="grammarSearch"
                                 type="search"
-                                placeholder="Tìm chủ điểm: thì, articles, điều kiện…"
-                                autocomplete="off"
-                        /></label>
-                        <label class="grammar-level-filter"
-                            ><span class="grammar-sr-only">Filter by level</span
-                            ><select id="grammarLevel">
-                                <option value="all">All levels</option>
-                                <option>A1</option>
-                                <option>A2</option>
-                                <option>B1</option>
-                                <option>B2</option>
-                                <option>C1</option>
+                                placeholder="Tìm số unit hoặc chủ điểm…" /></label
+                        ><label
+                            ><span class="grammar-sr-only">Trạng thái</span
+                            ><select id="grammarStatus">
+                                <option value="all">Tất cả unit</option>
+                                <option value="ready">Có bài tương tác</option>
+                                <option value="started">Đang học</option>
+                                <option value="completed">Hoàn thành</option>
+                                <option value="review">Cần ôn</option>
+                                <option value="reference">Tham chiếu sách</option>
                             </select></label
                         >
                     </div>
-                    <div class="grammar-filter-row">
-                        <div
-                            class="grammar-status-filters"
-                            role="group"
-                            aria-label="Filter lessons by progress"
-                        >
-                            <button type="button" data-status="all" aria-pressed="true">
-                                All topics</button
-                            ><button type="button" data-status="remaining" aria-pressed="false">
-                                To learn</button
-                            ><button type="button" data-status="completed" aria-pressed="false">
-                                Completed</button
-                            ><button type="button" data-status="saved" aria-pressed="false">
-                                Saved
-                            </button>
-                        </div>
-                        <p id="grammarResultsCount" role="status" aria-live="polite"></p>
-                    </div>
-                    <div id="grammarUnits" class="grammar-unit-grid"><p>Loading lessons…</p></div>
-                    <div id="grammarEmpty" class="grammar-empty" hidden>
-                        <h2>Không tìm thấy bài phù hợp</h2>
-                        <p>Thử từ khóa khác hoặc bỏ bộ lọc.</p>
-                        <button id="grammarResetFilters" class="grammar-secondary" type="button">
-                            Clear filters
-                        </button>
-                    </div>
+                    <p id="grammarResultsCount" role="status"></p>
+                    <div id="grammarUnits" class="grammar-unit-grid"></div>
+                    <details class="grammar-references">
+                        <summary>Phụ lục &amp; tra cứu</summary>
+                        <ul id="grammarAppendices"></ul>
+                    </details>
+                    <details class="grammar-references">
+                        <summary>Bài bổ trợ từ lộ trình cũ</summary>
+                        <p>
+                            72 bài tự biên soạn vẫn được giữ làm tài liệu bổ trợ; tiến độ cũ không
+                            chuyển thành hoàn thành unit sách.
+                        </p>
+                        <div id="grammarSupplementary"></div>
+                    </details>
                 </section>
-                <section id="grammarReader" hidden aria-label="Grammar lesson"></section>
+                <section id="grammarReader" hidden aria-label="Bài học"></section>
                 <p id="grammarNotice" class="grammar-notice" role="status" aria-live="polite"></p>
             </main>
             <footer class="grammar-footer">

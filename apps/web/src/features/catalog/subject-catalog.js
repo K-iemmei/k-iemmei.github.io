@@ -28,7 +28,8 @@ export const subjects = [
             {
                 type: 'grammar',
                 href: 'english-grammar.html',
-                description: 'A complete learning path, from sentence basics to advanced grammar.',
+                description:
+                    'English Grammar in Use · 145 units, with interactive practice added in batches.',
             },
             {
                 type: 'vocabulary',

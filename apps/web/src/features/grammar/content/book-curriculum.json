@@ -1,0 +1,2115 @@
+{
+    "id": "english-grammar-in-use-5",
+    "title": "English Grammar in Use",
+    "edition": 5,
+    "author": "Raymond Murphy",
+    "publisher": "Cambridge University Press",
+    "year": 2019,
+    "isbn": "9781108457651",
+    "pdfPages": 392,
+    "sourceSha256": "c97c05132de6cf5a3878ec54826edab07bf7912e27e32e8675f3a40a9967605d",
+    "verification": {
+        "contentsPdfPages": [5, 6, 7, 8],
+        "unitTheoryPagesVerified": 145,
+        "textlessPages": [2]
+    },
+    "appendices": [
+        {
+            "title": "Regular and irregular verbs",
+            "printedPage": 292,
+            "pdfPage": 304
+        },
+        {
+            "title": "Present and past tenses",
+            "printedPage": 294,
+            "pdfPage": 306
+        },
+        {
+            "title": "The future",
+            "printedPage": 295,
+            "pdfPage": 307
+        },
+        {
+            "title": "Modal verbs",
+            "printedPage": 296,
+            "pdfPage": 308
+        },
+        {
+            "title": "Short forms",
+            "printedPage": 297,
+            "pdfPage": 309
+        },
+        {
+            "title": "Spelling",
+            "printedPage": 298,
+            "pdfPage": 310
+        },
+        {
+            "title": "American English",
+            "printedPage": 300,
+            "pdfPage": 312
+        },
+        {
+            "title": "Additional exercises",
+            "printedPage": 302,
+            "pdfPage": 314
+        },
+        {
+            "title": "Study guide",
+            "printedPage": 326,
+            "pdfPage": 338
+        },
+        {
+            "title": "Key to Exercises",
+            "printedPage": 336,
+            "pdfPage": 348
+        },
+        {
+            "title": "Key to Additional exercises",
+            "printedPage": 368,
+            "pdfPage": 380
+        },
+        {
+            "title": "Key to Study guide",
+            "printedPage": 372,
+            "pdfPage": 384
+        },
+        {
+            "title": "Index",
+            "printedPage": 373,
+            "pdfPage": 385
+        }
+    ],
+    "units": [
+        {
+            "id": "giu-001",
+            "unitNumber": 1,
+            "title": "Present continuous (I am doing)",
+            "section": "Present and past",
+            "sourceReference": {
+                "unit": 1,
+                "printedPage": 2,
+                "pdfPage": 14
+            },
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-002",
+            "unitNumber": 2,
+            "title": "Present simple (I do)",
+            "section": "Present and past",
+            "sourceReference": {
+                "unit": 2,
+                "printedPage": 4,
+                "pdfPage": 16
+            },
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-001"]
+        },
+        {
+            "id": "giu-003",
+            "unitNumber": 3,
+            "title": "Present continuous and present simple 1 (I am doing and I do)",
+            "section": "Present and past",
+            "sourceReference": {
+                "unit": 3,
+                "printedPage": 6,
+                "pdfPage": 18
+            },
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-002"]
+        },
+        {
+            "id": "giu-004",
+            "unitNumber": 4,
+            "title": "Present continuous and present simple 2 (I am doing and I do)",
+            "section": "Present and past",
+            "sourceReference": {
+                "unit": 4,
+                "printedPage": 8,
+                "pdfPage": 20
+            },
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-003"]
+        },
+        {
+            "id": "giu-005",
+            "unitNumber": 5,
+            "title": "Past simple (I did)",
+            "section": "Present and past",
+            "sourceReference": {
+                "unit": 5,
+                "printedPage": 10,
+                "pdfPage": 22
+            },
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-004"]
+        },
+        {
+            "id": "giu-006",
+            "unitNumber": 6,
+            "title": "Past continuous (I was doing)",
+            "section": "Present and past",
+            "sourceReference": {
+                "unit": 6,
+                "printedPage": 12,
+                "pdfPage": 24
+            },
+            "status": "ready",
+            "estimatedMinutes": 25,
+            "prerequisites": ["giu-005"]
+        },
+        {
+            "id": "giu-007",
+            "unitNumber": 7,
+            "title": "Present perfect 1 (I have done)",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 7,
+                "printedPage": 14,
+                "pdfPage": 26
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-008",
+            "unitNumber": 8,
+            "title": "Present perfect 2 (I have done)",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 8,
+                "printedPage": 16,
+                "pdfPage": 28
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-009",
+            "unitNumber": 9,
+            "title": "Present perfect continuous (I have been doing)",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 9,
+                "printedPage": 18,
+                "pdfPage": 30
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-010",
+            "unitNumber": 10,
+            "title": "Present perfect continuous and simple (I have been doing and I have done)",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 10,
+                "printedPage": 20,
+                "pdfPage": 32
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-011",
+            "unitNumber": 11,
+            "title": "how long have you (been) … ?",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 11,
+                "printedPage": 22,
+                "pdfPage": 34
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-012",
+            "unitNumber": 12,
+            "title": "for and since when … ? and how long … ?",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 12,
+                "printedPage": 24,
+                "pdfPage": 36
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-013",
+            "unitNumber": 13,
+            "title": "Present perfect and past 1 (I have done and I did)",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 13,
+                "printedPage": 26,
+                "pdfPage": 38
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-014",
+            "unitNumber": 14,
+            "title": "Present perfect and past 2 (I have done and I did)",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 14,
+                "printedPage": 28,
+                "pdfPage": 40
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-015",
+            "unitNumber": 15,
+            "title": "Past perfect (I had done)",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 15,
+                "printedPage": 30,
+                "pdfPage": 42
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-016",
+            "unitNumber": 16,
+            "title": "Past perfect continuous (I had been doing)",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 16,
+                "printedPage": 32,
+                "pdfPage": 44
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-017",
+            "unitNumber": 17,
+            "title": "have and have got",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 17,
+                "printedPage": 34,
+                "pdfPage": 46
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-018",
+            "unitNumber": 18,
+            "title": "used to (do)",
+            "section": "Present perfect and past",
+            "sourceReference": {
+                "unit": 18,
+                "printedPage": 36,
+                "pdfPage": 48
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-019",
+            "unitNumber": 19,
+            "title": "Present tenses (I am doing / I do) for the future",
+            "section": "Future",
+            "sourceReference": {
+                "unit": 19,
+                "printedPage": 38,
+                "pdfPage": 50
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-020",
+            "unitNumber": 20,
+            "title": "I’m going to (do)",
+            "section": "Future",
+            "sourceReference": {
+                "unit": 20,
+                "printedPage": 40,
+                "pdfPage": 52
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-021",
+            "unitNumber": 21,
+            "title": "will and shall 1",
+            "section": "Future",
+            "sourceReference": {
+                "unit": 21,
+                "printedPage": 42,
+                "pdfPage": 54
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-022",
+            "unitNumber": 22,
+            "title": "will and shall 2",
+            "section": "Future",
+            "sourceReference": {
+                "unit": 22,
+                "printedPage": 44,
+                "pdfPage": 56
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-023",
+            "unitNumber": 23,
+            "title": "I will and I’m going to",
+            "section": "Future",
+            "sourceReference": {
+                "unit": 23,
+                "printedPage": 46,
+                "pdfPage": 58
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-024",
+            "unitNumber": 24,
+            "title": "will be doing and will have done",
+            "section": "Future",
+            "sourceReference": {
+                "unit": 24,
+                "printedPage": 48,
+                "pdfPage": 60
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-025",
+            "unitNumber": 25,
+            "title": "when I do and when I’ve done if and when",
+            "section": "Future",
+            "sourceReference": {
+                "unit": 25,
+                "printedPage": 50,
+                "pdfPage": 62
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-026",
+            "unitNumber": 26,
+            "title": "can, could and (be) able to",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 26,
+                "printedPage": 52,
+                "pdfPage": 64
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-027",
+            "unitNumber": 27,
+            "title": "could (do) and could have (done)",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 27,
+                "printedPage": 54,
+                "pdfPage": 66
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-028",
+            "unitNumber": 28,
+            "title": "must and can’t",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 28,
+                "printedPage": 56,
+                "pdfPage": 68
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-029",
+            "unitNumber": 29,
+            "title": "may and might 1",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 29,
+                "printedPage": 58,
+                "pdfPage": 70
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-030",
+            "unitNumber": 30,
+            "title": "may and might 2",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 30,
+                "printedPage": 60,
+                "pdfPage": 72
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-031",
+            "unitNumber": 31,
+            "title": "have to and must",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 31,
+                "printedPage": 62,
+                "pdfPage": 74
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-032",
+            "unitNumber": 32,
+            "title": "must mustn’t needn’t",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 32,
+                "printedPage": 64,
+                "pdfPage": 76
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-033",
+            "unitNumber": 33,
+            "title": "should 1",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 33,
+                "printedPage": 66,
+                "pdfPage": 78
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-034",
+            "unitNumber": 34,
+            "title": "should 2",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 34,
+                "printedPage": 68,
+                "pdfPage": 80
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-035",
+            "unitNumber": 35,
+            "title": "I’d better … it’s time …",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 35,
+                "printedPage": 70,
+                "pdfPage": 82
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-036",
+            "unitNumber": 36,
+            "title": "would",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 36,
+                "printedPage": 72,
+                "pdfPage": 84
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-037",
+            "unitNumber": 37,
+            "title": "can/could/would you … ? etc. (Requests, offers, permission and invitations)",
+            "section": "Modals",
+            "sourceReference": {
+                "unit": 37,
+                "printedPage": 74,
+                "pdfPage": 86
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-038",
+            "unitNumber": 38,
+            "title": "if I do … and if I did …",
+            "section": "if and wish",
+            "sourceReference": {
+                "unit": 38,
+                "printedPage": 76,
+                "pdfPage": 88
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-039",
+            "unitNumber": 39,
+            "title": "if I knew … I wish I knew …",
+            "section": "if and wish",
+            "sourceReference": {
+                "unit": 39,
+                "printedPage": 78,
+                "pdfPage": 90
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-040",
+            "unitNumber": 40,
+            "title": "if I had known … I wish I had known …",
+            "section": "if and wish",
+            "sourceReference": {
+                "unit": 40,
+                "printedPage": 80,
+                "pdfPage": 92
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-041",
+            "unitNumber": 41,
+            "title": "wish",
+            "section": "if and wish",
+            "sourceReference": {
+                "unit": 41,
+                "printedPage": 82,
+                "pdfPage": 94
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-042",
+            "unitNumber": 42,
+            "title": "Passive 1 (is done / was done)",
+            "section": "Passive",
+            "sourceReference": {
+                "unit": 42,
+                "printedPage": 84,
+                "pdfPage": 96
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-043",
+            "unitNumber": 43,
+            "title": "Passive 2 (be done / been done / being done)",
+            "section": "Passive",
+            "sourceReference": {
+                "unit": 43,
+                "printedPage": 86,
+                "pdfPage": 98
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-044",
+            "unitNumber": 44,
+            "title": "Passive 3",
+            "section": "Passive",
+            "sourceReference": {
+                "unit": 44,
+                "printedPage": 88,
+                "pdfPage": 100
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-045",
+            "unitNumber": 45,
+            "title": "it is said that … he is said to … he is supposed to …",
+            "section": "Passive",
+            "sourceReference": {
+                "unit": 45,
+                "printedPage": 90,
+                "pdfPage": 102
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-046",
+            "unitNumber": 46,
+            "title": "have something done",
+            "section": "Passive",
+            "sourceReference": {
+                "unit": 46,
+                "printedPage": 92,
+                "pdfPage": 104
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-047",
+            "unitNumber": 47,
+            "title": "Reported speech 1 (he said that …)",
+            "section": "Reported speech",
+            "sourceReference": {
+                "unit": 47,
+                "printedPage": 94,
+                "pdfPage": 106
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-048",
+            "unitNumber": 48,
+            "title": "Reported speech 2",
+            "section": "Reported speech",
+            "sourceReference": {
+                "unit": 48,
+                "printedPage": 96,
+                "pdfPage": 108
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-049",
+            "unitNumber": 49,
+            "title": "Questions 1",
+            "section": "Questions and auxiliary verbs",
+            "sourceReference": {
+                "unit": 49,
+                "printedPage": 98,
+                "pdfPage": 110
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-050",
+            "unitNumber": 50,
+            "title": "Questions 2 (do you know where … ? / he asked me where …)",
+            "section": "Questions and auxiliary verbs",
+            "sourceReference": {
+                "unit": 50,
+                "printedPage": 100,
+                "pdfPage": 112
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-051",
+            "unitNumber": 51,
+            "title": "Auxiliary verbs (have/do/can etc.) I think so / I hope so etc.",
+            "section": "Questions and auxiliary verbs",
+            "sourceReference": {
+                "unit": 51,
+                "printedPage": 102,
+                "pdfPage": 114
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-052",
+            "unitNumber": 52,
+            "title": "Question tags (do you? isn’t it? etc.)",
+            "section": "Questions and auxiliary verbs",
+            "sourceReference": {
+                "unit": 52,
+                "printedPage": 104,
+                "pdfPage": 116
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-053",
+            "unitNumber": 53,
+            "title": "Verb + -ing (enjoy doing / stop doing etc.)",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 53,
+                "printedPage": 106,
+                "pdfPage": 118
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-054",
+            "unitNumber": 54,
+            "title": "Verb + to … (decide to … / forget to … etc.)",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 54,
+                "printedPage": 108,
+                "pdfPage": 120
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-055",
+            "unitNumber": 55,
+            "title": "Verb (+ object) + to … (I want you to …)",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 55,
+                "printedPage": 110,
+                "pdfPage": 122
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-056",
+            "unitNumber": 56,
+            "title": "Verb + -ing or to … 1 (remember, regret etc.)",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 56,
+                "printedPage": 112,
+                "pdfPage": 124
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-057",
+            "unitNumber": 57,
+            "title": "Verb + -ing or to … 2 (try, need, help)",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 57,
+                "printedPage": 114,
+                "pdfPage": 126
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-058",
+            "unitNumber": 58,
+            "title": "Verb + -ing or to … 3 (like / would like etc.)",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 58,
+                "printedPage": 116,
+                "pdfPage": 128
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-059",
+            "unitNumber": 59,
+            "title": "prefer and would rather",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 59,
+                "printedPage": 118,
+                "pdfPage": 130
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-060",
+            "unitNumber": 60,
+            "title": "Preposition (in/for/about etc.) + -ing",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 60,
+                "printedPage": 120,
+                "pdfPage": 132
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-061",
+            "unitNumber": 61,
+            "title": "be/get used to … (I’m used to …)",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 61,
+                "printedPage": 122,
+                "pdfPage": 134
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-062",
+            "unitNumber": 62,
+            "title": "Verb + preposition + -ing (succeed in -ing / insist on -ing etc.)",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 62,
+                "printedPage": 124,
+                "pdfPage": 136
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-063",
+            "unitNumber": 63,
+            "title": "there’s no point in -ing, it’s worth -ing etc.",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 63,
+                "printedPage": 126,
+                "pdfPage": 138
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-064",
+            "unitNumber": 64,
+            "title": "to … , for … and so that …",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 64,
+                "printedPage": 128,
+                "pdfPage": 140
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-065",
+            "unitNumber": 65,
+            "title": "Adjective + to …",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 65,
+                "printedPage": 130,
+                "pdfPage": 142
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-066",
+            "unitNumber": 66,
+            "title": "to … (afraid to do) and preposition + -ing (afraid of -ing)",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 66,
+                "printedPage": 132,
+                "pdfPage": 144
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-067",
+            "unitNumber": 67,
+            "title": "see somebody do and see somebody doing",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 67,
+                "printedPage": 134,
+                "pdfPage": 146
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-068",
+            "unitNumber": 68,
+            "title": "-ing clauses (He hurt his knee playing football.)",
+            "section": "-ing and to …",
+            "sourceReference": {
+                "unit": 68,
+                "printedPage": 136,
+                "pdfPage": 148
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-069",
+            "unitNumber": 69,
+            "title": "Countable and uncountable 1",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 69,
+                "printedPage": 138,
+                "pdfPage": 150
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-070",
+            "unitNumber": 70,
+            "title": "Countable and uncountable 2",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 70,
+                "printedPage": 140,
+                "pdfPage": 152
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-071",
+            "unitNumber": 71,
+            "title": "Countable nouns with a/an and some",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 71,
+                "printedPage": 142,
+                "pdfPage": 154
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-072",
+            "unitNumber": 72,
+            "title": "a/an and the",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 72,
+                "printedPage": 144,
+                "pdfPage": 156
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-073",
+            "unitNumber": 73,
+            "title": "the 1",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 73,
+                "printedPage": 146,
+                "pdfPage": 158
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-074",
+            "unitNumber": 74,
+            "title": "the 2 (school / the school etc.)",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 74,
+                "printedPage": 148,
+                "pdfPage": 160
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-075",
+            "unitNumber": 75,
+            "title": "the 3 (children / the children)",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 75,
+                "printedPage": 150,
+                "pdfPage": 162
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-076",
+            "unitNumber": 76,
+            "title": "the 4 (the giraffe / the telephone / the old etc.)",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 76,
+                "printedPage": 152,
+                "pdfPage": 164
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-077",
+            "unitNumber": 77,
+            "title": "Names with and without the 1",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 77,
+                "printedPage": 154,
+                "pdfPage": 166
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-078",
+            "unitNumber": 78,
+            "title": "Names with and without the 2",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 78,
+                "printedPage": 156,
+                "pdfPage": 168
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-079",
+            "unitNumber": 79,
+            "title": "Singular and plural",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 79,
+                "printedPage": 158,
+                "pdfPage": 170
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-080",
+            "unitNumber": 80,
+            "title": "Noun + noun (a bus driver / a headache)",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 80,
+                "printedPage": 160,
+                "pdfPage": 172
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-081",
+            "unitNumber": 81,
+            "title": "-’s (your sister’s name) and of … (the name of the book)",
+            "section": "Articles and nouns",
+            "sourceReference": {
+                "unit": 81,
+                "printedPage": 162,
+                "pdfPage": 174
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-082",
+            "unitNumber": 82,
+            "title": "myself/yourself/themselves etc.",
+            "section": "Pronouns and determiners",
+            "sourceReference": {
+                "unit": 82,
+                "printedPage": 164,
+                "pdfPage": 176
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-083",
+            "unitNumber": 83,
+            "title": "a friend of mine my own house on my own / by myself",
+            "section": "Pronouns and determiners",
+            "sourceReference": {
+                "unit": 83,
+                "printedPage": 166,
+                "pdfPage": 178
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-084",
+            "unitNumber": 84,
+            "title": "there … and it …",
+            "section": "Pronouns and determiners",
+            "sourceReference": {
+                "unit": 84,
+                "printedPage": 168,
+                "pdfPage": 180
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-085",
+            "unitNumber": 85,
+            "title": "some and any",
+            "section": "Pronouns and determiners",
+            "sourceReference": {
+                "unit": 85,
+                "printedPage": 170,
+                "pdfPage": 182
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-086",
+            "unitNumber": 86,
+            "title": "no/none/any nothing/nobody etc.",
+            "section": "Pronouns and determiners",
+            "sourceReference": {
+                "unit": 86,
+                "printedPage": 172,
+                "pdfPage": 184
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-087",
+            "unitNumber": 87,
+            "title": "much, many, little, few, a lot, plenty",
+            "section": "Pronouns and determiners",
+            "sourceReference": {
+                "unit": 87,
+                "printedPage": 174,
+                "pdfPage": 186
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-088",
+            "unitNumber": 88,
+            "title": "all / all of most / most of no / none of etc.",
+            "section": "Pronouns and determiners",
+            "sourceReference": {
+                "unit": 88,
+                "printedPage": 176,
+                "pdfPage": 188
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-089",
+            "unitNumber": 89,
+            "title": "both / both of neither / neither of either / either of",
+            "section": "Pronouns and determiners",
+            "sourceReference": {
+                "unit": 89,
+                "printedPage": 178,
+                "pdfPage": 190
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-090",
+            "unitNumber": 90,
+            "title": "all every whole",
+            "section": "Pronouns and determiners",
+            "sourceReference": {
+                "unit": 90,
+                "printedPage": 180,
+                "pdfPage": 192
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-091",
+            "unitNumber": 91,
+            "title": "each and every",
+            "section": "Pronouns and determiners",
+            "sourceReference": {
+                "unit": 91,
+                "printedPage": 182,
+                "pdfPage": 194
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-092",
+            "unitNumber": 92,
+            "title": "Relative clauses 1: clauses with who/that/which",
+            "section": "Relative clauses",
+            "sourceReference": {
+                "unit": 92,
+                "printedPage": 184,
+                "pdfPage": 196
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-093",
+            "unitNumber": 93,
+            "title": "Relative clauses 2: clauses with and without who/that/which",
+            "section": "Relative clauses",
+            "sourceReference": {
+                "unit": 93,
+                "printedPage": 186,
+                "pdfPage": 198
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-094",
+            "unitNumber": 94,
+            "title": "Relative clauses 3: whose/whom/where",
+            "section": "Relative clauses",
+            "sourceReference": {
+                "unit": 94,
+                "printedPage": 188,
+                "pdfPage": 200
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-095",
+            "unitNumber": 95,
+            "title": "Relative clauses 4: extra information clauses (1)",
+            "section": "Relative clauses",
+            "sourceReference": {
+                "unit": 95,
+                "printedPage": 190,
+                "pdfPage": 202
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-096",
+            "unitNumber": 96,
+            "title": "Relative clauses 5: extra information clauses (2)",
+            "section": "Relative clauses",
+            "sourceReference": {
+                "unit": 96,
+                "printedPage": 192,
+                "pdfPage": 204
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-097",
+            "unitNumber": 97,
+            "title": "-ing and -ed clauses (the woman talking to Tom, the boy injured in the accident)",
+            "section": "Relative clauses",
+            "sourceReference": {
+                "unit": 97,
+                "printedPage": 194,
+                "pdfPage": 206
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-098",
+            "unitNumber": 98,
+            "title": "Adjectives ending in -ing and -ed (boring/bored etc.)",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 98,
+                "printedPage": 196,
+                "pdfPage": 208
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-099",
+            "unitNumber": 99,
+            "title": "Adjectives: a nice new house, you look tired",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 99,
+                "printedPage": 198,
+                "pdfPage": 210
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-100",
+            "unitNumber": 100,
+            "title": "Adjectives and adverbs 1 (quick/quickly)",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 100,
+                "printedPage": 200,
+                "pdfPage": 212
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-101",
+            "unitNumber": 101,
+            "title": "Adjectives and adverbs 2 (well, fast, late, hard/hardly)",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 101,
+                "printedPage": 202,
+                "pdfPage": 214
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-102",
+            "unitNumber": 102,
+            "title": "so and such",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 102,
+                "printedPage": 204,
+                "pdfPage": 216
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-103",
+            "unitNumber": 103,
+            "title": "enough and too",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 103,
+                "printedPage": 206,
+                "pdfPage": 218
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-104",
+            "unitNumber": 104,
+            "title": "quite, pretty, rather and fairly",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 104,
+                "printedPage": 208,
+                "pdfPage": 220
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-105",
+            "unitNumber": 105,
+            "title": "Comparative 1 (cheaper, more expensive etc.)",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 105,
+                "printedPage": 210,
+                "pdfPage": 222
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-106",
+            "unitNumber": 106,
+            "title": "Comparative 2 (much better / any better etc.)",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 106,
+                "printedPage": 212,
+                "pdfPage": 224
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-107",
+            "unitNumber": 107,
+            "title": "Comparative 3 (as … as / than)",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 107,
+                "printedPage": 214,
+                "pdfPage": 226
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-108",
+            "unitNumber": 108,
+            "title": "Superlative (the longest, the most enjoyable etc.)",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 108,
+                "printedPage": 216,
+                "pdfPage": 228
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-109",
+            "unitNumber": 109,
+            "title": "Word order 1: verb + object; place and time",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 109,
+                "printedPage": 218,
+                "pdfPage": 230
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-110",
+            "unitNumber": 110,
+            "title": "Word order 2: adverbs with the verb",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 110,
+                "printedPage": 220,
+                "pdfPage": 232
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-111",
+            "unitNumber": 111,
+            "title": "still any more yet already",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 111,
+                "printedPage": 222,
+                "pdfPage": 234
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-112",
+            "unitNumber": 112,
+            "title": "even",
+            "section": "Adjectives and adverbs",
+            "sourceReference": {
+                "unit": 112,
+                "printedPage": 224,
+                "pdfPage": 236
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-113",
+            "unitNumber": 113,
+            "title": "although though even though in spite of despite",
+            "section": "Conjunctions and prepositions",
+            "sourceReference": {
+                "unit": 113,
+                "printedPage": 226,
+                "pdfPage": 238
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-114",
+            "unitNumber": 114,
+            "title": "in case",
+            "section": "Conjunctions and prepositions",
+            "sourceReference": {
+                "unit": 114,
+                "printedPage": 228,
+                "pdfPage": 240
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-115",
+            "unitNumber": 115,
+            "title": "unless as long as provided",
+            "section": "Conjunctions and prepositions",
+            "sourceReference": {
+                "unit": 115,
+                "printedPage": 230,
+                "pdfPage": 242
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-116",
+            "unitNumber": 116,
+            "title": "as (as I walked … / as I was … etc.)",
+            "section": "Conjunctions and prepositions",
+            "sourceReference": {
+                "unit": 116,
+                "printedPage": 232,
+                "pdfPage": 244
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-117",
+            "unitNumber": 117,
+            "title": "like and as",
+            "section": "Conjunctions and prepositions",
+            "sourceReference": {
+                "unit": 117,
+                "printedPage": 234,
+                "pdfPage": 246
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-118",
+            "unitNumber": 118,
+            "title": "like as if",
+            "section": "Conjunctions and prepositions",
+            "sourceReference": {
+                "unit": 118,
+                "printedPage": 236,
+                "pdfPage": 248
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-119",
+            "unitNumber": 119,
+            "title": "during for while",
+            "section": "Conjunctions and prepositions",
+            "sourceReference": {
+                "unit": 119,
+                "printedPage": 238,
+                "pdfPage": 250
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-120",
+            "unitNumber": 120,
+            "title": "by and until by the time …",
+            "section": "Conjunctions and prepositions",
+            "sourceReference": {
+                "unit": 120,
+                "printedPage": 240,
+                "pdfPage": 252
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-121",
+            "unitNumber": 121,
+            "title": "at/on/in (time)",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 121,
+                "printedPage": 242,
+                "pdfPage": 254
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-122",
+            "unitNumber": 122,
+            "title": "on time and in time at the end and in the end",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 122,
+                "printedPage": 244,
+                "pdfPage": 256
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-123",
+            "unitNumber": 123,
+            "title": "in/at/on (position) 1",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 123,
+                "printedPage": 246,
+                "pdfPage": 258
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-124",
+            "unitNumber": 124,
+            "title": "in/at/on (position) 2",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 124,
+                "printedPage": 248,
+                "pdfPage": 260
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-125",
+            "unitNumber": 125,
+            "title": "in/at/on (position) 3",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 125,
+                "printedPage": 250,
+                "pdfPage": 262
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-126",
+            "unitNumber": 126,
+            "title": "to, at, in and into",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 126,
+                "printedPage": 252,
+                "pdfPage": 264
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-127",
+            "unitNumber": 127,
+            "title": "in/on/at (other uses)",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 127,
+                "printedPage": 254,
+                "pdfPage": 266
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-128",
+            "unitNumber": 128,
+            "title": "by",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 128,
+                "printedPage": 256,
+                "pdfPage": 268
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-129",
+            "unitNumber": 129,
+            "title": "Noun + preposition (reason for, cause of etc.)",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 129,
+                "printedPage": 258,
+                "pdfPage": 270
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-130",
+            "unitNumber": 130,
+            "title": "Adjective + preposition 1",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 130,
+                "printedPage": 260,
+                "pdfPage": 272
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-131",
+            "unitNumber": 131,
+            "title": "Adjective + preposition 2",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 131,
+                "printedPage": 262,
+                "pdfPage": 274
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-132",
+            "unitNumber": 132,
+            "title": "Verb + preposition 1 to and at",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 132,
+                "printedPage": 264,
+                "pdfPage": 276
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-133",
+            "unitNumber": 133,
+            "title": "Verb + preposition 2 about/for/of/after",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 133,
+                "printedPage": 266,
+                "pdfPage": 278
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-134",
+            "unitNumber": 134,
+            "title": "Verb + preposition 3 about and of",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 134,
+                "printedPage": 268,
+                "pdfPage": 280
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-135",
+            "unitNumber": 135,
+            "title": "Verb + preposition 4 of/for/from/on",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 135,
+                "printedPage": 270,
+                "pdfPage": 282
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-136",
+            "unitNumber": 136,
+            "title": "Verb + preposition 5 in/into/with/to/on",
+            "section": "Prepositions",
+            "sourceReference": {
+                "unit": 136,
+                "printedPage": 272,
+                "pdfPage": 284
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-137",
+            "unitNumber": 137,
+            "title": "Phrasal verbs 1 Introduction",
+            "section": "Phrasal verbs",
+            "sourceReference": {
+                "unit": 137,
+                "printedPage": 274,
+                "pdfPage": 286
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-138",
+            "unitNumber": 138,
+            "title": "Phrasal verbs 2 in/out",
+            "section": "Phrasal verbs",
+            "sourceReference": {
+                "unit": 138,
+                "printedPage": 276,
+                "pdfPage": 288
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-139",
+            "unitNumber": 139,
+            "title": "Phrasal verbs 3 out",
+            "section": "Phrasal verbs",
+            "sourceReference": {
+                "unit": 139,
+                "printedPage": 278,
+                "pdfPage": 290
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-140",
+            "unitNumber": 140,
+            "title": "Phrasal verbs 4 on/off (1)",
+            "section": "Phrasal verbs",
+            "sourceReference": {
+                "unit": 140,
+                "printedPage": 280,
+                "pdfPage": 292
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-141",
+            "unitNumber": 141,
+            "title": "Phrasal verbs 5 on/off (2)",
+            "section": "Phrasal verbs",
+            "sourceReference": {
+                "unit": 141,
+                "printedPage": 282,
+                "pdfPage": 294
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-142",
+            "unitNumber": 142,
+            "title": "Phrasal verbs 6 up/down",
+            "section": "Phrasal verbs",
+            "sourceReference": {
+                "unit": 142,
+                "printedPage": 284,
+                "pdfPage": 296
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-143",
+            "unitNumber": 143,
+            "title": "Phrasal verbs 7 up (1)",
+            "section": "Phrasal verbs",
+            "sourceReference": {
+                "unit": 143,
+                "printedPage": 286,
+                "pdfPage": 298
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-144",
+            "unitNumber": 144,
+            "title": "Phrasal verbs 8 up (2)",
+            "section": "Phrasal verbs",
+            "sourceReference": {
+                "unit": 144,
+                "printedPage": 288,
+                "pdfPage": 300
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        },
+        {
+            "id": "giu-145",
+            "unitNumber": 145,
+            "title": "Phrasal verbs 9 away/back",
+            "section": "Phrasal verbs",
+            "sourceReference": {
+                "unit": 145,
+                "printedPage": 290,
+                "pdfPage": 302
+            },
+            "status": "reference",
+            "estimatedMinutes": null,
+            "prerequisites": []
+        }
+    ]
+}
