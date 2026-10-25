@@ -41,7 +41,7 @@ export function gradeGrammar(lesson, mode, answers) {
 export function grammarRequest(path, method, body) {
     if (path === '/api/grammar' && method === 'GET')
         return { action: 'load', id: null, payload: {} };
-    const match = path.match(/^\/api\/grammar\/(giu-\d{3})(?:\/(attempts))?$/);
+    const match = path.match(/^\/api\/grammar\/(giu-\d{3})(?:\/(attempts|rounds))?$/);
     if (!match) return undefined;
     const lesson = Object.values(bookLessons).find((l) => l.id === match[1]);
     const fail = (message) => {
@@ -49,6 +49,14 @@ export function grammarRequest(path, method, body) {
     };
     if (!lesson) fail('This unit has no interactive lesson yet');
     if (!body || typeof body !== 'object') fail('Invalid grammar data');
+    if (method === 'POST' && match[2] === 'rounds')
+        return { action: 'begin', id: lesson.id, payload: {} };
+    const session = body.session_id;
+    if (
+        session !== undefined &&
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(session)
+    )
+        fail('Invalid study session');
     if (method === 'PUT' && !match[2]) {
         const drafts = body.drafts || {};
         if (
@@ -63,9 +71,17 @@ export function grammarRequest(path, method, body) {
             fail('Invalid writing draft');
         if (body.read !== undefined && typeof body.read !== 'boolean')
             fail('Invalid reading status');
-        return { action: 'save', id: lesson.id, payload: { read: body.read === true, drafts } };
+        return {
+            action: 'save',
+            id: lesson.id,
+            payload: {
+                read: body.read === true,
+                drafts,
+                ...(session ? { session_id: session } : {}),
+            },
+        };
     }
-    if (method === 'POST' && match[2]) {
+    if (method === 'POST' && match[2] === 'attempts') {
         const { mode, answers, request_id } = body;
         if (
             !['quick', 'deep', 'assessment', 'review'].includes(mode) ||
@@ -91,6 +107,7 @@ export function grammarRequest(path, method, body) {
             id: lesson.id,
             payload: {
                 request_id,
+                ...(session ? { session_id: session } : {}),
                 mode,
                 results,
                 score: results.filter((r) => r.correct).length,

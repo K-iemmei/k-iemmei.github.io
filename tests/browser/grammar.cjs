@@ -41,6 +41,19 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
             el.value = '';
             el.dispatchEvent(new Event('input', { bubbles: true }));
         });
+        assert.equal(await page.$$eval('.grammar-unit-card[open]', (els) => els.length), 1);
+        assert.equal(
+            await page.$$eval('.grammar-lesson-row .grammar-round-dots i', (els) => els.length),
+            725,
+        );
+        for (const width of [1440, 780, 390, 320]) {
+            await page.setViewport({ width, height: 900 });
+            assert(
+                await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+                'library overflow ' + width,
+            );
+        }
+        await page.setViewport({ width: 1440, height: 1000 });
         fs.mkdirSync('.local/grammar-book-preview', { recursive: true });
         await page.screenshot({ path: '.local/grammar-book-preview/library-light.png' });
         await page.click('a[href="english-grammar.html?lesson=giu-001"]');
@@ -52,6 +65,8 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
                 .length,
             0,
         );
+        await page.click('#grammarStartRound');
+        await page.waitForFunction(() => !document.querySelector('#grammarRead').disabled);
         await page.click('#grammarRead');
         await page.waitForFunction(() => document.querySelector('#grammarRead').disabled);
         const { bookLessons } =
@@ -83,7 +98,10 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         await page.waitForSelector('#grammarQuiz button:not(:disabled)');
         await fill('assessment', false);
         assert.match(await page.$eval('#grammarQuizResult', (el) => el.textContent), /5\/5/);
-        assert.equal(await page.$eval('#grammarProgressCount', (el) => el.textContent), '1 / 145');
+        assert.equal(
+            await page.$eval('#grammarProgressCount', (el) => el.textContent),
+            '1 / 725 lượt',
+        );
         await page.type('#giu-001-s1', 'I am preparing a release. I am not changing the database.');
         await page.click('[data-save-writing="giu-001-s1"]');
         await page.waitForFunction(() =>
@@ -94,7 +112,10 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         );
         await page.reload({ waitUntil: 'networkidle0' });
         assert.match(await page.$eval('#giu-001-s1', (el) => el.value), /preparing a release/);
-        assert.equal(await page.$eval('#grammarProgressCount', (el) => el.textContent), '1 / 145');
+        assert.equal(
+            await page.$eval('#grammarProgressCount', (el) => el.textContent),
+            '1 / 725 lượt',
+        );
         await page.goto(base + '/english-grammar.html?lesson=giu-145', {
             waitUntil: 'networkidle0',
         });

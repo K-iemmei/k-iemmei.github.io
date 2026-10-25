@@ -97,4 +97,60 @@ test('Grammar grades on server, persists completion and writing per user, schedu
         });
         assert(saved.data.progress.completed_at, unit.id);
     }
+
+    // Each pass requires a fresh server session, acknowledgement and assessment.
+    assert.equal((await call()).data.progress.find((p) => p.unit_id === 'giu-001').study_rounds, 0);
+    let firstRequest;
+    for (let round = 1; round <= 5; round++) {
+        const started = await call('/giu-001/rounds', 'POST', {});
+        assert.equal(started.status, 200);
+        const session_id = started.data.progress.study_session_id;
+        assert(session_id);
+        assert.equal(started.data.progress.round_read, false);
+        assert.equal(started.data.progress.round_score, 0);
+        assert.equal(
+            (await call('/giu-001/rounds', 'POST', {})).data.progress.study_session_id,
+            session_id,
+        );
+        await call('/giu-001', 'PUT', { read: true, session_id });
+        if (firstRequest) {
+            const duplicate = await call('/giu-001/attempts', 'POST', {
+                ...payload,
+                request_id: firstRequest,
+                session_id,
+            });
+            assert.equal(duplicate.data.progress.study_rounds, round - 1);
+        }
+        const request_id = require('node:crypto').randomUUID();
+        firstRequest ||= request_id;
+        const passed = await call('/giu-001/attempts', 'POST', {
+            ...payload,
+            request_id,
+            session_id,
+        });
+        assert.equal(passed.status, 200);
+        assert.equal(passed.data.progress.study_rounds, round);
+        assert.equal(passed.data.progress.study_session_id, null);
+        assert.equal(!!passed.data.progress.mastered_at, round === 5);
+        assert.notEqual((await call('/giu-001/rounds', 'POST', {})).status, 200);
+        const stale = await call('/giu-001', 'PUT', { read: true, session_id });
+        assert.notEqual(stale.status, 200);
+        // Move previous credit dates back one day to simulate studying tomorrow.
+        if (round < 5) {
+            await f.pool.query(
+                "UPDATE grammar_study_rounds SET studied_on=studied_on-1 WHERE unit_id='giu-001'",
+            );
+            await f.pool.query(
+                "UPDATE grammar_unit_progress SET last_studied_on=last_studied_on-1 WHERE unit_id='giu-001'",
+            );
+        }
+    }
+    assert.equal(
+        (
+            await f.pool.query(
+                "SELECT count(*)::int AS n FROM grammar_study_rounds WHERE unit_id='giu-001'",
+            )
+        ).rows[0].n,
+        5,
+    );
 });

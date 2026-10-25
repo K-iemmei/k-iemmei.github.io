@@ -1095,3 +1095,117 @@ summary:focus-visible {
         width: 100%;
     }
 }
+/* Compact five-pass library. */
+#grammarUnits {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+}
+#grammarUnits .grammar-unit-card {
+    padding: 0;
+    overflow: hidden;
+}
+#grammarUnits .grammar-unit-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 22px;
+    cursor: pointer;
+    margin: 0;
+}
+#grammarUnits .grammar-unit-heading > span:first-child {
+    display: grid;
+    gap: 4px;
+}
+#grammarUnits .grammar-unit-heading small {
+    font-size: 12px;
+    opacity: 0.65;
+}
+#grammarUnits .grammar-lesson-list {
+    padding: 0 14px 12px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 16px;
+}
+#grammarUnits .grammar-lesson-row {
+    min-height: 64px;
+    padding: 10px 8px;
+    gap: 12px;
+}
+#grammarUnits .grammar-lesson-copy {
+    min-width: 0;
+    flex: 1;
+}
+#grammarUnits .grammar-lesson-copy > span {
+    font-size: 14px;
+    line-height: 1.4;
+}
+.grammar-round-dots {
+    display: inline-flex;
+    gap: 5px;
+    flex-shrink: 0;
+    align-items: center;
+}
+.grammar-round-dots i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #9b9e99;
+    opacity: 0.45;
+}
+.grammar-round-dots i.is-done {
+    background: #4d9565;
+    opacity: 1;
+}
+.grammar-round-panel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    padding: 20px;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+}
+.grammar-round-panel > div {
+    flex: 1;
+    min-width: 180px;
+}
+.grammar-round-panel p {
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 6px 0 0;
+}
+.grammar-toolbar {
+    flex-wrap: wrap;
+}
+.grammar-toolbar select {
+    max-width: 100%;
+}
+@media (max-width: 700px) {
+    #grammarUnits .grammar-lesson-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    #grammarUnits .grammar-unit-heading {
+        padding: 16px;
+    }
+    .grammar-toolbar > label {
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+#grammarUnits .grammar-unit-heading::after {
+    content: '+';
+    font-size: 20px;
+    opacity: 0.65;
+}
+#grammarUnits details[open] > .grammar-unit-heading::after {
+    content: '−';
+}
+#grammarUnits .grammar-unit-heading > span:nth-child(2) {
+    margin-left: auto;
+    font-size: 12px;
+    opacity: 0.65;
+}

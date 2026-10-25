@@ -9,6 +9,7 @@ const key = `grammar-book-v1:${userId}`;
 let data = { progress: [], reviews: [] },
     ready = false,
     busy = false,
+    revision = 0,
     current = null,
     mode = 'quick',
     draft = {};
@@ -34,20 +35,60 @@ const send = (path, method, body) => apiRequest(path, { method, body: JSON.strin
 const update = (entry) => {
     data.progress = data.progress.filter((p) => p.unit_id !== entry.unit_id).concat(entry);
 };
+const rounds = (p) => Number(p?.study_rounds || 0);
+const today = () =>
+    new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Bangkok',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    }).format(new Date());
+const dots = (p) =>
+    `<span class="grammar-round-dots" role="img" aria-label="Đã học ${rounds(p)} trong 5 lượt">${Array.from({ length: 5 }, (_, i) => `<i class="${i < rounds(p) ? 'is-done' : ''}" aria-hidden="true"></i>`).join('')}</span>`;
+const expanded = new Set();
+try {
+    JSON.parse(localStorage.getItem(`${key}:sections`) || '[0]').forEach((i) => expanded.add(i));
+} catch {
+    expanded.add(0);
+}
+function roundPanel() {
+    if (!$('grammarRoundPanel') || !current) return;
+    const p = progress(current.id),
+        count = rounds(p),
+        active = !!p?.study_session_id,
+        doneToday = p?.last_studied_on >= today();
+    $('grammarRoundPanel').innerHTML =
+        `${dots(p)}<div><strong>${count === 5 ? 'Đã hoàn thành 5 lượt' : active ? `Đang học lượt ${count + 1}` : doneToday ? `Đã ghi nhận lượt ${count} hôm nay` : `Lượt học ${count + 1}`}</strong><p>${count === 5 ? 'Bạn vẫn có thể luyện tập và ôn lại.' : active ? `Đọc bài: ${p.round_read ? 'đã xác nhận' : 'chưa xác nhận'} · Kiểm tra: ${p.round_score}% / cần 80%` : doneToday ? 'Lượt tiếp theo mở vào ngày mai (giờ Việt Nam).' : 'Bắt đầu lượt, học phần kiến thức và đạt kiểm tra từ 80%. Mỗi ngày ghi nhận một lượt.'}</p></div>${!active && count < 5 && !doneToday ? '<button id="grammarStartRound" class="grammar-primary" type="button">Bắt đầu lượt ' + (count + 1) + '</button>' : ''}`;
+    $('grammarStartRound')?.addEventListener('click', () =>
+        mutate(async () => {
+            const id = current.id;
+            const result = await send(`/api/grammar/${id}/rounds`, 'POST', {});
+            bookLessons[Number(id.slice(4))].questions.forEach((q) => delete draft[q.id]);
+            backup();
+            update(result.progress);
+            if (current?.id === id) {
+                quiz();
+            }
+        }),
+    );
+}
 function controls() {
+    const p = progress(current?.id);
     document
         .querySelectorAll(
             '#grammarReader button,#grammarReader input,#grammarReader textarea,#grammarReader select',
         )
-        .forEach(
-            (e) =>
-                (e.disabled =
-                    !ready || busy || (e.id === 'grammarRead' && !!progress(current?.id)?.read)),
-        );
+        .forEach((e) => {
+            e.disabled =
+                !ready ||
+                busy ||
+                (e.id === 'grammarRead' && (!p?.study_session_id || p.round_read));
+        });
 }
 async function mutate(callback) {
     if (!ready || busy) return;
     busy = true;
+    revision++;
     controls();
     $('grammarNotice').textContent = '';
     try {
@@ -57,19 +98,20 @@ async function mutate(callback) {
         $('grammarNotice').textContent = e.message;
     } finally {
         busy = false;
-        if ($('grammarRead')) $('grammarRead').checked = !!progress(current?.id)?.read;
+        if ($('grammarRead')) $('grammarRead').checked = !!progress(current?.id)?.round_read;
+        roundPanel();
         controls();
     }
 }
 function library() {
-    const completed = data.progress.filter((p) => p.completed_at).length;
-    $('grammarProgressCount').textContent = `${completed} / 145`;
+    const completed = data.progress.reduce((sum, p) => sum + rounds(p), 0);
+    $('grammarProgressCount').textContent = `${completed} / 725 lượt`;
     $('grammarProgress').value = completed;
     const next =
         data.progress
-            .filter((p) => !p.completed_at)
+            .filter((p) => rounds(p) < 5)
             .sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0]?.unit_id ||
-        book.units.find((u) => u.status === 'ready' && !progress(u.id)?.completed_at)?.id ||
+        book.units.find((u) => u.status === 'ready' && rounds(progress(u.id)) < 5)?.id ||
         'giu-001';
     $('grammarContinue').href = url(next);
     $('grammarContinue').textContent = `Tiếp tục · Unit ${Number(next.slice(4))}`;
@@ -77,10 +119,12 @@ function library() {
         ? `${data.reviews.filter((r) => Date.parse(r.due_at) <= Date.now() || r.streak === 0).length} câu cần ôn`
         : 'Đang tải tiến độ…';
     const query = normaliseSearch($('grammarSearch').value.trim()),
-        filter = $('grammarStatus').value;
+        filter = $('grammarStatus').value,
+        selectedSection = $('grammarSection').value;
     let count = 0;
     $('grammarUnits').innerHTML = [...new Set(book.units.map((u) => u.section))]
-        .map((section) => {
+        .map((section, index) => {
+            if (selectedSection && section !== selectedSection) return '';
             const units = book.units
                 .filter((u) => u.section === section)
                 .filter((u) => {
@@ -92,31 +136,41 @@ function library() {
                         (filter === 'all' ||
                             (filter === 'ready' && u.status === 'ready') ||
                             (filter === 'reference' && u.status !== 'ready') ||
-                            (filter === 'started' && p && !p.completed_at) ||
-                            (filter === 'completed' && p?.completed_at) ||
+                            (filter === 'started' && p && rounds(p) < 5) ||
+                            (filter === 'completed' && rounds(p) === 5) ||
                             (filter === 'review' && due(u.id).length))
                     );
                 });
             count += units.length;
             if (!units.length) return '';
-            return `<section class="grammar-unit-card"><header class="grammar-unit-heading"><h2>${h(section)}</h2></header><ol class="grammar-lesson-list">${units
+            return `<details class="grammar-unit-card" data-section="${index}" ${query || filter !== 'all' || selectedSection || expanded.has(index) ? 'open' : ''}><summary class="grammar-unit-heading"><span><strong>${h(section)}</strong><small>Unit ${units[0].unitNumber}–${units.at(-1).unitNumber}</small></span><span>${units.length} bài</span></summary><ol class="grammar-lesson-list">${units
                 .map((u) => {
                     const p = progress(u.id),
                         label =
                             u.status !== 'ready'
                                 ? 'Tham chiếu sách'
-                                : p?.completed_at
+                                : rounds(p) === 5
                                   ? 'Hoàn thành'
                                   : due(u.id).length
                                     ? 'Cần ôn'
                                     : p
                                       ? 'Đang học'
                                       : 'Học & luyện tập';
-                    return `<li><a class="grammar-lesson-row ${p?.completed_at ? 'is-completed' : ''}" href="${url(u.id)}"><span class="grammar-unit-number">${u.unitNumber}</span><span class="grammar-lesson-copy"><span>${h(u.title)}</span><small>${label}${p?.best_score ? ` · ${p.best_score}%` : ''}</small></span><span>${p?.completed_at ? '✓' : ''}</span></a></li>`;
+                    return `<li><a class="grammar-lesson-row ${rounds(p) === 5 ? 'is-completed' : ''}" href="${url(u.id)}"><span class="grammar-unit-number">${u.unitNumber}</span><span class="grammar-lesson-copy"><span>${h(u.title)}</span><small>${label}${p?.best_score ? ` · ${p.best_score}%` : ''}</small></span>${dots(p)}</a></li>`;
                 })
-                .join('')}</ol></section>`;
+                .join('')}</ol></details>`;
         })
         .join('');
+    document.querySelectorAll('[data-section]').forEach((el) =>
+        el.querySelector('summary').addEventListener('click', () => {
+            const i = Number(el.dataset.section);
+            if (!el.open) expanded.add(i);
+            else expanded.delete(i);
+            try {
+                localStorage.setItem(`${key}:sections`, JSON.stringify([...expanded]));
+            } catch {}
+        }),
+    );
     $('grammarResultsCount').textContent = count ? `${count} unit` : 'Không có unit phù hợp.';
 }
 function mark(text, focus) {
@@ -159,6 +213,7 @@ function quiz() {
                 answers,
                 mode: submittedMode,
                 request_id: crypto.randomUUID(),
+                session_id: progress(id)?.study_session_id || undefined,
             });
             update(result.progress);
             for (const r of result.attempt.results) {
@@ -178,9 +233,12 @@ function quiz() {
                 el.innerHTML = `<strong>${r.correct ? 'Đúng.' : 'Chưa khớp đáp án bài luyện có kiểm soát.'}</strong><p>${h(r.explanation)}</p><p>Đáp án: ${r.accepted.map(h).join(' / ')}</p>${!r.correct ? `<p>Bạn nhập: ${h(r.answer)}</p>` : ''}`;
             }
             $('grammarQuizResult').textContent =
-                `${result.attempt.score}/${result.attempt.total} đúng.${result.progress.completed_at ? ' Unit đã hoàn thành.' : submittedMode === 'assessment' ? ' Hoàn thành khi đã đọc bài và đạt ít nhất 80%.' : ''}`;
+                `${result.attempt.score}/${result.attempt.total} đúng.${rounds(result.progress) === 5 ? ' Đã hoàn thành đủ 5 lượt.' : submittedMode === 'assessment' ? ' Hoàn thành khi đã đọc bài và đạt ít nhất 80%.' : ''}`;
+            const refreshedAt = revision;
+            roundPanel();
             apiRequest('/api/grammar')
                 .then((latest) => {
+                    if (revision !== refreshedAt) return;
                     data = latest;
                     library();
                 })
@@ -231,11 +289,14 @@ function locationView() {
         return;
     }
     $('grammarReader').innerHTML =
-        `<article class="grammar-article">${header}<p class="grammar-source-note">Bài giảng, ví dụ và bài luyện tự biên soạn bổ sung, không phải đáp án chép từ sách.</p><section class="grammar-lesson-section"><h2>Mục tiêu</h2><p>${h(l.objective)}</p>${u.prerequisites.length ? `<p>Nên biết trước: <a href="${url(u.prerequisites[0])}">Unit ${u.unitNumber - 1}</a></p>` : ''}<p>Khoảng 25 phút · Có thể học từng phần và quay lại sau.</p></section><section class="grammar-lesson-section"><h2>Hiểu & sử dụng</h2>${l.rules.map(([title, explanation, pattern]) => `<section class="grammar-rule"><div><h3>${h(title)}</h3><p>${h(explanation)}</p><p class="grammar-pattern">${h(pattern)}</p></div></section>`).join('')}</section><section class="grammar-lesson-section"><h2>Ví dụ thực tế</h2><div class="grammar-example-grid">${l.examples.map(([context, en, vi, focus, why, variation]) => `<figure class="grammar-example"><figcaption>${h(context)}</figcaption><blockquote lang="en">${mark(en, focus)}</blockquote><p>${h(vi)}</p><p>${h(why)}</p><small>Biến thể: ${h(variation)}</small></figure>`).join('')}</div></section><section class="grammar-trap"><h2>Điểm dễ nhầm</h2><p><s>${h(l.trap[0])}</s></p><p>${h(l.trap[1])}</p><p>${h(l.trap[2])}</p></section><label class="grammar-reading-check"><input id="grammarRead" type="checkbox" ${progress(u.id)?.read ? 'checked' : ''}/> Tôi đã đọc và tự giải thích được các ví dụ.</label><section class="grammar-lesson-section"><h2>Luyện tập</h2><label>Chế độ <select id="grammarMode"><option value="quick">Luyện nhanh · 8 câu</option><option value="deep">Luyện sâu · 6 câu</option><option value="assessment">Kiểm tra cuối unit · 5 câu</option><option value="review">Ôn câu sai / đến hạn</option></select></label><p class="grammar-source-note">Bài viết lại/sửa lỗi yêu cầu giữ nguyên ý và cấu trúc đã cho. Không dùng bài này để chấm mọi cách diễn đạt tự do.</p><div id="grammarQuizArea"></div></section><section class="grammar-lesson-section"><h2>Ứng dụng & hội thoại</h2><p>Viết trước, sau đó đối chiếu mẫu và tiêu chí. Phần này tự đánh giá, không chấm điểm tự động và không ảnh hưởng điểm kiểm tra.</p>${l.scenarios.map((s) => `<section class="grammar-scenario"><h3>${h(s.title)}</h3><p>${h(s.prompt)}</p><label for="${s.id}">Bài viết của bạn</label><textarea id="${s.id}" maxlength="5000" rows="5">${h(draft[s.id] ?? progress(u.id)?.drafts?.[s.id] ?? '')}</textarea><button class="grammar-secondary" data-save-writing="${s.id}">Lưu bản viết</button><span id="${s.id}-status" role="status"></span><details><summary>Phản hồi mẫu & tiêu chí</summary><p lang="en">${h(s.model)}</p><ul>${s.rubric.map((r) => `<li>${h(r)}</li>`).join('')}</ul><p>Có nhiều cách viết đúng khác; khác mẫu không đồng nghĩa với sai.</p></details></section>`).join('')}</section>${nav}</article>`;
+        `<article class="grammar-article">${header}<section id="grammarRoundPanel" class="grammar-round-panel" aria-live="polite"></section><p class="grammar-source-note">Bài giảng, ví dụ và bài luyện tự biên soạn bổ sung, không phải đáp án chép từ sách.</p><section class="grammar-lesson-section"><h2>Mục tiêu</h2><p>${h(l.objective)}</p>${u.prerequisites.length ? `<p>Nên biết trước: <a href="${url(u.prerequisites[0])}">Unit ${u.unitNumber - 1}</a></p>` : ''}<p>Khoảng 25 phút · Có thể học từng phần và quay lại sau.</p></section><section class="grammar-lesson-section"><h2>Hiểu & sử dụng</h2>${l.rules.map(([title, explanation, pattern]) => `<section class="grammar-rule"><div><h3>${h(title)}</h3><p>${h(explanation)}</p><p class="grammar-pattern">${h(pattern)}</p></div></section>`).join('')}</section><section class="grammar-lesson-section"><h2>Ví dụ thực tế</h2><div class="grammar-example-grid">${l.examples.map(([context, en, vi, focus, why, variation]) => `<figure class="grammar-example"><figcaption>${h(context)}</figcaption><blockquote lang="en">${mark(en, focus)}</blockquote><p>${h(vi)}</p><p>${h(why)}</p><small>Biến thể: ${h(variation)}</small></figure>`).join('')}</div></section><section class="grammar-trap"><h2>Điểm dễ nhầm</h2><p><s>${h(l.trap[0])}</s></p><p>${h(l.trap[1])}</p><p>${h(l.trap[2])}</p></section><label class="grammar-reading-check"><input id="grammarRead" type="checkbox" ${progress(u.id)?.round_read ? 'checked' : ''}/> Tôi đã đọc và tự giải thích được các ví dụ.</label><section class="grammar-lesson-section"><h2>Luyện tập</h2><label>Chế độ <select id="grammarMode"><option value="quick">Luyện nhanh · 8 câu</option><option value="deep">Luyện sâu · 6 câu</option><option value="assessment">Kiểm tra cuối unit · 5 câu</option><option value="review">Ôn câu sai / đến hạn</option></select></label><p class="grammar-source-note">Bài viết lại/sửa lỗi yêu cầu giữ nguyên ý và cấu trúc đã cho. Không dùng bài này để chấm mọi cách diễn đạt tự do.</p><div id="grammarQuizArea"></div></section><section class="grammar-lesson-section"><h2>Ứng dụng & hội thoại</h2><p>Viết trước, sau đó đối chiếu mẫu và tiêu chí. Phần này tự đánh giá, không chấm điểm tự động và không ảnh hưởng điểm kiểm tra.</p>${l.scenarios.map((s) => `<section class="grammar-scenario"><h3>${h(s.title)}</h3><p>${h(s.prompt)}</p><label for="${s.id}">Bài viết của bạn</label><textarea id="${s.id}" maxlength="5000" rows="5">${h(draft[s.id] ?? progress(u.id)?.drafts?.[s.id] ?? '')}</textarea><button class="grammar-secondary" data-save-writing="${s.id}">Lưu bản viết</button><span id="${s.id}-status" role="status"></span><details><summary>Phản hồi mẫu & tiêu chí</summary><p lang="en">${h(s.model)}</p><ul>${s.rubric.map((r) => `<li>${h(r)}</li>`).join('')}</ul><p>Có nhiều cách viết đúng khác; khác mẫu không đồng nghĩa với sai.</p></details></section>`).join('')}</section>${nav}</article>`;
     $('grammarRead').addEventListener('change', () => {
         const id = u.id;
         mutate(async () => {
-            const result = await send(`/api/grammar/${id}`, 'PUT', { read: true });
+            const result = await send(`/api/grammar/${id}`, 'PUT', {
+                read: true,
+                session_id: progress(id)?.study_session_id,
+            });
             update(result.progress);
         });
     });
@@ -262,9 +323,16 @@ function locationView() {
             });
         });
     }
+    roundPanel();
     quiz();
     controls();
 }
+$('grammarSection').innerHTML =
+    '<option value="">Tất cả các phần</option>' +
+    [...new Set(book.units.map((u) => u.section))]
+        .map((section) => `<option value="${h(section)}">${h(section)}</option>`)
+        .join('');
+$('grammarSection').addEventListener('change', library);
 $('grammarSearch').addEventListener('input', library);
 $('grammarStatus').addEventListener('change', library);
 $('grammarAppendices').innerHTML = book.appendices

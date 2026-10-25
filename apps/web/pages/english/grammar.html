@@ -47,12 +47,13 @@
                         </div>
                         <div class="grammar-progress-card">
                             <div class="grammar-progress-heading">
-                                <span>Tiến độ</span><span id="grammarProgressCount">0 / 145</span>
+                                <span>Tiến độ</span
+                                ><span id="grammarProgressCount">0 / 725 lượt</span>
                             </div>
                             <progress
                                 id="grammarProgress"
                                 value="0"
-                                max="145"
+                                max="725"
                                 aria-label="Tiến độ theo tài khoản"
                             ></progress
                             ><a id="grammarContinue" class="grammar-primary" href="?lesson=giu-001"
@@ -74,11 +75,15 @@
                                 <option value="all">Tất cả unit</option>
                                 <option value="ready">Có bài tương tác</option>
                                 <option value="started">Đang học</option>
-                                <option value="completed">Hoàn thành</option>
+                                <option value="completed">Đủ 5 lượt</option>
                                 <option value="review">Cần ôn</option>
                                 <option value="reference">Tham chiếu sách</option>
                             </select></label
                         >
+                        <label
+                            ><span class="grammar-sr-only">Chọn phần</span
+                            ><select id="grammarSection"></select
+                        ></label>
                     </div>
                     <p id="grammarResultsCount" role="status"></p>
                     <div id="grammarUnits" class="grammar-unit-grid"></div>

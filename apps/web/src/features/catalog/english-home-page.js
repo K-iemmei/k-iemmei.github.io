@@ -33,7 +33,9 @@ if (host) {
     apiRequest('/api/grammar')
         .then((data) => {
             const card = host.querySelector('a[href="english-grammar.html"] p');
-            const completed = data.progress.filter((unit) => unit.completed_at).length;
+            const completed = data.progress.filter(
+                (unit) => Number(unit.study_rounds) === 5,
+            ).length;
             const due = data.reviews.filter(
                 (item) => Date.parse(item.due_at) <= Date.now() || item.streak === 0,
             ).length;
