@@ -44,6 +44,7 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         assert.equal(await page.$$eval('.priority-check', (els) => els.length), 180);
         const id = await page.$eval('.priority-word', (el) => el.dataset.word);
         assert.equal(await page.$eval('.priority-definition', (el) => el.open), false);
+        assert.equal(await page.$eval('.priority-examples', (el) => el.open), false);
         assert(
             await page.$eval(
                 '.priority-definition',
@@ -95,7 +96,7 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         );
         assert.equal(
             await page.$eval(`[data-word="${id}"] .priority-examples`, (el) => el.open),
-            false,
+            true,
         );
         assert.equal(await page.$(`[data-word="${id}"].is-mastered`), null);
         await page.select('#priorityRounds', '4');
