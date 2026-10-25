@@ -662,8 +662,8 @@ a {
 }
 .priority-word-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
 }
 .priority-letter-group {
     margin-bottom: 26px;
@@ -679,8 +679,8 @@ a {
     display: flex;
     flex-direction: column;
     border: 1px solid var(--border);
-    border-radius: 15px;
-    padding: 20px;
+    border-radius: 12px;
+    padding: 14px;
     background: var(--surface);
     overflow-wrap: anywhere;
 }
@@ -695,7 +695,7 @@ a {
     gap: 10px;
 }
 .priority-word h3 {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1.35;
     margin: 0 0 4px;
     letter-spacing: -0.02em;
@@ -706,7 +706,7 @@ a {
     font-size: 12px;
 }
 .priority-pronunciation {
-    margin: 10px 0 0;
+    margin: 6px 0 0;
 }
 .priority-mastered {
     color: #528366;
@@ -715,14 +715,32 @@ a {
 }
 .priority-meanings {
     padding-left: 20px;
-    margin: 16px 0;
+    margin: 8px 0;
     font-size: 14px;
 }
 .priority-meanings li {
-    padding: 3px 0;
+    padding: 2px 0;
 }
 .priority-meanings small {
     color: var(--text-muted);
+}
+.priority-definition {
+    margin: 12px 0 6px;
+}
+.priority-definition summary {
+    cursor: pointer;
+    color: var(--accent-text);
+    font-size: 13px;
+    font-weight: 600;
+}
+.priority-definition:not([open]) .definition-hide,
+.priority-definition[open] .definition-show {
+    display: none;
+}
+@media (max-width: 1100px) {
+    .priority-word-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 .priority-examples {
     margin-top: auto;
@@ -734,8 +752,8 @@ a {
     cursor: pointer;
 }
 .priority-examples figure {
-    margin: 14px 0;
-    padding: 12px;
+    margin: 8px 0;
+    padding: 8px;
     border-left: 2px solid var(--accent-fill);
     background: var(--bg);
     border-radius: 4px;
@@ -743,7 +761,7 @@ a {
 .priority-examples blockquote {
     margin: 0;
     font-size: 14px;
-    line-height: 1.65;
+    line-height: 1.5;
 }
 .priority-examples figcaption {
     margin-top: 7px;
@@ -754,8 +772,8 @@ a {
 .priority-checks {
     display: flex;
     gap: 9px;
-    padding-top: 18px;
-    margin-top: 16px;
+    padding-top: 10px;
+    margin-top: 10px;
     border-top: 1px solid var(--border);
 }
 .priority-check {
@@ -811,7 +829,7 @@ a {
         flex-basis: 100%;
     }
     .priority-word {
-        padding: 18px;
+        padding: 14px;
     }
     .vocab-tabs button {
         padding: 9px 10px;

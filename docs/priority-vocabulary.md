@@ -38,6 +38,11 @@ Users mark the next box after each study pass. They can undo the most recent
 mark. There is no daily cap and no quiz prerequisite for this list. All five
 marks produce a green border and completion check on the card.
 
+Meanings are hidden by default behind a native **Hiện nghĩa / Ẩn nghĩa** toggle.
+Cards use compact spacing and four columns on wide screens, adapting to fewer
+columns on smaller windows. Saving a study mark preserves both the definition
+and example toggles.
+
 Progress is stored per authenticated user in `vocabulary_priority_progress`,
 including timestamps and a revision. Server-side row locking and revision checks
 reject duplicate or stale writes; the browser reloads progress on conflict.

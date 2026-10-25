@@ -43,6 +43,13 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         assert.equal(await page.$$eval('.priority-word', (els) => els.length), 36);
         assert.equal(await page.$$eval('.priority-check', (els) => els.length), 180);
         const id = await page.$eval('.priority-word', (el) => el.dataset.word);
+        assert.equal(await page.$eval('.priority-definition', (el) => el.open), false);
+        assert(
+            await page.$eval(
+                '.priority-definition',
+                (el) => el.getBoundingClientRect().height < 40,
+            ),
+        );
         async function tick(round, count) {
             await page.click(`[data-word="${id}"] [data-round="${round}"]`);
             await page.waitForFunction(
@@ -79,7 +86,17 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         assert(await page.$(`[data-word="${id}"].is-mastered .priority-mastered`));
         await page.reload({ waitUntil: 'networkidle0' });
         await page.waitForSelector(`[data-word="${id}"].is-mastered`);
+        await page.click(`[data-word="${id}"] .priority-definition summary`);
+        await page.click(`[data-word="${id}"] .priority-examples summary`);
         await tick(5, 4);
+        assert.equal(
+            await page.$eval(`[data-word="${id}"] .priority-definition`, (el) => el.open),
+            true,
+        );
+        assert.equal(
+            await page.$eval(`[data-word="${id}"] .priority-examples`, (el) => el.open),
+            false,
+        );
         assert.equal(await page.$(`[data-word="${id}"].is-mastered`), null);
         await page.select('#priorityRounds', '4');
         await page.waitForFunction(() => document.querySelectorAll('.priority-word').length === 1);

@@ -34,7 +34,7 @@ function card(word) {
     return `<article class="priority-word ${count === 5 ? 'is-mastered' : ''}" data-word="${word.id}" aria-labelledby="heading-${word.id}">
         <header><div><h3 id="heading-${word.id}" lang="en">${h(word.term)}</h3><small>${h(word.pos)} · ${h(word.level)}${word.qualifier ? ` · ${h(word.qualifier)}` : ''}</small></div>${count === 5 ? '<span class="priority-mastered" aria-label="Đã học đủ 5 lần">✓</span>' : ''}</header>
         ${content?.pronunciation ? `<p class="priority-pronunciation" lang="en">/${h(content.pronunciation)}/</p>` : ''}
-        <ol class="priority-meanings">${(content?.senses || []).map((sense) => `<li>${sense.pos ? `<small>${h(sense.pos)}</small> ` : ''}${h(sense.meaning)}</li>`).join('')}</ol>
+        <details class="priority-definition"><summary><span class="definition-show">Hiện nghĩa</span><span class="definition-hide">Ẩn nghĩa</span></summary><ol class="priority-meanings">${(content?.senses || []).map((sense) => `<li>${sense.pos ? `<small>${h(sense.pos)}</small> ` : ''}${h(sense.meaning)}</li>`).join('')}</ol></details>
         <details class="priority-examples" open><summary>Ví dụ thực tế</summary>${(content?.examples || []).map((example) => `<figure><blockquote lang="en">${h(example.en)}</blockquote>${example.vi ? `<figcaption>${h(example.vi)}</figcaption>` : ''}</figure>`).join('')}</details>
         <div class="priority-checks" role="group" aria-label="5 lần học ${h(word.term)}">${Array.from(
             { length: 5 },
@@ -167,9 +167,15 @@ export async function initPriorityVocabulary() {
             ) {
                 const visibleArticle = $('priorityWords').querySelector(`[data-word="${id}"]`);
                 if (visibleArticle) {
-                    const wasOpen = visibleArticle.querySelector('details').open;
+                    const detailsState = [...visibleArticle.querySelectorAll('details')].map(
+                        (el) => el.open,
+                    );
                     visibleArticle.outerHTML = card(priorityCatalog.find((word) => word.id === id));
-                    $('priorityWords').querySelector(`[data-word="${id}"] details`).open = wasOpen;
+                    $('priorityWords')
+                        .querySelectorAll(`[data-word="${id}"] details`)
+                        .forEach((el, index) => {
+                            el.open = detailsState[index];
+                        });
                     if (visibleArticle === article)
                         $('priorityWords')
                             .querySelector(`[data-word="${id}"] [data-round="${round}"]`)
