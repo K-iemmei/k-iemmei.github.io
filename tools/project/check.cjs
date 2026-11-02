@@ -22,7 +22,7 @@ for (const file of files.filter((file) => file.includes(path.join('apps', 'web',
     for (const match of source.matchAll(
         /(?:from\s*|import\s*\(\s*|import\s*)['"](\.[^'"]+)['"]/g,
     )) {
-        if (!fs.existsSync(path.resolve(path.dirname(file), match[1])))
+        if (!fs.existsSync(path.resolve(path.dirname(file), match[1].split(/[?#]/)[0])))
             throw new Error('Broken import: ' + file + ' -> ' + match[1]);
     }
 }

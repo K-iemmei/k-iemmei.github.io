@@ -37,6 +37,7 @@ function card(word, comparison = false) {
     const headingId = `heading-${comparison ? 'related-' : ''}${word.id}`;
     return `<article class="priority-word ${count === 5 ? 'is-mastered' : ''}" data-word="${word.id}" ${comparison ? '' : 'tabindex="0" aria-haspopup="dialog"'} aria-labelledby="${headingId}">
         <header><div><h3 id="${headingId}" lang="en">${h(word.term)}</h3><small>${word.custom ? 'Từ tự thêm' : `${h(word.pos)} · ${h(word.level)}`}${word.qualifier ? ` · ${h(word.qualifier)}` : ''}</small></div>${count === 5 ? '<span class="priority-mastered" aria-label="Đã học đủ 5 lần">✓</span>' : ''}</header>
+        ${comparison ? '' : `<button type="button" class="priority-related-trigger" data-related="${word.id}" aria-haspopup="dialog" aria-controls="priorityRelatedDialog">Từ liên quan ↗</button>`}
         ${content?.pronunciation ? `<p class="priority-pronunciation" lang="en">/${h(content.pronunciation)}/</p>` : ''}
         <details class="priority-definition"><summary><span class="definition-show">Hiện nghĩa</span><span class="definition-hide">Ẩn nghĩa</span></summary><ol class="priority-meanings">${(content?.senses || []).map((sense) => `<li>${sense.pos ? `<small>${h(sense.pos)}</small> ` : ''}${h(sense.meaning)}</li>`).join('')}</ol></details>
         <details class="priority-examples"><summary>Ví dụ thực tế</summary>${(content?.examples || []).map((example) => `<figure><blockquote lang="en">${h(example.en)}</blockquote>${example.vi ? `<figcaption>${h(example.vi)}</figcaption>` : ''}</figure>`).join('')}</details>
@@ -121,7 +122,8 @@ function initRelatedWords() {
         }
     }
     $('priorityWords').addEventListener('click', (event) => {
-        if (event.target.closest('button, details, a, input, select, textarea')) return;
+        const trigger = event.target.closest('[data-related]');
+        if (!trigger && event.target.closest('button, summary, a, input, select, textarea')) return;
         const article = event.target.closest('[data-word]');
         if (article) open(article);
     });

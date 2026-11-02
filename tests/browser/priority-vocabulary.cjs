@@ -176,6 +176,17 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         );
         await page.keyboard.press('Escape');
         await page.waitForFunction(() => !document.querySelector('#priorityRelatedDialog').open);
+        await page.click('#priorityWords [data-related]');
+        await page.waitForSelector('#priorityRelatedDialog[open] .priority-word');
+        await page.keyboard.press('Escape');
+        await page.waitForFunction(() => !document.querySelector('#priorityRelatedDialog').open);
+        await page.click('#priorityWords .priority-definition summary');
+        assert.equal(await page.$eval('#priorityRelatedDialog', (el) => el.open), false);
+        await page.click('#priorityWords .priority-meanings li');
+        await page.waitForSelector('#priorityRelatedDialog[open] .priority-word');
+        await page.keyboard.press('Escape');
+        await page.waitForFunction(() => !document.querySelector('#priorityRelatedDialog').open);
+        await page.focus('#priorityWords .priority-word');
         assert(
             await page.$eval(
                 '#priorityWords .priority-word',

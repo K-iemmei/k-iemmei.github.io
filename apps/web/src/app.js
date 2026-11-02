@@ -19,7 +19,7 @@ const pages = {
     blog: () => import('./features/publishing/list-page.js'),
     'note-editor': () => import('./features/publishing/editor-page.js'),
     'blog-post': () => import('./features/publishing/post-page.js'),
-    vocabulary: () => import('./features/vocabulary/vocabulary-page.js'),
+    vocabulary: () => import('./features/vocabulary/vocabulary-page.js?v=related-cards-2'),
     'vocabulary-deck': () => import('./features/vocabulary/vocabulary-deck-page.js'),
     'reading-author': () => import('./features/english/reading/reading-authoring-page.js'),
     admin: () => import('./features/admin/admin-page.js'),

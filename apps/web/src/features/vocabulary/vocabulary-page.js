@@ -1,4 +1,4 @@
-import { initPriorityVocabulary } from './priority-vocabulary-page.js';
+import { initPriorityVocabulary } from './priority-vocabulary-page.js?v=related-cards-2';
 import { apiRequest } from '../../core/database-client.js';
 import { deployment } from '../../core/deployment-config.js';
 import { parseApkgInBrowser } from './apkg-browser.js';
