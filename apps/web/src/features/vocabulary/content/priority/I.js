@@ -1306,7 +1306,10 @@ export const words = [
     {
         id: 'pv-e10bb5d3b091d32b',
         pronunciation: 'ˈaɪɹəni',
-        senses: [{ pos: 'danh từ', meaning: 'giống thép; giống gang' }],
+        senses: [
+            { pos: 'danh từ', meaning: 'sự mỉa mai; lối nói ngược để châm biếm' },
+            { pos: 'danh từ', meaning: 'sự trớ trêu; tình huống trái với điều được mong đợi' },
+        ],
         examples: [
             {
                 en: "The irony of Ireland's copying the nation she most hated.",

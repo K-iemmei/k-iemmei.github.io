@@ -167,6 +167,7 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
             ),
         );
         assert(await page.$eval('#priorityRelatedWords .priority-definition', (el) => el.open));
+        assert(await page.$eval('#priorityRelatedWords', (el) => el.textContent.includes('Họ từ')));
         assert(
             await page.evaluate(
                 () =>
@@ -220,6 +221,34 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         await page.waitForSelector(
             `[data-word="${customId}"] [data-round="1"][aria-checked="true"]`,
         );
+        // Build the index, then add a card: new suggestions must appear without reload.
+        await page.$eval('#prioritySearch', (el) => {
+            el.value = 'absence';
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        await page.waitForFunction(
+            () => document.querySelector('#priorityWords h3')?.textContent === 'absence',
+        );
+        await page.click('#priorityWords [data-related]');
+        await page.waitForSelector('#priorityRelatedDialog[open] .priority-word');
+        await page.keyboard.press('Escape');
+        await page.click('#priorityAddToggle');
+        await page.type('#priorityWord', 'away-from-class');
+        await page.type('#priorityMean', 'vắng mặt');
+        await page.type('#priorityExample', 'She was away from class today.');
+        await page.click('#priorityAddSubmit');
+        await page.waitForFunction(
+            () => document.querySelector('#priorityWords h3')?.textContent === 'away-from-class',
+        );
+        await page.click('#priorityWords [data-related]');
+        await page.waitForSelector('#priorityRelatedDialog[open] .priority-word');
+        assert(
+            await page.$$eval('#priorityRelatedWords h3', (els) =>
+                els.some((el) => el.textContent === 'absent'),
+            ),
+        );
+        assert(await page.$eval('#priorityRelatedWords', (el) => el.textContent.includes('Gợi ý')));
+        await page.keyboard.press('Escape');
         assert.deepEqual(errors, []);
         console.log(
             'PASS: priority words, five passes/undo/reload, exact filters, A–Z, search, pagination, Anki tab, mobile and dark/light.',

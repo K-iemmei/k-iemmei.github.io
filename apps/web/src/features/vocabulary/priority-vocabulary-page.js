@@ -2,11 +2,15 @@ import { apiRequest } from '../../core/database-client.js';
 import { escapeHtml as h } from '../../shared/escape-html.js';
 import { priorityCatalog } from './content/priority-catalog.js';
 import { filterPriorityWords } from '../../domain/priority-vocabulary.js';
-import { relatedPriorityWords } from '../../domain/priority-relations.js';
+import {
+    createPriorityRelationIndex,
+    relatedPriorityWords,
+} from '../../domain/priority-relations.js?v=relations-audit-1';
 
 const $ = (id) => document.getElementById(id),
     pageSize = 36;
 let catalog = [...priorityCatalog],
+    relationIndex = null,
     progress = new Map(),
     ready = false,
     pending = new Set(),
@@ -19,7 +23,7 @@ function letterContent(letter) {
     if (!requests.has(letter))
         requests.set(
             letter,
-            import(`./content/priority/${letter}.js`)
+            import(`./content/priority/${letter}.js?v=relations-audit-1`)
                 .then((module) => {
                     module.words.forEach((word) => contents.set(word.id, word));
                 })
@@ -99,15 +103,16 @@ function initRelatedWords() {
                 [...new Set(priorityCatalog.map((word) => word.letter))].map(letterContent),
             );
             if (token !== comparisonGeneration || !dialog.open) return;
-            const related = relatedPriorityWords(selected, catalog, contents);
+            relationIndex ||= createPriorityRelationIndex(catalog, contents);
+            const related = relatedPriorityWords(selected, catalog, contents, relationIndex);
             $('priorityRelatedStatus').textContent = related.length
-                ? `${related.length} từ liên quan · Gợi ý theo nghĩa chung hoặc nhóm học; không phải từ nào cũng thay thế được cho nhau.`
-                : 'Chưa tìm thấy từ liên quan trong danh sách. Bạn vẫn có thể ôn card này.';
+                ? `${related.length} từ liên quan · Phân biệt gần nghĩa, họ từ, tương phản và cùng chủ đề; không phải từ nào cũng thay thế được cho nhau. Từ tự thêm được gắn nhãn gợi ý.`
+                : 'Card này chưa có liên kết phù hợp trong danh sách. Bạn vẫn có thể ôn card này.';
             $('priorityRelatedWords').innerHTML = [
                 `<section class="priority-relation"><p class="priority-relation-label">Từ đang chọn</p>${card(selected, true)}</section>`,
                 ...related.map(
                     ({ word, reason }) =>
-                        `<section class="priority-relation"><p class="priority-relation-label">${reason}</p>${card(word, true)}</section>`,
+                        `<section class="priority-relation"><p class="priority-relation-label">${h(reason)}</p>${card(word, true)}</section>`,
                 ),
             ].join('');
             $('priorityRelatedWords')
@@ -221,6 +226,7 @@ async function load() {
     catalog = [...priorityCatalog, ...(result.words || []).map(customWord)].sort((a, b) =>
         a.term.localeCompare(b.term, 'en'),
     );
+    relationIndex = null;
     updateLetters();
     const incoming = new Map(result.progress.map((entry) => [entry.word_id, entry]));
     // An overlapping save may be newer than the snapshot returned by this GET.
@@ -258,6 +264,7 @@ export async function initPriorityVocabulary() {
             });
             const word = customWord(saved);
             catalog.push(word);
+            relationIndex = null;
             catalog.sort((a, b) => a.term.localeCompare(b.term, 'en'));
             updateLetters();
             $('prioritySearch').value = word.term;

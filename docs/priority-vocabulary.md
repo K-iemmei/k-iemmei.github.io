@@ -36,13 +36,23 @@ stable IDs from the headword and qualifier, independent of list order.
 
 Click a card's heading or blank area (or focus the card and press Enter/Space)
 to compare it with related words in a modal. The selected card appears first,
-followed by words sharing a complete Vietnamese meaning phrase or an explicit
-study group. Groups include related topics and contrasts as well as synonyms;
-they do not imply that words are interchangeable. Matching covers the full
-catalogue and account-specific custom words, regardless of current filters.
+followed by words in explicitly reviewed study groups. Each link identifies
+near meanings, word families, contrasts, or a shared topic. These labels do not
+imply that words are interchangeable. The review covers all 2,000 built-in
+cards; 1,998 have direct links and `sometime` / `whoever` are deliberately kept
+standalone. Groups do not expand transitively through a word's other senses.
+Account-specific custom words get separately labelled suggestions from complete
+matching meaning phrases, with parenthetical dictionary notes excluded.
+Matching covers the full catalogue, regardless of current filters.
 The modal opens meanings by default and shows read-only study counts. Escape,
 the close button, or a click on the backdrop closes it and restores focus.
 Dictionary modules load on first use; a failure offers a retry by reopening.
+The relationship index is built once and invalidated when account words reload
+or a custom card is added. All built-in groups, exact members, source meanings,
+and direct neighbours are listed in
+[the full audit](priority-vocabulary-relations-audit.md). Regenerate it with
+`node tools/content/audit-priority-relations.cjs --write` and verify it with
+`node tools/content/audit-priority-relations.cjs --check`.
 
 Users mark the next box after each study pass. They can undo the most recent
 mark. There is no daily cap and no quiz prerequisite for this list. All five

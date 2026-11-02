@@ -1,183 +1,25 @@
-// Explicit study groups complement shared dictionary meanings. A shared topic is
-// a learning association, not a claim that every member is interchangeable.
-const groups = [
-    ['abolish', 'cancel', 'revoke', ' repeal', 'eliminate', 'remove', 'eradicate'],
-    ['absence', 'absent', 'lack', 'shortage', 'scarcity', 'deficiency', 'deprive'],
-    ['absorb', 'consume', 'intake'],
-    ['abstract', 'concept', 'notion', 'theoretical'],
-    ['abundant', 'abundance', 'ample', 'plentiful', 'numerous'],
-    ['accurate', 'accuracy', 'precise', 'precision', 'exact'],
-    ['achieve', 'accomplish', 'attain', 'achievement', 'accomplishment', 'fulfil'],
-    ['adapt', 'adjust', 'modify', 'alter', 'transform', 'modification', 'adaptation'],
-    ['admit', 'acknowledge', 'confess', 'concede'],
-    ['advantage', 'benefit', 'beneficial', 'merit', 'asset'],
-    ['adverse', 'harmful', 'detrimental', 'damaging', 'destructive'],
-    ['advocate', 'support', 'endorse', 'backing', 'proponent'],
-    ['affection', 'affectionate', 'fond', 'love', 'adore', 'devotion'],
-    ['aggressive', 'hostile', 'hostility', 'aggression', 'fierce'],
-    ['aid', 'assist', 'assistance', 'help', 'facilitate'],
-    ['aim', 'goal', 'objective', 'purpose', 'ambition', 'aspiration'],
-    ['allocate', 'distribute', 'assign', 'allocation', 'distribution'],
-    ['allow', 'permit', 'authorize', 'permission', 'consent', 'approval'],
-    ['amaze', 'astonish', 'astonishing', 'surprise', 'stun', 'startle'],
-    ['analyse', 'analyze', 'analysis', 'examine', 'investigate', 'scrutinize', 'inspection'],
-    ['anger', 'angry', 'rage', 'fury', 'furious', 'outrage', 'irritate'],
-    ['anxiety', 'anxious', 'worry', 'concern', 'uneasy', 'nervous', 'apprehension'],
-    ['appeal', 'attract', 'attraction', 'appealing', 'allure', 'fascinate'],
-    ['appropriate', 'suitable', 'apt', 'adequate', 'fit'],
-    ['argue', 'argument', 'debate', 'dispute', 'controversy', 'controversial'],
-    ['arrogant', 'arrogance', 'conceited', 'vanity'],
-    ['artificial', 'synthetic', 'fake', 'counterfeit', 'genuine', 'authentic'],
-    ['assess', 'evaluate', 'assessment', 'evaluation', 'appraise', 'estimate'],
-    ['assume', 'assumption', 'presume', 'suppose', 'hypothesis'],
-    ['assure', 'reassure', 'guarantee', 'ensure', 'certainty'],
-    ['attach', 'attachment', 'connect', 'connection', 'link', 'bond'],
-    ['attempt', 'endeavour', 'strive', 'effort', 'try'],
-    ['attitude', 'perspective', 'viewpoint', 'outlook', 'stance'],
-    ['aware', 'awareness', 'conscious', 'consciousness', 'perceive', 'perception'],
-    ['ban', 'prohibit', 'forbid', 'restrict', 'restriction', 'prohibition'],
-    ['barrier', 'obstacle', 'hurdle', 'impediment', 'hinder'],
-    ['begin', 'commence', 'initiate', 'onset', 'inception'],
-    ['brave', 'courage', 'courageous', 'bold', 'courageously'],
-    ['brief', 'concise', 'succinct', 'short', 'brevity'],
-    ['bright', 'brilliant', 'vivid', 'radiant', 'luminous'],
-    ['calm', 'tranquil', 'serene', 'peaceful', 'composure'],
-    ['capable', 'competent', 'proficient', 'skilled', 'expertise', 'competence'],
-    ['careful', 'cautious', 'caution', 'vigilant', 'alert', 'wary'],
-    ['cause', 'trigger', 'provoke', 'induce', 'generate', 'spark'],
-    ['cease', 'halt', 'stop', 'terminate', 'termination'],
-    ['change', 'shift', 'transition', 'evolve', 'evolution'],
-    ['clear', 'obvious', 'evident', 'apparent', 'explicit', 'manifest'],
-    ['collapse', 'crumble', 'deteriorate', 'decline', 'decay'],
-    ['combine', 'merge', 'integrate', 'unite', 'fusion', 'integration'],
-    ['compel', 'force', 'oblige', 'mandatory', 'compulsory'],
-    ['complex', 'complicated', 'intricate', 'complexity'],
-    ['comply', 'conform', 'obey', 'compliance', 'obedience'],
-    ['comprehend', 'understand', 'grasp', 'comprehension'],
-    ['conceal', 'hide', 'disguise', 'cover', 'concealment'],
-    ['conclude', 'conclusion', 'infer', 'deduce', 'inference'],
-    ['conflict', 'clash', 'confrontation', 'confront', 'combat'],
-    ['consequence', 'outcome', 'result', 'impact', 'effect', 'repercussion'],
-    ['conserve', 'preserve', 'protect', 'safeguard', 'conservation', 'preservation'],
-    ['considerable', 'substantial', 'significant', 'notable', 'remarkable'],
-    ['constant', 'continuous', 'continual', 'persistent', 'perpetual'],
-    ['contain', 'include', 'comprise', 'encompass', 'incorporate'],
-    ['contradict', 'contradiction', 'contrary', 'opposite', 'opposition'],
-    ['convince', 'persuade', 'persuasion', 'compelling', 'convincing'],
-    ['cooperate', 'collaborate', 'cooperation', 'collaboration', 'partnership'],
-    ['create', 'invent', 'devise', 'innovation', 'innovative', 'creativity'],
-    ['crime', 'criminal', 'offence', 'offender', 'convict', 'prosecute'],
-    ['crucial', 'essential', 'vital', 'critical', 'indispensable', 'fundamental'],
-    ['danger', 'risk', 'hazard', 'peril', 'threat', 'jeopardize'],
-    ['decrease', 'reduce', 'diminish', 'lessen', 'reduction', 'shrink'],
-    ['dedicate', 'devote', 'commit', 'dedication', 'commitment'],
-    ['defeat', 'overcome', 'conquer', 'triumph', 'victory'],
-    ['delay', 'postpone', 'defer', 'procrastinate'],
-    ['deliberate', 'intentional', 'intention', 'intentionally'],
-    ['demonstrate', 'illustrate', 'show', 'exhibit', 'display'],
-    ['deny', 'reject', 'refuse', 'decline', 'rejection'],
-    ['depend', 'rely', 'dependent', 'reliance', 'dependency'],
-    ['depression', 'sadness', 'sorrow', 'grief', 'misery', 'despair'],
-    ['desire', 'crave', 'yearn', 'longing', 'eager', 'keen'],
-    ['determine', 'resolve', 'determination', 'resolute', 'decisive'],
-    ['different', 'distinct', 'diverse', 'varied', 'diversity', 'distinction'],
-    ['difficult', 'challenging', 'demanding', 'tough', 'arduous'],
-    ['disclose', 'reveal', 'unveil', 'expose', 'disclosure'],
-    ['disease', 'illness', 'disorder', 'syndrome', 'infection', 'epidemic'],
-    ['dismiss', 'fire', 'sack', 'redundant', 'redundancy', 'layoff'],
-    ['doubt', 'uncertainty', 'sceptical', 'skeptical', 'dubious'],
-    ['economy', 'economic', 'fiscal', 'monetary', 'inflation', 'recession'],
-    ['education', 'curriculum', 'tuition', 'scholarship', 'academic', 'literacy'],
-    ['efficient', 'effective', 'efficiency', 'effectiveness', 'productive'],
-    ['emerge', 'appear', 'arise', 'emergence'],
-    ['emphasize', 'emphasis', 'stress', 'highlight', 'underscore'],
-    ['encourage', 'motivate', 'inspire', 'incentive', 'motivation'],
-    ['endure', 'tolerate', 'withstand', 'bear', 'endurance'],
-    ['enhance', 'improve', 'boost', 'strengthen', 'reinforce'],
-    ['enormous', 'huge', 'immense', 'vast', 'massive', 'gigantic'],
-    ['environment', 'ecology', 'ecosystem', 'biodiversity', 'habitat', 'conservation'],
-    ['equal', 'equality', 'equity', 'fair', 'justice', 'impartial'],
-    ['error', 'mistake', 'fault', 'flaw', 'defect'],
-    ['escape', 'flee', 'evade', 'avoid', 'elude'],
-    ['ethical', 'moral', 'ethics', 'morality', 'integrity'],
-    ['evidence', 'proof', 'verify', 'confirm', 'validate', 'substantiate'],
-    ['expand', 'extend', 'enlarge', 'broaden', 'expansion'],
-    ['expect', 'anticipate', 'predict', 'forecast', 'foresee'],
-    ['expensive', 'costly', 'pricey', 'affordable', 'cheap'],
-    ['explain', 'clarify', 'elaborate', 'explanation', 'clarification'],
-    ['famous', 'renowned', 'prominent', 'eminent', 'notorious'],
-    ['fear', 'dread', 'terror', 'fright', 'frighten', 'terrify'],
-    ['flexible', 'adaptable', 'versatile', 'flexibility'],
-    ['flourish', 'thrive', 'prosper', 'prosperity'],
-    ['fragile', 'delicate', 'vulnerable', 'brittle'],
-    ['freedom', 'liberty', 'liberate', 'liberation', 'autonomy'],
-    ['friendly', 'amiable', 'cordial', 'sociable', 'hospitable'],
-    ['generous', 'generosity', 'charitable', 'charity', 'donation'],
-    ['gradual', 'gradually', 'incremental', 'progressive'],
-    ['happy', 'joy', 'delight', 'pleasure', 'content', 'satisfaction'],
-    ['honest', 'sincere', 'truthful', 'honesty', 'sincerity'],
-    ['humble', 'modest', 'humility', 'modesty'],
-    ['imitate', 'mimic', 'replicate', 'reproduce', 'imitation'],
-    ['important', 'importance', 'priority', 'significance'],
-    ['increase', 'rise', 'grow', 'surge', 'soar', 'escalate'],
-    ['independent', 'independence', 'autonomous', 'self-reliant'],
-    ['inevitable', 'unavoidable', 'inescapable'],
-    ['intelligent', 'clever', 'smart', 'intelligence', 'intellect'],
-    ['journey', 'voyage', 'expedition', 'excursion', 'trip'],
-    ['large', 'sizeable', 'big', 'extensive', 'spacious'],
-    ['legal', 'legislation', 'law', 'statute', 'regulation', 'jurisdiction'],
-    ['limit', 'constraint', 'limitation', 'restrain', 'curb'],
-    ['logical', 'rational', 'reasonable', 'coherent'],
-    ['maintain', 'retain', 'sustain', 'uphold'],
-    ['manage', 'administer', 'oversee', 'supervise', 'management'],
-    ['necessary', 'necessity', 'requirement', 'prerequisite'],
-    ['negotiate', 'bargain', 'compromise', 'negotiation', 'concession'],
-    ['observe', 'notice', 'detect', 'spot', 'observation'],
-    ['obtain', 'acquire', 'gain', 'procure', 'acquisition'],
-    ['old', 'ancient', 'antique', 'archaic', 'obsolete'],
-    ['opportunity', 'chance', 'prospect', 'possibility'],
-    ['ordinary', 'normal', 'typical', 'conventional', 'commonplace'],
-    ['participate', 'engage', 'involve', 'participation', 'involvement'],
-    ['poor', 'poverty', 'impoverished', 'deprived', 'destitute'],
-    ['power', 'authority', 'influence', 'dominance', 'control'],
-    ['prevent', 'avert', 'preclude', 'deter', 'prevention'],
-    ['quick', 'rapid', 'swift', 'prompt', 'speed', 'accelerate'],
-    ['rare', 'scarce', 'uncommon', 'exceptional'],
-    ['recover', 'restore', 'revive', 'recovery', 'restoration'],
-    ['relevant', 'pertinent', 'applicable', 'relevance'],
-    ['reliable', 'dependable', 'trustworthy', 'reliability'],
-    ['remote', 'distant', 'isolated', 'isolation'],
-    ['replace', 'substitute', 'replacement', 'alternative'],
-    ['resist', 'oppose', 'defy', 'resistance', 'defiance'],
-    ['responsible', 'accountable', 'responsibility', 'accountability'],
-    ['reward', 'award', 'prize', 'honour', 'recognition'],
-    ['rigid', 'strict', 'stern', 'stringent'],
-    ['rural', 'urban', 'suburb', 'metropolitan', 'municipal'],
-    ['safe', 'secure', 'safety', 'security', 'stability'],
-    ['separate', 'divide', 'split', 'segregate', 'separation'],
-    ['similar', 'alike', 'resemble', 'similarity', 'resemblance'],
-    ['small', 'tiny', 'minute', 'miniature', 'minimal'],
-    ['solve', 'resolve', 'solution', 'resolution', 'remedy'],
-    ['speak', 'communicate', 'convey', 'express', 'articulate'],
-    ['sufficient', 'enough', 'adequate', 'suffice'],
-    ['temporary', 'transient', 'interim', 'provisional'],
-    ['tendency', 'trend', 'inclination', 'prone'],
-    ['tired', 'exhausted', 'weary', 'fatigue', 'exhaustion'],
-    ['transfer', 'transmit', 'transport', 'transmission'],
-    ['transparent', 'transparency', 'opaque', 'clarity'],
-    ['valuable', 'precious', 'invaluable', 'worthwhile'],
-    ['wealth', 'wealthy', 'affluent', 'rich', 'fortune'],
-    ['willing', 'reluctant', 'willingness', 'reluctance', 'hesitant'],
-    ['work', 'labour', 'employment', 'occupation', 'profession', 'vocation'],
-].map((terms) => new Set(terms.map((term) => term.trim())));
+import {
+    priorityRelationGroups,
+    relationSelector,
+} from '../features/vocabulary/content/priority-relation-groups.js';
 
+const kinds = {
+    meaning: { label: 'Gần nghĩa', score: 4 },
+    family: { label: 'Họ từ', score: 3 },
+    contrast: { label: 'Tương phản', score: 2 },
+    topic: { label: 'Cùng chủ đề', score: 1 },
+};
+
+// Parenthetical dictionary notes and examples are not separate definitions.
+// Keep accents and whole phrases; matching isolated syllables is too noisy.
 function phrases(content) {
     return new Set(
         (content?.senses || []).flatMap(({ meaning }) =>
-            meaning
-                .toLocaleLowerCase('vi')
+            String(meaning)
                 .normalize('NFC')
-                .split(/[;,()/]/)
+                .toLocaleLowerCase('vi')
+                .replace(/\([^)]*\)/g, '')
+                .split(/[;,]/)
                 .map((part) =>
                     part
                         .trim()
@@ -189,23 +31,87 @@ function phrases(content) {
     );
 }
 
-export function relatedPriorityWords(selected, words, contents) {
-    const term = selected.term.toLowerCase();
-    const memberships = groups.filter((group) => group.has(term));
-    const meanings = phrases(contents.get(selected.id));
-    return words
-        .filter((word) => word.id !== selected.id)
-        .map((word) => {
-            const sameMeaning = [...phrases(contents.get(word.id))].some((phrase) =>
-                meanings.has(phrase),
-            );
-            const sameGroup = memberships.some((group) => group.has(word.term.toLowerCase()));
-            return {
-                word,
-                reason: sameMeaning ? 'Có nghĩa chung' : 'Cùng nhóm học',
-                score: sameMeaning ? 2 : sameGroup ? 1 : 0,
-            };
-        })
-        .filter(({ score }) => score > 0)
-        .sort((a, b) => b.score - a.score || a.word.term.localeCompare(b.word.term, 'en'));
+export function createPriorityRelationIndex(words, contents) {
+    const selectors = new Map(
+        words.filter((word) => !word.custom).map((word) => [relationSelector(word), word]),
+    );
+    const edges = new Map(words.map((word) => [word.id, new Map()]));
+    function connect(a, b, relation) {
+        if (a.id === b.id) return;
+        for (const [from, to] of [
+            [a, b],
+            [b, a],
+        ]) {
+            const targets = edges.get(from.id);
+            if (!targets.has(to.id)) targets.set(to.id, { word: to, relations: [] });
+            const entry = targets.get(to.id);
+            if (!entry.relations.some((item) => item.id === relation.id))
+                entry.relations.push(relation);
+        }
+    }
+    for (const group of priorityRelationGroups) {
+        const members = group.members.map((member) => selectors.get(member)).filter(Boolean);
+        const relation = { id: group.id, kind: group.kind, label: group.label };
+        for (let i = 0; i < members.length; i++)
+            for (let j = i + 1; j < members.length; j++) {
+                if (
+                    group.sides?.some(
+                        (side) =>
+                            side.includes(relationSelector(members[i])) &&
+                            side.includes(relationSelector(members[j])),
+                    )
+                )
+                    continue;
+                connect(members[i], members[j], relation);
+            }
+    }
+    // User-created cards cannot be pre-reviewed. Show an explicitly labelled
+    // phrase suggestion only when at least one endpoint is a custom card.
+    const meanings = new Map();
+    for (const word of words)
+        for (const phrase of phrases(contents.get(word.id))) {
+            if (!meanings.has(phrase)) meanings.set(phrase, []);
+            meanings.get(phrase).push(word);
+        }
+    for (const [phrase, members] of meanings) {
+        for (const custom of members.filter((word) => word.custom))
+            for (const other of members)
+                connect(custom, other, {
+                    id: `phrase:${phrase}`,
+                    kind: 'suggestion',
+                    label: `Cùng cụm nghĩa: ${phrase}`,
+                });
+    }
+    return new Map(
+        [...edges].map(([id, targets]) => [
+            id,
+            [...targets.values()]
+                .map((entry) => {
+                    entry.relations.sort(
+                        (a, b) =>
+                            (kinds[b.kind]?.score || 0) - (kinds[a.kind]?.score || 0) ||
+                            a.label.localeCompare(b.label, 'vi'),
+                    );
+                    const first = entry.relations[0];
+                    return {
+                        ...entry,
+                        reason:
+                            first.kind === 'suggestion'
+                                ? `Gợi ý · ${first.label}`
+                                : `${kinds[first.kind].label} · ${first.label}`,
+                        score: kinds[first.kind]?.score || 0,
+                    };
+                })
+                .sort(
+                    (a, b) =>
+                        b.score - a.score ||
+                        a.word.term.localeCompare(b.word.term, 'en') ||
+                        a.word.id.localeCompare(b.word.id),
+                ),
+        ]),
+    );
+}
+
+export function relatedPriorityWords(selected, words, contents, index) {
+    return (index || createPriorityRelationIndex(words, contents)).get(selected.id) || [];
 }
