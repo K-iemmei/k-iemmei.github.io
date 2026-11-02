@@ -34,6 +34,16 @@ stable IDs from the headword and qualifier, independent of list order.
 
 ## Five manual study marks
 
+Click a card's heading or blank area (or focus the card and press Enter/Space)
+to compare it with related words in a modal. The selected card appears first,
+followed by words sharing a complete Vietnamese meaning phrase or an explicit
+study group. Groups include related topics and contrasts as well as synonyms;
+they do not imply that words are interchangeable. Matching covers the full
+catalogue and account-specific custom words, regardless of current filters.
+The modal opens meanings by default and shows read-only study counts. Escape,
+the close button, or a click on the backdrop closes it and restores focus.
+Dictionary modules load on first use; a failure offers a retry by reopening.
+
 Users mark the next box after each study pass. They can undo the most recent
 mark. There is no daily cap and no quiz prerequisite for this list. All five
 marks produce a green border and completion check on the card.
@@ -54,6 +64,16 @@ Content modules load on demand by letter, in parallel with account progress.
 Network failure leaves study controls disabled until progress can be loaded.
 
 ## Deployment and verification
+
+Users can select **Thêm từ vựng** and enter required **Word**, **Mean**, and
+**Example** fields. Custom words are private to the signed-in account, persist
+after reload, and support the same five study marks and search as built-in words.
+They have no assigned CEFR level. Saving clears the study/letter/level filters
+and searches for the new word so it is visible immediately.
+
+Apply `database/migrations/025-priority-vocabulary-custom.sql` for local databases
+or `supabase/hosted-priority-vocabulary-custom-migration.sql` for hosted Supabase
+after the original priority migration, before deploying the updated application.
 
 Apply `database/migrations/024-priority-vocabulary.sql`, then
 `supabase/hosted-priority-vocabulary-migration.sql` on hosted Supabase before

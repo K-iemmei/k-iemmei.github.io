@@ -78,4 +78,41 @@ test('priority vocabulary persists five manual passes, isolates users and reject
         [],
     );
     assert.equal((await call('/pv-0000000000000000', 'PUT', payload)).status, 400);
+    assert.equal(
+        (await call('', 'POST', { word: ' ', mean: 'meaning', example: 'Example.' })).status,
+        400,
+    );
+    const created = await call('', 'POST', {
+        word: ' zephyr ',
+        mean: 'a gentle breeze',
+        example: 'A zephyr blew through the garden.',
+        user_id: other,
+    });
+    assert.equal(created.status, 200);
+    assert.equal(created.data.word, 'zephyr');
+    assert(!created.data.user_id);
+    const customId = created.data.id;
+    assert.match(customId, /^pv-custom-[a-f0-9]{16}$/);
+    assert.equal((await call()).data.words[0].id, customId);
+    assert.equal(
+        (await call('/' + customId, 'PUT', { completed_rounds: 1, expected_revision: 0 })).status,
+        200,
+    );
+    assert.equal(
+        (await call()).data.progress.find((p) => p.word_id === customId).completed_rounds,
+        1,
+    );
+    const isolated = (
+        await f.pool.query("SELECT app_priority_vocabulary($1,'load') AS result", [other])
+    ).rows[0].result;
+    assert.deepEqual(isolated.words, []);
+    await assert.rejects(
+        () =>
+            f.pool.query("SELECT app_priority_vocabulary($1,'save',$2,$3::jsonb)", [
+                other,
+                customId,
+                JSON.stringify({ completed_rounds: 1, expected_revision: 0 }),
+            ]),
+        /Unknown vocabulary word/,
+    );
 });

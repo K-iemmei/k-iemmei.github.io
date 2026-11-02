@@ -70,6 +70,47 @@
                     </button>
                 </nav>
                 <section id="priorityPanel" aria-label="Từ vựng ưu tiên">
+                    <button
+                        id="priorityAddToggle"
+                        class="outline-button"
+                        type="button"
+                        aria-expanded="false"
+                        aria-controls="priorityAddForm"
+                    >
+                        Thêm từ vựng
+                    </button>
+                    <form id="priorityAddForm" class="priority-add-form" hidden>
+                        <label for="priorityWord">Word</label>
+                        <input
+                            id="priorityWord"
+                            name="word"
+                            required
+                            maxlength="500"
+                            placeholder="Nhập từ tiếng Anh"
+                        />
+                        <label for="priorityMean">Mean (Nghĩa)</label>
+                        <textarea
+                            id="priorityMean"
+                            name="mean"
+                            required
+                            maxlength="4000"
+                            rows="2"
+                            placeholder="Nhập nghĩa của từ"
+                        ></textarea>
+                        <label for="priorityExample">Example (Ví dụ)</label>
+                        <textarea
+                            id="priorityExample"
+                            name="example"
+                            required
+                            maxlength="4000"
+                            rows="3"
+                            placeholder="Nhập câu ví dụ"
+                        ></textarea>
+                        <button id="priorityAddSubmit" class="outline-button" type="submit">
+                            Lưu từ vựng
+                        </button>
+                        <p id="priorityAddMessage" role="status" aria-live="polite"></p>
+                    </form>
                     <div class="priority-toolbar">
                         <label class="priority-search"
                             ><span class="sr-only">Tìm từ</span
@@ -123,7 +164,30 @@
                     <button id="priorityReload" class="outline-button" type="button" hidden>
                         Thử tải lại
                     </button>
+                    <p class="priority-comparison-hint">
+                        Bấm vào card để xem các từ liên quan · Nhấn Esc để đóng
+                    </p>
                     <div id="priorityWords" aria-busy="true"></div>
+                    <dialog
+                        id="priorityRelatedDialog"
+                        class="priority-related-dialog"
+                        aria-labelledby="priorityRelatedTitle"
+                        aria-describedby="priorityRelatedStatus"
+                    >
+                        <header class="priority-related-header">
+                            <h2 id="priorityRelatedTitle">Các từ liên quan</h2>
+                            <button
+                                id="priorityRelatedClose"
+                                class="outline-button"
+                                type="button"
+                                autofocus
+                            >
+                                Đóng (Esc)
+                            </button>
+                        </header>
+                        <p id="priorityRelatedStatus" role="status" aria-live="polite"></p>
+                        <div id="priorityRelatedWords" class="priority-related-grid"></div>
+                    </dialog>
                     <button id="priorityMore" class="outline-button" type="button" hidden>
                         Xem thêm từ
                     </button>

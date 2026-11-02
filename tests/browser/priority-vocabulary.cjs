@@ -150,6 +150,65 @@ const { createDevelopmentApp } = require('../../apps/api/development-server');
         assert.equal(await page.$eval('.intro-actions', (el) => el.hidden), false);
         await page.click('#priorityTab');
         assert.equal(await page.$eval('#ankiPanel', (el) => el.hidden), true);
+        await page.$eval('#prioritySearch', (el) => {
+            el.value = 'absence';
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        await page.waitForFunction(
+            () =>
+                document.querySelector('#priorityWords .priority-word h3')?.textContent ===
+                'absence',
+        );
+        await page.click('#priorityWords .priority-word h3');
+        await page.waitForSelector('#priorityRelatedDialog[open] .priority-word');
+        assert(
+            await page.$$eval('#priorityRelatedWords h3', (els) =>
+                els.some((el) => el.textContent === 'absent'),
+            ),
+        );
+        assert(await page.$eval('#priorityRelatedWords .priority-definition', (el) => el.open));
+        assert(
+            await page.evaluate(
+                () =>
+                    document.querySelector('#priorityRelatedDialog').scrollWidth <=
+                    document.querySelector('#priorityRelatedDialog').clientWidth,
+            ),
+        );
+        await page.keyboard.press('Escape');
+        await page.waitForFunction(() => !document.querySelector('#priorityRelatedDialog').open);
+        assert(
+            await page.$eval(
+                '#priorityWords .priority-word',
+                (el) => el === document.activeElement,
+            ),
+        );
+        await page.keyboard.press('Enter');
+        await page.waitForSelector('#priorityRelatedDialog[open] .priority-word');
+        await page.click('#priorityRelatedClose');
+        await page.waitForFunction(() => !document.querySelector('#priorityRelatedDialog').open);
+        await page.click('#priorityAddToggle');
+        await page.type('#priorityWord', 'zephyr');
+        await page.type('#priorityMean', 'a gentle breeze');
+        await page.type('#priorityExample', 'A zephyr blew through the garden.');
+        await page.click('#priorityAddSubmit');
+        await page.waitForSelector('[data-word^="pv-custom-"]');
+        const customId = await page.$eval('[data-word^="pv-custom-"]', (el) => el.dataset.word);
+        await page.click(`[data-word="${customId}"] .priority-definition summary`);
+        assert.equal(
+            await page.$eval(`[data-word="${customId}"] .priority-meanings`, (el) =>
+                el.textContent.trim(),
+            ),
+            'a gentle breeze',
+        );
+        await page.click(`[data-word="${customId}"] [data-round="1"]`);
+        await page.waitForSelector(
+            `[data-word="${customId}"] [data-round="1"][aria-checked="true"]`,
+        );
+        await page.reload({ waitUntil: 'networkidle0' });
+        await page.type('#prioritySearch', 'zephyr');
+        await page.waitForSelector(
+            `[data-word="${customId}"] [data-round="1"][aria-checked="true"]`,
+        );
         assert.deepEqual(errors, []);
         console.log(
             'PASS: priority words, five passes/undo/reload, exact filters, A–Z, search, pagination, Anki tab, mobile and dark/light.',
